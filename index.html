@@ -2,7 +2,7 @@
 <html lang="bn">
 <head>
     <meta charset="UTF-8" />
-    <!-- 🆕 [v16.5.40] সদস্যের নতুন ফিল্ড whatsapp/fbUsername + 💬 বাটন (ইমেইল-বাটনের পাশে) → ফ্রি WhatsApp (wa.me) / Messenger (m.me) / শেয়ার-মেনু মেসেজ-মোডাল; টেমপ্লেট ইমেইলের মতোই। Rules/Apps Script অপরিবর্তিত। [v16.5.41] 🧾 "রিসিপ্ট ছবি সংযুক্ত" টিক (ইমেইলের একই রিসিপ্ট JPG হয়ে শেয়ার/ডাউনলোড) + সদস্য-তালিকায় WhatsApp/Facebook কলাম। -->
+    <!-- 🆕 [v16.5.40] সদস্যের নতুন ফিল্ড whatsapp/fbUsername + 💬 বাটন (ইমেইল-বাটনের পাশে) → ফ্রি WhatsApp (wa.me) / Messenger (m.me) / শেয়ার-মেনু মেসেজ-মোডাল; টেমপ্লেট ইমেইলের মতোই। Rules/Apps Script অপরিবর্তিত। [v16.5.41] 🧾 "রিসিপ্ট ছবি সংযুক্ত" টিক (ইমেইলের একই রিসিপ্ট JPG হয়ে শেয়ার/ডাউনলোড) + সদস্য-তালিকায় WhatsApp/Facebook কলাম। [v16.5.42] WhatsApp/Messenger বাটন এখন সবসময় নিজ নিজ অ্যাপের চ্যাট খোলে (ছবি আগে ডাউনলোড); শেয়ার-মেনু আলাদা বাটনে। -->
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, interactive-widget=resizes-content" />
     <title>সরদার হাট তাফসিরুল ওয়াজ মাহফিল — তহবিল ব্যবস্থাপনা</title>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -15413,17 +15413,21 @@ body.dark-mode .btn-outline{border-color:var(--gold-300)!important;color:var(--g
             };
             // 🧾 রিসিপ্ট-ছবি: ইমেইল-মোডালের pdfTypeFor()/generatePdfForType() যুক্তির হুবহু প্রতিলিপি (শুধু আউটপুট PDF-এর বদলে JPG)।
             // জবাব: { file } | { none:'কারণ' }
+            const receiptPlan = (key) => {
+                let type = 'none', item = null, legacy = '';
+                if (/^t:/.test(key)) { item = items.find(x => 't:' + x.id === key) || null; type = item ? (item.pdfType || 'none') : 'none'; }
+                else {
+                    legacy = key === '__default__' ? defaultTplKey : key;
+                    const setting = (et[legacy] && et[legacy].attachPdf) || 'auto';
+                    type = setting === 'always' ? 'statement' : setting === 'never' ? 'none' : (donor ? 'statement' : 'none');
+                }
+                return { type, item, legacy };
+            };
             const buildReceipt = async (key) => {
                 const fname = (typeof sanitizeFileName === 'function' ? sanitizeFileName('রিসিপ্ট-' + m.name) : 'receipt') + '.jpg';
-                if (typeof generateJpgForType === 'function') {
-                    let type = 'none', item = null, legacy = '';
-                    if (/^t:/.test(key)) { item = items.find(x => 't:' + x.id === key) || null; type = item ? (item.pdfType || 'none') : 'none'; }
-                    else {
-                        legacy = key === '__default__' ? defaultTplKey : key;
-                        const setting = (et[legacy] && et[legacy].attachPdf) || 'auto';
-                        type = setting === 'always' ? 'statement' : setting === 'never' ? 'none' : (donor ? 'statement' : 'none');
-                    }
-                    if (type === 'none') return { none: 'এই টেমপ্লেটে ইমেইলে রিসিপ্ট এটাচ হয় না, তাই ছবিও যাবে না' };
+                const { type, item, legacy } = receiptPlan(key);
+                if (type === 'none') return { none: 'এই টেমপ্লেটে ইমেইলে রিসিপ্ট এটাচ হয় না, তাই ছবিও যাবে না' };
+                if (typeof generateJpgForType === 'function') {   // admin: ইমেইলের হুবহু একই রিসিপ্ট-ধরন/ডিজাইন/সিগনেচার
                     const txn = latestTxn();
                     if (PDF_NEEDS_TXN[type] && !txn) return { none: 'এই সদস্যের কোনো লেনদেন নেই, তাই রিসিপ্ট-ছবি হবে না' };
                     if (type === 'monthly' && txn.kind !== 'monthly') return { none: 'মাসভিত্তিক রিসিপ্টের জন্য মাসিক লেনদেন নেই' };
@@ -15432,12 +15436,12 @@ body.dark-mode .btn-outline{border-color:var(--gold-300)!important;color:var(--g
                     const url = await withPdfSig(sig, () => generateJpgForType(type, m, txn, item ? item.pdfShow : null, item ? item.pdfStyle : 'money'));
                     return { file: new File([mfMsgDataUrlToBlob(url)], fname, { type: 'image/jpeg' }) };
                 }
-                // personal: ইমেইলে যে হিসাব-রিসিপ্ট যায় (generateReceiptPdfBase64) — একই ক্যানভাস থেকে JPG নেওয়া হয়
+                // personal: এই প্যানেলে ইমেইলে যে হিসাব-রিসিপ্ট (generateReceiptPdfBase64) যায় — একই ক্যানভাস থেকে JPG নেওয়া হয়
                 const sink = { canvas: null }; window.__mfImgSink = sink;
                 try { await generateReceiptPdfBase64(m); } finally { window.__mfImgSink = null; }
                 if (!sink.canvas) throw new Error('রিসিপ্ট ছবি তৈরি হয়নি');
                 const blob = await new Promise((res, rej) => sink.canvas.toBlob(b => b ? res(b) : rej(new Error('ছবি তৈরি হয়নি')), 'image/jpeg', 0.92));
-                return { file: new File([blob], fname, { type: 'image/jpeg' }) };
+                return { file: new File([blob], fname, { type: 'image/jpeg' }), note: type === 'statement' ? '' : ' — সব লেনদেনের হিসাব-রিসিপ্ট' };
             };
             const wa = mfMsgWaNumber(m.whatsapp || m.mobile), fb = mfMsgFbHandle(m.fbUsername);
             let initial = '';
@@ -15460,7 +15464,7 @@ body.dark-mode .btn-outline{border-color:var(--gold-300)!important;color:var(--g
                 <button class="btn btn-outline" id="msg-fb">Messenger</button>
                 <button class="btn btn-primary" id="msg-wa">WhatsApp</button>
               </div>
-              <div class="small muted" style="margin-top:8px;line-height:1.5;">• ছবি ছাড়া: WhatsApp-এ লেখা সরাসরি বসে যায়; Messenger-এ লেখা কপি হয়ে চ্যাট খোলে, সেখানে পেস্ট করে সেন্ড করুন। • ছবিসহ (ফোন): WhatsApp/Messenger বাটনে ফোনের শেয়ার-মেনু খুলবে — সেখানে WhatsApp বা Messenger বেছে নিন। • ছবিসহ (কম্পিউটার): ছবি ডাউনলোড হয়ে চ্যাট খোলে — চ্যাটে 📎 দিয়ে ছবিটি দিন।</div>
+              <div class="small muted" style="margin-top:8px;line-height:1.5;">• <strong>WhatsApp / Messenger</strong>: ওই সদস্যের চ্যাট সরাসরি খোলে (WhatsApp-এ লেখা বসে যায়; Messenger-এ লেখা কপি হয়, পেস্ট করুন)। টিক থাকলে ছবি আগে ডাউনলোড হয় — চ্যাটে 📎 দিয়ে দিন। • <strong>📤 শেয়ার মেনু</strong>: ফোনের শেয়ার-মেনুতে লেখা ও ছবি একসাথে যায় — সেখান থেকে অ্যাপ ও কন্টাক্ট নিজে বাছতে হয়।</div>
             `, () => {
                 const $ = id => document.getElementById(id);
                 const text = () => $('msg-body').value.trim();
@@ -15474,7 +15478,7 @@ body.dark-mode .btn-outline{border-color:var(--gold-300)!important;color:var(--g
                     try { r = await buildReceipt($('msg-tpl').value); } catch (e) { console.error(e); r = { err: (e && e.message) || 'ছবি তৈরি হয়নি' }; }
                     if (my !== seq || !$('msg-att')) return;   // টেমপ্লেট/টিক বদলে গেছে বা মোডাল বন্ধ
                     rcptBusy = false; rcpt = r;
-                    setSt(r.file ? '✅ রিসিপ্ট-ছবি প্রস্তুত (' + Math.max(1, Math.round(r.file.size / 1024)) + ' KB)' : r.none ? 'ℹ️ ' + r.none : '⚠️ রিসিপ্ট-ছবি তৈরি হয়নি: ' + r.err);
+                    setSt(r.file ? '✅ রিসিপ্ট-ছবি প্রস্তুত (' + Math.max(1, Math.round(r.file.size / 1024)) + ' KB)' + (r.note || '') : r.none ? 'ℹ️ ' + r.none : '⚠️ রিসিপ্ট-ছবি তৈরি হয়নি: ' + r.err);
                 };
                 // পাঠানোর ফাইল-তালিকা: টিক থাকলে রিসিপ্ট + নিজে বাছা অতিরিক্ত ছবি। null = এখনো তৈরি হচ্ছে
                 const filesNow = () => {
@@ -15489,21 +15493,14 @@ body.dark-mode .btn-outline{border-color:var(--gold-300)!important;color:var(--g
                 $('msg-tpl').onchange = () => { try { $('msg-body').value = compose($('msg-tpl').value); } catch (e) { toast('⚠️ টেমপ্লেট তৈরি করা যায়নি'); } prepare(); };
                 $('msg-att').onchange = prepare;
                 $('msg-copy').onclick = async () => { toast(await mfMsgCopy(text()) ? '✅ কপি হয়েছে' : '⚠️ কপি করা যায়নি — লেখা সিলেক্ট করে কপি করুন'); };
-                // app: 'wa' | 'fb'
+                // app: 'wa' | 'fb' — প্রতিটি বাটন সবসময় নিজের অ্যাপের ওই সদস্যের চ্যাট খোলে (শেয়ার-মেনু শুধু "📤 শেয়ার মেনু" বাটনে)।
+                // রিসিপ্ট-ছবি থাকলে আগে ফোনে/কম্পিউটারে ডাউনলোড হয় — চ্যাটে 📎 দিয়ে দিতে হয় (ওয়েব থেকে সরাসরি চ্যাটে ছবি বসানোর উপায় নেই)।
                 const go = (app) => {
                     const t = text(); if (!t) { toast('মেসেজ খালি'); return; }
                     const files = filesNow();
                     if (files === null) { toast('⏳ রিসিপ্ট-ছবি তৈরি হচ্ছে — একটু পরে আবার চাপুন'); return; }
                     if (app === 'fb' && !fb) { toast('⚠️ Facebook ইউজারনেম নেই — আগে "✎ সম্পাদনা" থেকে যোগ করুন'); return; }
-                    if (files.length) {
-                        if (mfMsgIsMobile() && canShareFiles(files)) {   // ফোন: শেয়ার-মেনু (একমাত্র উপায় যাতে ছবি WhatsApp/Messenger-এ যায়)
-                            toast('📤 শেয়ার-মেনু থেকে ' + (app === 'wa' ? 'WhatsApp' : 'Messenger') + ' বেছে নিন');
-                            navigator.share({ text: t, files }).catch(() => {});
-                            return;
-                        }
-                        files.forEach(f => mfMsgDownloadFile(f));   // কম্পিউটার/অসমর্থিত: ছবি ডাউনলোড + চ্যাট খোলা
-                        toast('🖼️ ছবি ডাউনলোড হয়েছে — চ্যাটে 📎 দিয়ে দিন');
-                    }
+                    if (files.length) { files.forEach(f => mfMsgDownloadFile(f)); toast('🖼️ ছবি ডাউনলোড হয়েছে — চ্যাটে 📎 → গ্যালারি/ডাউনলোড থেকে ছবিটি দিন' + (app === 'fb' ? '; লেখা কপি করা আছে, পেস্ট করুন' : '')); }
                     if (app === 'wa') {
                         if (!wa) toast('ℹ️ WhatsApp নম্বর নেই — কন্টাক্ট বেছে নিন');
                         mfMsgOpen('https://wa.me/' + wa + '?text=' + encodeURIComponent(t));
