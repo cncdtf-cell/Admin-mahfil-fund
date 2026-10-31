@@ -2,7 +2,10 @@
 <html lang="bn">
 <head>
     <meta charset="UTF-8" />
-    <!-- 🆕 [v16.5.40] সদস্যের নতুন ফিল্ড whatsapp/fbUsername + 💬 বাটন (ইমেইল-বাটনের পাশে) → ফ্রি WhatsApp (wa.me) / Messenger (m.me) / শেয়ার-মেনু মেসেজ-মোডাল; টেমপ্লেট ইমেইলের মতোই। Rules/Apps Script অপরিবর্তিত। [v16.5.41] 🧾 "রিসিপ্ট ছবি সংযুক্ত" টিক (ইমেইলের একই রিসিপ্ট JPG হয়ে শেয়ার/ডাউনলোড) + সদস্য-তালিকায় WhatsApp/Facebook কলাম। [v16.5.42] WhatsApp/Messenger বাটন এখন সবসময় নিজ নিজ অ্যাপের চ্যাট খোলে (ছবি আগে ডাউনলোড); শেয়ার-মেনু আলাদা বাটনে। -->
+    <!-- 🔧 [v16.5.46] এডমিনে সদস্য-তালিকার নতুন কলাম (WhatsApp নম্বর, Facebook/Messenger) না দেখানোর ত্রুটি ঠিক: লগইনের পর ক্লাউডের পুরনো কলাম-কনফিগ নতুন ডিফল্ট কলাম বাদ দিয়ে ক্যাশে বসত। -->
+    <!-- 🆕 [v16.5.45] DM-এ ➡️ ফরওয়ার্ড (ওভারলে, ব্যবহারকারী বাছাই) + দিনের বিভাজক ("আজ/গতকাল/তারিখ") যোগ। -->
+    <!-- 🆕 [v16.5.44] ব্যক্তিগত মেসেজে (DM) রিয়্যাক্ট · উত্তর · পিন · কপি · এডিট · মুছুন — রিয়্যাকশন/পিন থ্রেড-ডকে; Rules অপরিবর্তিত। -->
+    <!-- 🆕 [v16.5.40] সদস্যের নতুন ফিল্ড whatsapp/fbUsername + 💬 বাটন (ইমেইল-বাটনের পাশে) → ফ্রি WhatsApp (wa.me) / Messenger (m.me) / শেয়ার-মেনু মেসেজ-মোডাল; টেমপ্লেট ইমেইলের মতোই। Rules/Apps Script অপরিবর্তিত। [v16.5.41] 🧾 "রিসিপ্ট ছবি সংযুক্ত" টিক (ইমেইলের একই রিসিপ্ট JPG হয়ে শেয়ার/ডাউনলোড) + সদস্য-তালিকায় WhatsApp/Facebook কলাম। [v16.5.42] WhatsApp/Messenger বাটন এখন সবসময় নিজ নিজ অ্যাপের চ্যাট খোলে (ছবি আগে ডাউনলোড); শেয়ার-মেনু আলাদা বাটনে। [v16.5.43] 💬 মোডালে টেমপ্লেটের নিচে "👁️ সব টেমপ্লেটের প্রিভিউ" ও "📚 টেমপ্লেট ম্যানেজার" লিংক + মেসেজ/ছবির লাইভ প্রিভিউ। -->
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, interactive-widget=resizes-content" />
     <title>সরদার হাট তাফসিরুল ওয়াজ মাহফিল — তহবিল ব্যবস্থাপনা</title>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -8355,8 +8358,10 @@ body.dark-mode .btn-outline{border-color:var(--gold-300)!important;color:var(--g
                 snap.forEach(d => {
                     const config = d.data();
                     if (config && Array.isArray(config.columns)) {
-                        TABLE_COLUMN_CACHE[d.id] = config;
                         try { localStorage.setItem(_tableColLocalKey(d.id), JSON.stringify(config)); } catch (e) {}
+                        // 🔧 [v16.5.46] আগে এখানে ক্লাউডের কনফিগ সরাসরি ক্যাশে বসত — ফলে কোড-আপডেটে যোগ হওয়া *নতুন ডিফল্ট কলাম* (যেমন WhatsApp/Facebook) পুরনো সেভ-করা কনফিগে
+                        // না থাকায় কখনো দেখাত না (getColumnConfig-এর "মিসিং কলাম যোগ" ধাপ বাদ পড়ত)। এখন ক্যাশ মুছে দেওয়া হয়: পরের getColumnConfig(...) সদ্য-সেভ-করা কনফিগ পড়ে নতুন কলাম মিলিয়ে নেয় ও আবার সেভ করে।
+                        delete TABLE_COLUMN_CACHE[d.id];
                         changed = true;
                     }
                 });
@@ -11907,7 +11912,9 @@ body.dark-mode .btn-outline{border-color:var(--gold-300)!important;color:var(--g
                 <span class="dm-avatar">${avatar}</span>
                 <div><h3 style="margin:0;">${escapeHtml(otherName)}</h3><div class="small muted">ব্যক্তিগত মেসেজ</div></div>
               </div>
+              <div id="dmx-pinbar" class="dmx-pinbar" style="display:none;"></div>
               <div class="chat-messages dm-messages" id="dm-messages"><div class="small muted" style="padding:16px;text-align:center;">লোড হচ্ছে...</div></div>
+              <div id="dmx-replybar" class="dmx-replybar" style="display:none;"></div>
               <div class="chat-input-area no-print" style="margin-top:10px;">
                 <button class="btn btn-outline btn-attach" id="dm-attach-btn" type="button" title="ছবি পাঠান (সর্বোচ্চ ১০ এমবি)">📎</button>
                 <input type="file" id="dm-image-input" accept="image/*" style="display:none;">
@@ -11937,7 +11944,9 @@ body.dark-mode .btn-outline{border-color:var(--gold-300)!important;color:var(--g
                 } else {
                     _chatImgLog('⚠ dm-attach-btn পাওয়া যায়নি');
                 }
+                dmxReset(); dmxWire();   // 🆕 [DM-X]
                 listenDmMessages();
+                dmxListenThread();
             });
         };
 
@@ -11945,6 +11954,8 @@ body.dark-mode .btn-outline{border-color:var(--gold-300)!important;color:var(--g
             if (dmUnsub) { try { dmUnsub(); } catch (e) {}
                 dmUnsub = null; }
             dmCurrentThreadId = null;
+            if (dmxThreadUnsub) { try { dmxThreadUnsub(); } catch (e) {} dmxThreadUnsub = null; }   // 🆕 [DM-X]
+            dmxReset();
         };
 
         const listenDmMessages = () => {
@@ -11964,7 +11975,229 @@ body.dark-mode .btn-outline{border-color:var(--gold-300)!important;color:var(--g
             });
         };
 
+        // ======================================================================
+        //  🆕 [DM-X] ব্যক্তিগত মেসেজে রিয়্যাক্ট · উত্তর (রিপ্লাই) · পিন · ফরওয়ার্ড · কপি · এডিট · মুছুন · দিনের বিভাজক (গ্রুপ-চ্যাটের মতো)
+        //  ডেটা: রিয়্যাকশন/পিন থ্রেড-ডকে (dm_threads/{tid}.reactions / .pins — দুজনই লিখতে পারেন, Rules অপরিবর্তিত);
+        //  উত্তর মেসেজের নিজের ডকে (replyTo); এডিট/মোছা শুধু নিজের মেসেজ (আগের Rules অনুযায়ী)। পুরনো মেসেজে এসব ফিল্ড না থাকলেও সমস্যা নেই।
+        // ======================================================================
+        let dmxThread = { reactions: {}, pins: {} };
+        let dmxReply = null, dmxMenuFor = null, dmxMsgs = [], dmxLastCount = -1, dmxPinIdx = 0, dmxThreadUnsub = null;
+        const DMX_EMOJIS = ['👍', '❤️', '😂', '😮', '😢', '🙏', '🤲', '👎'];
+        const dmxMe = () => (window.currentUser && window.currentUser.email) || '';
+        const dmxKey = (email) => String(email || '').trim().toLowerCase().replace(/[.#$\[\]\/~*]/g, '_');
+        const dmxReset = () => { try { const f = document.getElementById('dmx-fwd'); if (f) f.remove(); } catch (e) {} dmxThread = { reactions: {}, pins: {} }; dmxReply = null; dmxMenuFor = null; dmxMsgs = []; dmxLastCount = -1; dmxPinIdx = 0; };
+        const dmxEnsureCss = () => {
+            if (document.getElementById('dmx-css')) return;
+            const st = document.createElement('style'); st.id = 'dmx-css';
+            st.textContent = `.dmx-msg{position:relative;cursor:pointer}.dmx-more{background:none;border:0;cursor:pointer;font-size:16px;line-height:1;padding:0 4px;opacity:.6;color:inherit}
+.dmx-quote{border-left:3px solid #2e7d32;background:rgba(0,0,0,.07);border-radius:6px;padding:3px 8px;margin-bottom:4px;font-size:12px;display:flex;flex-direction:column;cursor:pointer;text-align:left}
+.dmx-quote span{opacity:.8;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:230px}
+.dmx-chips{display:flex;flex-wrap:wrap;gap:4px;margin-top:4px}.dmx-chip{border:1px solid #ccc;background:#fff;color:#222;border-radius:12px;padding:0 7px;font-size:12px;cursor:pointer}.dmx-chip.mine{border-color:#2e7d32;background:#e8f5e9}
+.dmx-menu{margin-top:6px;background:#fff;color:#222;border:1px solid #ccc;border-radius:10px;padding:6px;box-shadow:0 2px 10px rgba(0,0,0,.18);cursor:default}
+.dmx-emojis{display:flex;flex-wrap:wrap;gap:2px}.dmx-emojis span{font-size:22px;padding:2px 5px;border-radius:8px;cursor:pointer}.dmx-emojis span.on{background:#e8f5e9}
+.dmx-acts{display:flex;flex-wrap:wrap;gap:4px;margin-top:4px}.dmx-acts button{border:1px solid #ccc;background:#fafafa;color:#222;border-radius:8px;padding:3px 8px;font-size:12px;cursor:pointer}
+.dmx-pin{font-size:11px;opacity:.75;margin-bottom:2px}
+.dmx-pinbar{display:flex;align-items:center;gap:6px;border:1px solid #ccc;border-left:3px solid #f9a825;border-radius:8px;padding:4px 8px;margin-bottom:6px;font-size:12px;cursor:pointer}
+.dmx-pinbar span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;flex:1}
+.dmx-replybar{display:flex;align-items:center;gap:6px;border:1px solid #ccc;border-left:3px solid #2e7d32;border-radius:8px;padding:4px 8px;margin-top:8px;font-size:12px}
+.dmx-replybar span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;flex:1}.dmx-replybar button{border:0;background:none;cursor:pointer;font-size:14px;color:inherit}
+.dmx-day{text-align:center;margin:8px 0 6px}.dmx-day span{background:rgba(0,0,0,.08);font-size:11px;border-radius:999px;padding:2px 12px}
+#dmx-fwd{position:absolute;inset:0;z-index:20;background:var(--paper-raised,#fff);color:var(--ink,#222);padding:12px;overflow:auto;border-radius:inherit}
+#dmx-fwd .fw-row{display:flex;align-items:center;gap:8px;width:100%;text-align:left;border:0;border-bottom:1px solid #e5e5e5;background:none;color:inherit;padding:9px 4px;font:inherit;cursor:pointer}
+#dmx-fwd .fw-prev{background:rgba(0,0,0,.06);border-radius:8px;padding:6px 10px;font-size:12.5px;margin:8px 0;white-space:pre-wrap;max-height:90px;overflow:auto}
+.dmx-flash{animation:dmxflash 1.3s}@keyframes dmxflash{0%,60%{box-shadow:0 0 0 3px #f9a825}100%{box-shadow:none}}`;
+            document.head.appendChild(st);
+        };
+        const dmxApplyThread = (data) => { dmxThread = { reactions: (data && data.reactions) || {}, pins: (data && data.pins) || {} }; };
+        const dmxFind = (id) => dmxMsgs.find(m => m.id === id);
+        const dmxSnippet = (m) => m ? (m.text ? String(m.text).slice(0, 80) : (m.imageUrl ? '📷 ছবি' : '')) : '';
+        const dmxWho = (m) => m.sender === dmxMe() ? 'আপনি' : (m.senderName || String(m.sender || '').split('@')[0]);
+        const dmxWriteThread = (patch) => {
+            if (!dmCurrentThreadId) return Promise.resolve();
+            const { doc, setDoc } = window._firestore;
+            return setDoc(doc(window._firestoreDb, 'dm_threads', dmCurrentThreadId), patch, { merge: true });
+        };
+        const dmxRerender = () => { if (document.getElementById('dm-messages')) renderDmMessages(dmxMsgs); };
+        const dmxReact = (mid, emoji) => {
+            const k = dmxKey(dmxMe()), cur = (dmxThread.reactions[mid] || {})[k] || '', val = cur === emoji ? '' : emoji;   // একই ইমোজিতে আবার ট্যাপ = তুলে নেওয়া
+            dmxThread.reactions = Object.assign({}, dmxThread.reactions, { [mid]: Object.assign({}, dmxThread.reactions[mid] || {}, { [k]: val }) });
+            dmxMenuFor = null; dmxRerender();
+            dmxWriteThread({ reactions: { [mid]: { [k]: val } } }).catch(e => { console.error('[DM] রিয়্যাক্ট সেভ ব্যর্থ:', e); toast('❌ রিয়্যাক্ট সেভ হয়নি'); });
+        };
+        const dmxPinToggle = (mid) => {
+            const was = !!(dmxThread.pins && dmxThread.pins[mid]);
+            const val = was ? null : { by: dmxMe(), at: new Date().toISOString() };
+            dmxThread.pins = Object.assign({}, dmxThread.pins, { [mid]: val });
+            dmxMenuFor = null; dmxRerender();
+            toast(was ? '📌 পিন সরানো হয়েছে' : '📌 পিন করা হয়েছে (দুজনেই দেখবেন)');
+            dmxWriteThread({ pins: { [mid]: val } }).catch(e => { console.error('[DM] পিন সেভ ব্যর্থ:', e); toast('❌ পিন সেভ হয়নি'); });
+        };
+        const dmxUpdateReplyBar = () => {
+            const el = document.getElementById('dmx-replybar'); if (!el) return;
+            if (!dmxReply) { el.style.display = 'none'; el.innerHTML = ''; return; }
+            el.style.display = 'flex';
+            el.innerHTML = `<span>↩ <b>${escapeHtml(dmxReply.name)}</b>-কে উত্তর: ${escapeHtml(dmxReply.text)}</span><button type="button" id="dmx-reply-x" title="বাতিল">✕</button>`;
+            const x = document.getElementById('dmx-reply-x'); if (x) x.onclick = () => { dmxReply = null; dmxUpdateReplyBar(); };
+        };
+        const dmxReplyPayload = () => dmxReply ? { replyTo: { id: dmxReply.id, name: dmxReply.name, text: dmxReply.text } } : {};
+        const dmxClearReply = () => { dmxReply = null; dmxUpdateReplyBar(); };
+        const dmxGoto = (id) => {
+            const e = document.getElementById('dmx-m-' + id);
+            if (!e) { toast('মেসেজটি পাওয়া যায়নি'); return; }
+            e.scrollIntoView({ block: 'center', behavior: 'smooth' }); e.classList.remove('dmx-flash'); void e.offsetWidth; e.classList.add('dmx-flash');
+        };
+        const dmxPinned = () => Object.keys(dmxThread.pins || {}).filter(id => dmxThread.pins[id] && dmxFind(id))
+            .sort((a, b) => String(dmxThread.pins[b].at || '').localeCompare(String(dmxThread.pins[a].at || '')));
+        const dmxUpdatePinBar = () => {
+            const el = document.getElementById('dmx-pinbar'); if (!el) return;
+            const ids = dmxPinned();
+            if (!ids.length) { el.style.display = 'none'; el.innerHTML = ''; return; }
+            if (dmxPinIdx >= ids.length) dmxPinIdx = 0;
+            const m = dmxFind(ids[dmxPinIdx]);
+            el.style.display = 'flex';
+            el.innerHTML = `<span>📌 ${escapeHtml(dmxSnippet(m))}</span>${ids.length > 1 ? `<span class="muted" style="flex:none;">${dmxPinIdx + 1}/${ids.length}</span>` : ''}`;
+            el.onclick = () => { dmxGoto(ids[dmxPinIdx]); dmxPinIdx = (dmxPinIdx + 1) % ids.length; dmxUpdatePinBar(); };
+        };
+        const dmxDayKey = (iso) => { const x = new Date(iso); return isNaN(x) ? '' : x.getFullYear() + '-' + x.getMonth() + '-' + x.getDate(); };
+        const dmxDayLabel = (iso) => {
+            const x = new Date(iso); if (isNaN(x)) return '';
+            const t = new Date(), y = new Date(Date.now() - 86400000);
+            if (dmxDayKey(x) === dmxDayKey(t)) return 'আজ';
+            if (dmxDayKey(x) === dmxDayKey(y)) return 'গতকাল';
+            try { return x.toLocaleDateString('bn-BD', { day: 'numeric', month: 'long', year: 'numeric' }); } catch (e) { return x.toDateString(); }
+        };
+        // ➡️ ফরওয়ার্ড: DM-মোডালের ভেতরেই একটি ওভারলে (openModal ব্যবহার হয় না — নইলে চলমান চ্যাটের অবস্থা মুছে যেত)
+        const dmxForward = (id) => {
+            const m = dmxFind(id); if (!m) return;
+            const host = document.querySelector('#modal-backdrop .modal'); if (!host) return;
+            const me = dmxMe().toLowerCase();
+            const users = (typeof userList !== 'undefined' ? userList : []).filter(u => u && u.email && String(u.email).toLowerCase() !== me && u.status !== 'inactive' && u.status !== 'blocked')
+                .sort((a, b) => String(a.displayName || a.email).localeCompare(String(b.displayName || b.email), 'bn'));
+            const old = document.getElementById('dmx-fwd'); if (old) old.remove();
+            if (getComputedStyle(host).position === 'static') host.style.position = 'relative';
+            const ov = document.createElement('div'); ov.id = 'dmx-fwd';
+            ov.innerHTML = `<div style="display:flex;align-items:center;gap:8px;"><b style="flex:1;">➡️ ফরওয়ার্ড করুন</b><button type="button" class="btn btn-outline btn-sm" id="dmx-fwd-x">✕ বন্ধ</button></div>
+              <div class="fw-prev">${escapeHtml(dmxSnippet(m) || '—')}</div>
+              <div class="field"><input type="search" id="dmx-fwd-q" placeholder="নাম লিখে খুঁজুন..."></div><div id="dmx-fwd-list"></div>`;
+            host.appendChild(ov);
+            const list = ov.querySelector('#dmx-fwd-list');
+            const draw = (q) => {
+                const qq = String(q || '').trim().toLowerCase();
+                const rows = users.filter(u => !qq || String(u.displayName || u.email).toLowerCase().includes(qq));
+                list.innerHTML = rows.length ? rows.map(u => `<button type="button" class="fw-row" data-fw="${escapeHtml(u.email)}"><span>👤</span><span><b>${escapeHtml(u.displayName || String(u.email).split('@')[0])}</b><br><span class="small muted">${escapeHtml(u.email)}</span></span></button>`).join('')
+                    : '<div class="small muted" style="padding:16px;text-align:center;">কাউকে পাওয়া যায়নি</div>';
+            };
+            draw('');
+            ov.querySelector('#dmx-fwd-q').addEventListener('input', (e) => draw(e.target.value));
+            ov.querySelector('#dmx-fwd-x').onclick = () => ov.remove();
+            let busy = false;
+            list.addEventListener('click', async (e) => {
+                const b = e.target.closest('[data-fw]'); if (!b || busy) return;
+                busy = true; b.disabled = true;
+                try {
+                    const tid = await ensureDmThread(b.dataset.fw);
+                    const { collection, addDoc, doc, setDoc } = window._firestore;
+                    const myName = getProfileDisplayName(dmxMe(), window.currentUser.displayName);
+                    const text = `↪ ফরওয়ার্ড করা মেসেজ (${dmxWho(m)})${m.text ? ':\n' + m.text : ''}`;
+                    const payload = { sender: dmxMe(), senderName: myName, text, forwarded: true, timestamp: new Date().toISOString() };
+                    if (m.imageUrl) payload.imageUrl = m.imageUrl;
+                    await addDoc(collection(window._firestoreDb, 'dm_threads', tid, 'messages'), payload);
+                    await setDoc(doc(window._firestoreDb, 'dm_threads', tid), { lastMessage: text.substring(0, 80), lastMessageAt: payload.timestamp, lastSender: dmxMe() }, { merge: true });
+                    ov.remove(); toast('✅ ফরওয়ার্ড করা হয়েছে');
+                } catch (er) { console.error('[DM] ফরওয়ার্ড ব্যর্থ:', er); toast('❌ ফরওয়ার্ড করা যায়নি'); busy = false; b.disabled = false; }
+            });
+        };
+        const dmxAct = async (act, id) => {
+            const m = dmxFind(id); if (!m) return;
+            dmxMenuFor = null;
+            if (act === 'reply') {
+                dmxReply = { id, name: dmxWho(m), text: dmxSnippet(m) }; dmxRerender(); dmxUpdateReplyBar();
+                const inp = document.getElementById('dm-input'); if (inp) inp.focus();
+            } else if (act === 'pin') { dmxPinToggle(id); }
+            else if (act === 'fwd') { dmxRerender(); dmxForward(id); }
+            else if (act === 'copy') {
+                const ok = typeof mfMsgCopy === 'function' ? await mfMsgCopy(m.text || '') : false;
+                toast(ok ? '✅ কপি হয়েছে' : '⚠️ কপি করা যায়নি'); dmxRerender();
+            } else if (act === 'edit') {
+                dmxRerender();
+                const nt = window.prompt('মেসেজ এডিট করুন', m.text || '');
+                if (nt === null || !nt.trim() || nt.trim() === m.text) return;
+                try {
+                    const { doc, setDoc } = window._firestore;
+                    await setDoc(doc(window._firestoreDb, 'dm_threads', dmCurrentThreadId, 'messages', id), { text: nt.trim(), editedAt: new Date().toISOString() }, { merge: true });
+                    toast('✅ মেসেজ এডিট হয়েছে');
+                } catch (e) { console.error('[DM] এডিট ব্যর্থ:', e); toast('❌ এডিট করা যায়নি'); }
+            } else if (act === 'del') {
+                dmxRerender();
+                if (!window.confirm('এই মেসেজটি মুছে ফেলবেন? (দুজনের কাছ থেকেই মুছবে)')) return;
+                try {
+                    const { doc, deleteDoc } = window._firestore;
+                    await deleteDoc(doc(window._firestoreDb, 'dm_threads', dmCurrentThreadId, 'messages', id));
+                    if (dmxThread.pins && dmxThread.pins[id]) dmxWriteThread({ pins: { [id]: null } }).catch(() => {});
+                    toast('🗑 মুছে ফেলা হয়েছে');
+                } catch (e) { console.error('[DM] মোছা ব্যর্থ:', e); toast('❌ মোছা যায়নি'); }
+            }
+        };
+        const dmxRender = (msgs) => {
+            const el = document.getElementById('dm-messages'); if (!el) return;
+            dmxEnsureCss();
+            const first = dmxLastCount < 0, grew = msgs.length > dmxLastCount;
+            const near = el.scrollHeight - el.scrollTop - el.clientHeight < 90, prevTop = el.scrollTop;
+            dmxMsgs = msgs; dmxLastCount = msgs.length;
+            const me = dmxMe(), mk = dmxKey(me), tickOn = typeof dmOtherLastReadAt !== 'undefined';
+            let _lastDay = '';
+            el.innerHTML = msgs.length ? msgs.map(m => {
+                const mine = m.sender === me;
+                const _dk = m.timestamp ? dmxDayKey(m.timestamp) : '';
+                const dayHtml = (_dk && _dk !== _lastDay) ? `<div class="dmx-day"><span>${escapeHtml(dmxDayLabel(m.timestamp))}</span></div>` : '';
+                if (_dk) _lastDay = _dk;
+                const seen = tickOn && mine && dmOtherLastReadAt && m.timestamp && new Date(m.timestamp) <= new Date(dmOtherLastReadAt);
+                const tick = (tickOn && mine) ? `<span class="msg-tick ${seen ? 'seen' : ''}">✓✓</span>` : '';
+                const rx = dmxThread.reactions[m.id] || {}, counts = {}, myR = rx[mk] || '';
+                Object.keys(rx).forEach(k => { if (rx[k]) counts[rx[k]] = (counts[rx[k]] || 0) + 1; });
+                const chips = Object.keys(counts).map(e => `<span class="dmx-chip${e === myR ? ' mine' : ''}" data-dmx-react="${m.id}" data-emoji="${e}">${e}${counts[e] > 1 ? ' ' + counts[e] : ''}</span>`).join('');
+                const q = m.replyTo ? `<div class="dmx-quote" data-dmx-goto="${escapeHtml(m.replyTo.id || '')}"><b>${escapeHtml(m.replyTo.name || '')}</b><span>${escapeHtml(m.replyTo.text || '')}</span></div>` : '';
+                const pinned = !!(dmxThread.pins && dmxThread.pins[m.id]);
+                const menu = dmxMenuFor === m.id ? `<div class="dmx-menu"><div class="dmx-emojis">${DMX_EMOJIS.map(e => `<span data-dmx-react="${m.id}" data-emoji="${e}" class="${e === myR ? 'on' : ''}">${e}</span>`).join('')}</div><div class="dmx-acts"><button type="button" data-dmx-act="reply" data-id="${m.id}">↩ উত্তর</button><button type="button" data-dmx-act="pin" data-id="${m.id}">${pinned ? '📌 আনপিন' : '📌 পিন'}</button><button type="button" data-dmx-act="fwd" data-id="${m.id}">➡️ ফরওয়ার্ড</button>${m.text ? `<button type="button" data-dmx-act="copy" data-id="${m.id}">📋 কপি</button>` : ''}${mine && m.text ? `<button type="button" data-dmx-act="edit" data-id="${m.id}">✎ এডিট</button>` : ''}${mine ? `<button type="button" data-dmx-act="del" data-id="${m.id}">🗑 মুছুন</button>` : ''}</div></div>` : '';
+                return dayHtml + `<div class="chat-msg ${mine ? 'me' : 'other'} dmx-msg" id="dmx-m-${m.id}" data-dmx-msg="${m.id}">
+                  ${pinned ? '<div class="dmx-pin">📌 পিন করা</div>' : ''}${q}
+                  ${m.imageUrl ? `<div class="msg-image"><img src="${escapeHtml(toDirectImageUrl(m.imageUrl))}" data-preview-image="${escapeHtml(m.imageUrl)}" style="max-width:220px;max-height:220px;border-radius:10px;cursor:zoom-in;display:block;"></div>` : ''}
+                  ${m.text ? `<div class="msg-text">${escapeHtml(m.text)}${m.editedAt ? ' <span class="muted small">(এডিটেড)</span>' : ''}</div>` : ''}
+                  <div class="msg-time">${m.timestamp ? fmtDate(m.timestamp) : ''}${tick}<button type="button" class="dmx-more" data-dmx-more="${m.id}" title="অপশন">⋯</button></div>
+                  ${chips ? `<div class="dmx-chips">${chips}</div>` : ''}${menu}
+                </div>`;
+            }).join('') : `<div class="chat-empty"><div class="em">💬</div><div>এখনো কোনো মেসেজ নেই</div><div class="small muted">প্রথম মেসেজ পাঠিয়ে আলাপ শুরু করুন</div></div>`;
+            if (first || grew || near) el.scrollTop = el.scrollHeight; else el.scrollTop = prevTop;
+            el.querySelectorAll('[data-preview-image]').forEach(img => { img.addEventListener('click', () => openImagePreview(img.dataset.previewImage, { el: img })); });
+            dmxUpdatePinBar(); dmxUpdateReplyBar();
+        };
+        const dmxWire = () => {
+            const el = document.getElementById('dm-messages'); if (!el || el.dataset.dmxWired) return;
+            el.dataset.dmxWired = '1'; dmxEnsureCss();
+            el.addEventListener('click', (ev) => {
+                const t = ev.target; let b;
+                if ((b = t.closest('[data-dmx-react]'))) { dmxReact(b.dataset.dmxReact, b.dataset.emoji); return; }
+                if ((b = t.closest('[data-dmx-act]'))) { dmxAct(b.dataset.dmxAct, b.dataset.id); return; }
+                if ((b = t.closest('[data-dmx-goto]'))) { dmxGoto(b.dataset.dmxGoto); return; }
+                if (t.closest('[data-preview-image]') || t.closest('.dmx-menu')) return;
+                if ((b = t.closest('[data-dmx-more]') || t.closest('[data-dmx-msg]'))) { const id = b.dataset.dmxMore || b.dataset.dmxMsg; dmxMenuFor = dmxMenuFor === id ? null : id; dmxRerender(); }
+            });
+        };
+        // থ্রেড-ডক লিসেনার (রিয়্যাকশন/পিন রিয়েল-টাইম)। personal-এ বিদ্যমান listenDmThread-ই dmxApplyThread ডাকে; admin-এ এটি আলাদা।
+        const dmxListenThread = () => {
+            if (dmxThreadUnsub) { try { dmxThreadUnsub(); } catch (e) {} dmxThreadUnsub = null; }
+            const { doc, onSnapshot } = window._firestore, tid = dmCurrentThreadId;
+            dmxThreadUnsub = onSnapshot(doc(window._firestoreDb, 'dm_threads', tid), (snap) => {
+                if (dmCurrentThreadId !== tid) return;
+                dmxApplyThread(snap.data()); dmxRerender();
+            }, () => {});
+        };
+
         const renderDmMessages = (msgs) => {
+            try { return dmxRender(msgs); }
+            catch (e) { console.error('[DM] রেন্ডার ব্যর্থ:', e); return _renderDmMessagesRaw(msgs); }
+        };
+        const _renderDmMessagesRaw = (msgs) => {
             const el = document.getElementById('dm-messages');
             if (!el) return;
             const myEmail = window.currentUser.email;
@@ -11995,8 +12228,10 @@ body.dark-mode .btn-outline{border-color:var(--gold-300)!important;color:var(--g
                     sender: window.currentUser.email,
                     senderName: getProfileDisplayName(window.currentUser.email, window.currentUser.displayName),
                     text,
-                    timestamp: new Date().toISOString()
+                    timestamp: new Date().toISOString(),
+                    ...dmxReplyPayload()   // 🆕 [DM-X] উত্তর দিলে উদ্ধৃতি সংযুক্ত
                 });
+                dmxClearReply();
                 await setDoc(doc(window._firestoreDb, 'dm_threads', dmCurrentThreadId), {
                     lastMessage: text.substring(0, 80), lastMessageAt: new Date().toISOString(),
                     lastSender: window.currentUser.email
@@ -12022,8 +12257,9 @@ body.dark-mode .btn-outline{border-color:var(--gold-300)!important;color:var(--g
                 const { collection, addDoc, doc, setDoc } = window._firestore;
                 await addDoc(collection(window._firestoreDb, 'dm_threads', dmCurrentThreadId, 'messages'), {
                     sender: window.currentUser.email, senderName: displayName, text: '', imageUrl, timestamp: new Date()
-                        .toISOString()
+                        .toISOString(), ...dmxReplyPayload()
                 });
+                dmxClearReply();
                 await setDoc(doc(window._firestoreDb, 'dm_threads', dmCurrentThreadId), {
                     lastMessage: '📷 ছবি', lastMessageAt: new Date().toISOString(), lastSender: window.currentUser.email
                 }, { merge: true });
@@ -15449,8 +15685,11 @@ body.dark-mode .btn-outline{border-color:var(--gold-300)!important;color:var(--g
             openModal(`
               <h3>💬 মেসেজ পাঠান — ${escapeHtml(m.name)}</h3>
               <div class="small muted" style="margin-bottom:8px;">WhatsApp: <strong>${wa ? escapeHtml(m.whatsapp || m.mobile) : 'নেই'}</strong> · Messenger: <strong>${fb ? escapeHtml(fb) : 'নেই'}</strong>${(!wa || !fb) ? ' — "✎ সম্পাদনা" থেকে যোগ করুন' : ''}</div>
-              <div class="field"><label>টেমপ্লেট</label><select id="msg-tpl">${opts.map(o => `<option value="${escapeHtml(o.key)}">${escapeHtml(o.label)}</option>`).join('')}</select></div>
+              <div class="field"><label>টেমপ্লেট</label><select id="msg-tpl">${opts.map(o => `<option value="${escapeHtml(o.key)}">${escapeHtml(o.label)}</option>`).join('')}</select>
+                <div class="small muted" style="margin-top:4px;"><a href="#" id="msg-tpl-prev">👁️ সব টেমপ্লেটের প্রিভিউ</a>${(typeof openEmailTemplateManager === 'function' && typeof isAdminUser === 'function' && isAdminUser()) ? ' · <a href="#" id="msg-open-mgr">📚 টেমপ্লেট ম্যানেজার</a>' : ''}</div>
+                <div id="msg-tpl-list" style="display:none;margin-top:6px;max-height:300px;overflow:auto;border:1px solid var(--line);border-radius:8px;padding:6px;"></div></div>
               <div class="field"><label>মেসেজ (পাঠানোর আগে এডিট করা যাবে)</label><textarea id="msg-body" rows="10" style="width:100%;">${escapeHtml(initial)}</textarea></div>
+              <div class="field"><label>👁️ প্রিভিউ (যেভাবে যাবে)</label><div id="msg-pv" class="small" style="border:1px solid var(--line);border-radius:8px;padding:8px 10px;"></div></div>
               <div class="field" style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:4px;">
                 <input type="checkbox" id="msg-att" checked style="width:18px;height:18px;flex:none;">
                 <label for="msg-att" style="margin:0;">🧾 রিসিপ্ট ছবি সংযুক্ত করুন <span class="muted small">(ইমেইলে যে রিসিপ্ট যায় সেটাই)</span></label>
@@ -15468,8 +15707,21 @@ body.dark-mode .btn-outline{border-color:var(--gold-300)!important;color:var(--g
             `, () => {
                 const $ = id => document.getElementById(id);
                 const text = () => $('msg-body').value.trim();
-                let rcpt = null, rcptBusy = false, seq = 0;   // rcpt: { file } | { none } | { err } | null
-                const setSt = (t) => { const e = $('msg-att-st'); if (e) e.textContent = t; };
+                let rcpt = null, rcptBusy = false, seq = 0, stText = '', pvUrl = '';   // rcpt: { file } | { none } | { err } | null
+                const tplLabel = () => { const s = $('msg-tpl'); return s && s.selectedIndex >= 0 ? s.options[s.selectedIndex].text : ''; };
+                const updatePreview = () => {
+                    const pv = $('msg-pv'); if (!pv) return;
+                    if (pvUrl) { try { URL.revokeObjectURL(pvUrl); } catch (e) {} pvUrl = ''; }
+                    const att = $('msg-att') && $('msg-att').checked, extra = $('msg-img') && $('msg-img').files && $('msg-img').files[0];
+                    if (att && rcpt && rcpt.file) pvUrl = URL.createObjectURL(rcpt.file);
+                    pv.innerHTML = `
+                      <div><strong>প্রাপক:</strong> ${escapeHtml(m.name)} · WhatsApp ${wa ? escapeHtml(m.whatsapp || m.mobile) : '—'} · Messenger ${fb ? escapeHtml(fb) : '—'}</div>
+                      <div><strong>টেমপ্লেট:</strong> ${escapeHtml(tplLabel())}</div>
+                      <div><strong>ছবি:</strong> ${escapeHtml(stText || '—')}${extra ? ' · + অতিরিক্ত ছবি: ' + escapeHtml(extra.name) : ''}</div>
+                      ${pvUrl ? `<div style="margin-top:6px;"><a href="${pvUrl}" target="_blank" rel="noopener"><img src="${pvUrl}" alt="রিসিপ্ট" style="max-width:100%;max-height:180px;border:1px solid var(--line);border-radius:6px;"></a> <span class="muted">(বড় করে দেখতে ছবিতে চাপুন)</span></div>` : ''}
+                      <div style="margin-top:6px;padding:8px 10px;border:1px dashed var(--line);border-radius:8px;white-space:pre-wrap;max-height:240px;overflow:auto;">${escapeHtml($('msg-body').value) || '<span class="muted">(ফাঁকা)</span>'}</div>`;
+                };
+                const setSt = (t) => { stText = t; const e = $('msg-att-st'); if (e) e.textContent = t; updatePreview(); };
                 const prepare = async () => {
                     const my = ++seq; rcpt = null; rcptBusy = false;
                     if (!$('msg-att') || !$('msg-att').checked) { setSt('ছবি যাবে না (টিক বন্ধ)'); return; }
@@ -15490,7 +15742,26 @@ body.dark-mode .btn-outline{border-color:var(--gold-300)!important;color:var(--g
                 };
                 const canShareFiles = (files) => !!(navigator.share && navigator.canShare && navigator.canShare({ files }));
                 $('msg-close').onclick = closeModal;
-                $('msg-tpl').onchange = () => { try { $('msg-body').value = compose($('msg-tpl').value); } catch (e) { toast('⚠️ টেমপ্লেট তৈরি করা যায়নি'); } prepare(); };
+                $('msg-tpl').onchange = () => { try { $('msg-body').value = compose($('msg-tpl').value); } catch (e) { toast('⚠️ টেমপ্লেট তৈরি করা যায়নি'); } updatePreview(); prepare(); };
+                $('msg-body').addEventListener('input', updatePreview);
+                $('msg-img').addEventListener('change', updatePreview);
+                // 🔗 টেমপ্লেট-লিংক: সব টেমপ্লেটের প্রিভিউ-তালিকা (এই সদস্যের ডেটা বসিয়ে) — "ব্যবহার করুন" চাপলে সেটি বাছাই হয়; এডমিনের জন্য ম্যানেজার-লিংক
+                let listBuilt = false;
+                const buildTplList = () => {
+                    const box = $('msg-tpl-list'); box.innerHTML = '';
+                    opts.forEach(o => {
+                        let txt = '', tp = 'none';
+                        try { txt = compose(o.key); } catch (e) { txt = '(এই টেমপ্লেট তৈরি করা যায়নি)'; }
+                        try { tp = receiptPlan(o.key).type; } catch (e) {}
+                        const att = tp === 'none' ? 'ছবি যাবে না' : ('ছবি: ' + ((typeof PDF_TYPES !== 'undefined' && PDF_TYPES[tp]) || tp));
+                        const d = document.createElement('div'); d.style.cssText = 'border-bottom:1px solid var(--line);padding:6px 2px;';
+                        d.innerHTML = `<div><strong>${escapeHtml(o.label)}</strong> <span class="muted small">· ${escapeHtml(att)}</span> <button type="button" class="btn btn-outline btn-sm" data-use="${escapeHtml(o.key)}" style="margin-left:6px;">ব্যবহার করুন</button></div><div class="small" style="white-space:pre-wrap;max-height:90px;overflow:auto;margin-top:3px;">${escapeHtml(txt.length > 400 ? txt.slice(0, 400) + '…' : txt)}</div>`;
+                        box.appendChild(d);
+                    });
+                    box.querySelectorAll('[data-use]').forEach(b => b.onclick = () => { $('msg-tpl').value = b.dataset.use; $('msg-tpl').onchange(); $('msg-tpl-list').style.display = 'none'; });
+                };
+                $('msg-tpl-prev').onclick = (ev) => { ev.preventDefault(); const box = $('msg-tpl-list'); const show = box.style.display === 'none'; box.style.display = show ? 'block' : 'none'; if (show && !listBuilt) { listBuilt = true; buildTplList(); } };
+                const mgr = $('msg-open-mgr'); if (mgr) mgr.onclick = (ev) => { ev.preventDefault(); closeModal(); openEmailTemplateManager(); };
                 $('msg-att').onchange = prepare;
                 $('msg-copy').onclick = async () => { toast(await mfMsgCopy(text()) ? '✅ কপি হয়েছে' : '⚠️ কপি করা যায়নি — লেখা সিলেক্ট করে কপি করুন'); };
                 // app: 'wa' | 'fb' — প্রতিটি বাটন সবসময় নিজের অ্যাপের ওই সদস্যের চ্যাট খোলে (শেয়ার-মেনু শুধু "📤 শেয়ার মেনু" বাটনে)।
@@ -15519,6 +15790,7 @@ body.dark-mode .btn-outline{border-color:var(--gold-300)!important;color:var(--g
                     if (files.length) { if (canShareFiles(files)) data.files = files; else toast('ℹ️ এই ডিভাইসে ছবিসহ শেয়ার চলছে না — শুধু লেখা যাচ্ছে'); }
                     navigator.share(data).catch(() => {});   // ব্যবহারকারী বাতিল করলে কিছু নয়
                 };
+                updatePreview();
                 prepare();
             });
         };
