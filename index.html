@@ -5,6 +5,11 @@
     <!-- 🔧 [v16.5.46] এডমিনে সদস্য-তালিকার নতুন কলাম (WhatsApp নম্বর, Facebook/Messenger) না দেখানোর ত্রুটি ঠিক: লগইনের পর ক্লাউডের পুরনো কলাম-কনফিগ নতুন ডিফল্ট কলাম বাদ দিয়ে ক্যাশে বসত। -->
     <!-- 🆕 [v16.5.45] DM-এ ➡️ ফরওয়ার্ড (ওভারলে, ব্যবহারকারী বাছাই) + দিনের বিভাজক ("আজ/গতকাল/তারিখ") যোগ। -->
     <!-- 🆕 [v16.5.44] ব্যক্তিগত মেসেজে (DM) রিয়্যাক্ট · উত্তর · পিন · কপি · এডিট · মুছুন — রিয়্যাকশন/পিন থ্রেড-ডকে; Rules অপরিবর্তিত। -->
+    <!-- 🆕 [v16.5.54] বাগ-ফিক্স: নোটিফিকেশন URL সেভ হতো না (ফরম্যাট না মিললে চুপচাপ ফাঁকা থাকত) — এখন পেস্ট করা লেখা থেকে URL বের করে নেয়, ভুল হলে স্পষ্ট বার্তা দেয়, আর ঠিক URL দিলে/পরীক্ষা করলে সাথে সাথে সেভ হয়। -->
+    <!-- 🆕 [v16.5.53] সেটিংসে "🔔 নোটিফিকেশন — Apps Script Web App URL" (পেস্ট, পরীক্ষা, এখনই চালান) — Notify_v3.gs লাগবে (Web App হিসেবে ডিপ্লয়)। -->
+    <!-- 🔧 [v16.5.52] ফোল্ডার-তৈরি/মোছা ব্যর্থ হলে আসল কারণ দেখায়; সেটিংসে "🩺 Drive পরীক্ষা" — Code_combined_v16_5_28.gs লাগবে। -->
+    <!-- 🆕 [v16.5.51] ছবির ফোল্ডার: যেকোনো মেনুর নামে (নতুন মেনু হলেও), "আমাদের সম্পর্কে" যোগ; সেটিংসে ছবির ব্যাকআপ-মেয়াদ (চ্যাট ডিফল্ট ১ বছর) ও "এখনই পরিষ্কার" — Code_combined_v16_5_27.gs লাগবে। -->
+    <!-- 🆕 [v16.5.50] ছবি-আপলোড: "🗑 আপলোড মুছুন" (এইমাত্র আপলোড-করা ছবি Drive থেকেও), বিভাগ-ভিত্তিক ফোল্ডার (সদস্য/নোটিশ/ঘোষণা/চ্যাট/লোগো), সম্পাদনায় পুরনো ছবি একই নামে প্রতিস্থাপন — Code_combined_v16_5_26.gs লাগবে। -->
     <!-- 🔧 [v16.5.49] Apps Script Web App URL নতুন ডিপ্লয়মেন্টের (v16.5.25) লিংকে বদলানো — ছবি-আপলোড ও ইমেইল দুটোই। -->
     <!-- 🔧 [v16.5.48] ছবি-আপলোড: সর্বোচ্চ ১.৫ MB (বড় ছবি ~৮০০ KB লক্ষ্যে কমপ্রেস), EXIF-ঘোরানো ছবি ঠিক, সাদা পটভূমি। -->
     <!-- 🆕 [v16.5.47] UI: 💬 মডাল গোছানো (যোগাযোগ-চিপ, রিসিপ্ট-কার্ডে ধরন/ফর্ম/লেনদেন বাছাই, WhatsApp/Messenger ব্র্যান্ড-বাটন), ইমেইলে রিসিপ্টের ফর্ম (রিসিপ্ট/ক্লাসিক) + মাসিক/বার্ষিক ধরন, বাকি আইকন (➡ ⬅ ↩ ↪), মডালের স্টিকি হেডার/অ্যাকশন-বার, ফোকাস-রিং। Rules/সার্ভার অপরিবর্তিত। -->
@@ -5735,7 +5740,7 @@ body.dark-mode .btn-outline{border-color:var(--gold-300)!important;color:var(--g
         window.mfGetIdToken = window.mfGetIdToken || (async () => {
             try { const u = window._auth && window._auth.currentUser; return u ? await u.getIdToken() : ''; } catch (e) { return ''; }
         });
-        const uploadImageToDrive = async (file, personName, mobile, oldFileUrl, onProgress, folderId) => {
+        const uploadImageToDrive = async (file, personName, mobile, oldFileUrl, onProgress, folderId, category) => {
             if (!IMAGE_UPLOAD_SCRIPT_URL || IMAGE_UPLOAD_SCRIPT_URL.indexOf('PASTE_YOUR') === 0) {
                 throw new Error('Google Apps Script Web App URL এখনো সেট করা হয়নি (IMAGE_UPLOAD_SCRIPT_URL)।');
             }
@@ -5749,7 +5754,7 @@ body.dark-mode .btn-outline{border-color:var(--gold-300)!important;color:var(--g
                 res = await fetch(IMAGE_UPLOAD_SCRIPT_URL, {
                     method: 'POST',
                     headers: { 'Content-Type': 'text/plain;charset=utf-8' },
-                    body: JSON.stringify({ action: 'upload', idToken: (window.mfGetIdToken ? await window.mfGetIdToken() : ''), imageBase64: dataUrl, mimeType, personName: personName || '', mobile: mobile || '', oldFileUrl: oldFileUrl || '', folderId: folderId || '' })
+                    body: JSON.stringify({ action: 'upload', idToken: (window.mfGetIdToken ? await window.mfGetIdToken() : ''), imageBase64: dataUrl, mimeType, personName: personName || '', mobile: mobile || '', oldFileUrl: oldFileUrl || '', folderId: folderId || '', category: category || '' })
                 });
             } catch (netErr) {
                 // 🆕 fetch নিজেই ব্যর্থ হলে (CORS ব্লক / নেট নেই / URL ভুল) — আগে এটা অজানা এরর হয়ে হারিয়ে যেত
@@ -5781,8 +5786,39 @@ body.dark-mode .btn-outline{border-color:var(--gold-300)!important;color:var(--g
                 throw new Error('ছবি Drive-এ সেভ হয়েছে, কিন্তু লিংক (directUrl) রেসপন্সে পাওয়া যায়নি — Apps Script-এর পুরনো ভার্সন ডিপ্লয় করা থাকতে পারে। Code.gs আপডেট থাকলে পুনরায় "New version" Deploy করুন।');
             }
             onProgress?.('done');
+            window.__mfUploadNote = json.note || '';   // 🆕 [v16.5.28] সার্ভারের সতর্কতা (যেমন ফোল্ডার তৈরি যায়নি)
             return json.directUrl;
         };
+        // 🆕 [v16.5.26/52] এইমাত্র আপলোড-করা ছবি Drive থেকে মোছা (ট্র্যাশে) — শুধু নিজের আপলোড; সার্ভার যাচাই করে
+        const deleteUploadedImage = async (fileUrl) => {
+            const res = await fetch(IMAGE_UPLOAD_SCRIPT_URL, { method: 'POST', headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+                body: JSON.stringify({ action: 'delete_image', idToken: (window.mfGetIdToken ? await window.mfGetIdToken() : ''), fileUrl }) });
+            let json; try { json = JSON.parse(await res.text()); } catch (e) { throw new Error('সার্ভার থেকে সঠিক রেসপন্স আসেনি'); }
+            if (!json.success) throw new Error(json.error || 'ছবি মোছা যায়নি');
+            return true;
+        };
+        // 🆕 [v16.5.51] ছবির মেয়াদ (এডমিন): সার্ভার থেকে পড়া/সংরক্ষণ/এখনই-পরিষ্কার
+        const imgRetentionCall = async (mode, retention) => {
+            const res = await fetch(IMAGE_UPLOAD_SCRIPT_URL, { method: 'POST', headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+                body: JSON.stringify({ action: 'img_retention', mode, retention: retention || undefined, idToken: (window.mfGetIdToken ? await window.mfGetIdToken() : '') }) });
+            let json; try { json = JSON.parse(await res.text()); } catch (e) { throw new Error('সার্ভার থেকে সঠিক রেসপন্স আসেনি (Code_combined_v16_5_27.gs ডিপ্লয় করেছেন?)'); }
+            if (!json.success) throw new Error(json.error || 'ব্যর্থ');
+            return json;
+        };
+        // 🆕 [v16.5.53] নোটিফিকেশন Apps Script Web App (settings.notifyUrl) — সংযোগ-পরীক্ষা/এখনই-চালান (শুধু এডমিন)
+        const NOTIFY_URL_RE = /^https:\/\/script\.google\.com\/(?:a\/macros\/[A-Za-z0-9_.\-]+\/|macros\/)s\/[A-Za-z0-9_\-]+\/exec$/;
+        // 🆕 [v16.5.54] পেস্ট করা লেখা থেকে (স্পেস/নতুন লাইন/?query/…/dev সহ) সঠিক /exec URL বের করে
+        const normNotifyUrl = (raw) => { const m = String(raw || '').match(/https:\/\/script\.google\.com\/(?:a\/macros\/[A-Za-z0-9_.\-]+\/|macros\/)s\/[A-Za-z0-9_\-]+\/(?:exec|dev)/); return m ? m[0].replace(/\/dev$/, '/exec') : ''; };
+        const notifyCall = async (url, action) => {
+            if (!action) { const r = await fetch(url); const j = JSON.parse(await r.text()); return j; }
+            const res = await fetch(url, { method: 'POST', headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+                body: JSON.stringify({ action, idToken: (window.mfGetIdToken ? await window.mfGetIdToken() : '') }) });
+            let j; try { j = JSON.parse(await res.text()); } catch (e) { throw new Error('সঠিক রেসপন্স আসেনি — Web App ডিপ্লয় (Execute as: Me, Access: Anyone) ও Notify_v3.gs ঠিক আছে কিনা দেখুন'); }
+            if (!j.success) throw new Error(j.error || 'ব্যর্থ');
+            return j;
+        };
+        const IMG_CAT_BY_FIELD = { 'f-imageUrl': 'members', 'ue-photo': 'members', 'f-noticeImage': 'notices', 'f-announcementImage': 'announcements', 'un-image': 'notices', 's-logo-url': 'logo' };
+        const IMG_CAT_DEFAULT = 'others';   // নতুন কোনো মেনু থেকে আপলোড হলে wireImageUploadField/mfUploadImage-এ সেই মেনুর নাম দিন — সেই নামেই ফোল্ডার হবে
         window.mfUploadImage = uploadImageToDrive; // 🆕 [v16.5.15] ERP কেন্দ্রের "সংগঠন" এডিটর ব্যবহার করে (শুধু এডমিন-প্যানেলে)
 
         // "Insert Image" ফিল্ডের HTML — URL টেক্সটবক্স + আপলোড বাটন + প্রিভিউ, একসাথে
@@ -5814,6 +5850,7 @@ body.dark-mode .btn-outline{border-color:var(--gold-300)!important;color:var(--g
                       <input type="file" accept="image/*" data-image-input="${fieldId}" style="display:none;">
                     </label>
                     <a class="btn btn-outline btn-sm" href="${escapeHtml(folderHref)}" target="_blank" rel="noopener noreferrer" title="Drive ফোল্ডারে সব ছবি/ডাটা সরাসরি দেখুন">📁 ড্রাইভ ফোল্ডার</a>
+                    <button type="button" class="btn btn-outline btn-sm" data-image-del="${fieldId}" style="display:none;" title="এইমাত্র আপলোড করা ছবি Drive থেকেও মুছে ফেলুন">🗑 আপলোড মুছুন</button>
                     <button type="button" class="btn btn-outline btn-sm" data-image-clear="${fieldId}" title="ছবি সরান">✕ সরান</button>
                     <button type="button" class="btn btn-outline btn-sm" data-image-testconn="${fieldId}" title="Apps Script সংযোগ পরীক্ষা করুন">🔌 সংযোগ পরীক্ষা</button>
                     <span class="image-upload-status" id="status-${fieldId}"></span>
@@ -5831,7 +5868,8 @@ body.dark-mode .btn-outline{border-color:var(--gold-300)!important;color:var(--g
         // getNameMobile: () => ({name, mobile})  — ফাইলের নাম "ব্যক্তির-নাম_মোবাইল" রাখার জন্য
         // 🆕 [ফোল্ডার-রাউটিং] folderId (ঐচ্ছিক) — কোন Drive ফোল্ডারে এই ফিল্ডের ছবি আপলোড হবে,
         // না দিলে Code.gs-এর নিজস্ব ডিফল্ট ফোল্ডার ব্যবহৃত হবে
-        const wireImageUploadField = (fieldId, getNameMobile, folderId) => {
+        const wireImageUploadField = (fieldId, getNameMobile, folderId, category) => {
+            category = category || IMG_CAT_BY_FIELD[fieldId] || IMG_CAT_DEFAULT;
             const wrap = document.querySelector(`[data-image-field="${fieldId}"]`);
             if (!wrap) return;
             const fileInput = wrap.querySelector(`[data-image-input="${fieldId}"]`);
@@ -5841,16 +5879,26 @@ body.dark-mode .btn-outline{border-color:var(--gold-300)!important;color:var(--g
             const preview = document.getElementById(`preview-${fieldId}`);
             const status = document.getElementById(`status-${fieldId}`);
             const clearBtn = wrap.querySelector(`[data-image-clear="${fieldId}"]`);
+            const delBtn = wrap.querySelector(`[data-image-del="${fieldId}"]`);
+            let justUploaded = '';
+            const syncDel = () => { if (delBtn) delBtn.style.display = (justUploaded && urlInput.value.trim() === justUploaded) ? '' : 'none'; };
+            if (delBtn) delBtn.addEventListener('click', async () => {
+                if (!justUploaded || !window.confirm('এইমাত্র আপলোড করা ছবিটি Drive থেকেও মুছে ফেলবেন?')) return;
+                status.textContent = '⏳ মোছা হচ্ছে...'; status.className = 'image-upload-status uploading';
+                try { await deleteUploadedImage(justUploaded); justUploaded = ''; urlInput.value = ''; setPreview(''); status.textContent = '🗑 ছবি মোছা হয়েছে'; status.className = 'image-upload-status success'; }
+                catch (err) { status.textContent = '❌ ' + (err.message || 'মোছা যায়নি'); status.className = 'image-upload-status error'; }
+                syncDel();
+            });
 
             const setPreview = (url) => {
                 preview.innerHTML = url ? `<img src="${escapeHtml(toDirectImageUrl(url))}" alt="preview">` : '<span class="ph">👤</span>';
             };
-            urlInput.addEventListener('input', () => setPreview(urlInput.value.trim()));
+            urlInput.addEventListener('input', () => { setPreview(urlInput.value.trim()); syncDel(); });
 
             if (clearBtn) clearBtn.addEventListener('click', () => {
                 urlInput.value = '';
                 setPreview('');
-                status.textContent = '';
+                status.textContent = ''; syncDel();
             });
 
             // 🆕 এক ক্লিকে Apps Script Web App ডিপ্লয়মেন্ট লাইভ ও সঠিক কিনা যাচাই করা
@@ -5875,10 +5923,10 @@ body.dark-mode .btn-outline{border-color:var(--gold-300)!important;color:var(--g
                     const directUrl = await uploadImageToDrive(file, name, mobile, oldUrl, (stage) => {
                         if (stage === 'compressing') status.textContent = '⏳ কমপ্রেস করা হচ্ছে...';
                         if (stage === 'uploading') status.textContent = '⏳ আপলোড হচ্ছে...';
-                    }, folderId);
-                    urlInput.value = directUrl;
+                    }, folderId, category);
+                    urlInput.value = directUrl; justUploaded = directUrl; syncDel();
                     setPreview(directUrl);
-                    status.textContent = '✅ আপলোড সফল হয়েছে';
+                    status.textContent = '✅ আপলোড সফল হয়েছে' + (window.__mfUploadNote ? ' — ⚠️ ' + window.__mfUploadNote : '');
                     status.className = 'image-upload-status success';
                 } catch (err) {
                     console.error(err);
@@ -7456,6 +7504,27 @@ body.dark-mode .btn-outline{border-color:var(--gold-300)!important;color:var(--g
             <div style="border-bottom:1px dashed var(--line);padding-bottom:12px;margin-bottom:12px;">
               <div class="field"><label>লোগো (ইমোজি বা অক্ষর)</label><input type="text" id="s-logo" value="${escapeHtml(s.logo)}" maxlength="4"></div>
               ${imageUploadFieldHtml('s-logo-url', s.logoUrl || '', 'লোগো ছবি')}
+              <div class="field" id="notify-box" style="border:1px solid var(--line);border-radius:10px;padding:10px 12px;">
+                <label for="s-notify-url">🔔 নোটিফিকেশন — Apps Script Web App URL</label>
+                <input type="text" id="s-notify-url" value="${escapeHtml(s.notifyUrl || '')}" placeholder="https://script.google.com/macros/s/…/exec" inputmode="url" autocomplete="off">
+                <div class="small muted" style="margin:4px 0 6px;">Notify স্ক্রিপ্টকে Web App হিসেবে ডিপ্লয় করে (Execute as: Me · Access: Anyone) পাওয়া লিংকটি এখানে পেস্ট করুন, তারপর নিচের "সংরক্ষণ" চাপুন। ফাঁকা রাখলে এই সুবিধা বন্ধ থাকে; ট্রিগারে নোটিফিকেশন আগের মতোই চলে।</div>
+                <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center;">
+                  <button type="button" class="btn btn-outline btn-sm" id="notify-test">🔌 সংযোগ ও স্ট্যাটাস</button>
+                  <button type="button" class="btn btn-outline btn-sm" id="notify-run">🔔 এখনই চালান</button>
+                  <span id="notify-st" class="small"></span>
+                </div>
+              </div>
+              <div class="field" id="img-ret-box" style="border:1px solid var(--line);border-radius:10px;padding:10px 12px;">
+                <label>🗂 ছবির ফোল্ডার ও ব্যাকআপ-মেয়াদ</label>
+                <div class="small muted" style="margin-bottom:6px;">প্রতিটি মেনুর ছবি আলাদা ফোল্ডারে যায়। এখানে ঠিক করুন ছবি কত দিন থাকবে (০ = চিরস্থায়ী)। মেয়াদ পেরোলে ছবি Drive-ট্র্যাশে যায় (৩০ দিন ফিরিয়ে আনা যায়)। চ্যাটের ডিফল্ট ৩৬৫ দিন।</div>
+                <div id="img-ret-list" class="small">⏳ লোড হচ্ছে...</div>
+                <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:8px;align-items:center;">
+                  <button type="button" class="btn btn-outline btn-sm" id="img-ret-save">💾 মেয়াদ সংরক্ষণ</button>
+                  <button type="button" class="btn btn-outline btn-sm" id="img-ret-run">🧹 এখনই পরিষ্কার</button>
+                  <button type="button" class="btn btn-outline btn-sm" id="img-ret-diag">🩺 Drive পরীক্ষা</button>
+                  <span id="img-ret-st" class="small"></span>
+                </div>
+              </div>
               <div class="field"><label>প্রতিষ্ঠানের নাম</label><input type="text" id="s-name" value="${escapeHtml(s.name)}"></div>
               <div class="field"><label>ঠিকানা</label><input type="text" id="s-address" value="${escapeHtml(s.address)}"></div>
               <div class="field"><label>যোগাযোগ</label><input type="text" id="s-contact" value="${escapeHtml(s.contact)}"></div>
@@ -7683,6 +7752,7 @@ body.dark-mode .btn-outline{border-color:var(--gold-300)!important;color:var(--g
                 };
 
                 const saveSettings = () => {
+                    { const _e = document.getElementById('s-notify-url'), _raw = _e ? _e.value.trim() : ''; if (_raw && !normNotifyUrl(_raw)) { toast('⚠️ নোটিফিকেশন URL ঠিক নয় — https://script.google.com/macros/s/…/exec ফরম্যাটে দিন'); try { _e.focus(); } catch (x) { } return; } }   // 🆕 [v16.5.54] আর চুপচাপ বাতিল হবে না
                     const f = currentFields();
                     const tl = {};
                     CONFIG.TAB_ORDER.forEach(k => { tl[k] = document.getElementById(`s-tablabel-${k}`).value.trim() ||
@@ -7798,6 +7868,7 @@ body.dark-mode .btn-outline{border-color:var(--gold-300)!important;color:var(--g
                         })(),
                         logo: document.getElementById('s-logo').value.trim() || '☪',
                         logoUrl: document.getElementById('s-logo-url').value.trim(),
+                        notifyUrl: (() => { const e = document.getElementById('s-notify-url'); if (!e) return state.settings.notifyUrl || ''; const raw = e.value.trim(); return raw ? (normNotifyUrl(raw) || (state.settings.notifyUrl || '')) : ''; })(),   // 🆕 [v16.5.53] ভুল ফরম্যাট হলে আগেরটাই থাকে
                         logoDataUrl: pendingLogoDataUrl || '', // 🆕 [বাগ-ফিক্স] JPG/PDF এক্সপোর্টে লোগো দেখানোর জন্য
                         name: document.getElementById('s-name').value.trim() || CONFIG.DEFAULT_SETTINGS.name,
                         address: document.getElementById('s-address').value.trim(),
@@ -7830,6 +7901,47 @@ body.dark-mode .btn-outline{border-color:var(--gold-300)!important;color:var(--g
                 document.getElementById('f-cancel').onclick = closeModal;
                 document.getElementById('f-save').onclick = saveSettings;
                 wireImageUploadField('s-logo-url', () => ({ name: 'logo', mobile: '' }), DEFAULT_DRIVE_FOLDER_ID);
+                // 🆕 [v16.5.53] নোটিফিকেশন Web App URL: পরীক্ষা / এখনই চালান (URL-টি সেটিংস "সংরক্ষণ"-এ সেভ হয়)
+                (() => {
+                    const inp = document.getElementById('s-notify-url'), st = document.getElementById('notify-st'); if (!inp) return;
+                    const persist = (v) => { if ((state.settings.notifyUrl || '') !== v) { state.settings.notifyUrl = v; saveState(); } };   // 🆕 [v16.5.54] পরীক্ষা সফল/ঠিক URL হলেই সাথে সাথে সেভ
+                    inp.addEventListener('change', () => { const v = normNotifyUrl(inp.value); if (v) { inp.value = v; persist(v); st.textContent = '💾 সেভ হয়েছে'; } else if (inp.value.trim()) st.textContent = '⚠️ সঠিক URL দিন (https://script.google.com/macros/s/…/exec)'; });
+                    const get = () => { const v = normNotifyUrl(inp.value); if (v) { inp.value = v; persist(v); } if (!NOTIFY_URL_RE.test(v)) { st.textContent = '⚠️ সঠিক URL দিন (https://script.google.com/macros/s/…/exec)'; return ''; } return v; };
+                    document.getElementById('notify-test').onclick = async () => {
+                        const u = get(); if (!u) return; st.textContent = '⏳...';
+                        try { const g = await notifyCall(u); const s2 = await notifyCall(u, 'status'); st.textContent = '✅ চালু (' + (g.version || '') + ') · টোকেনসহ ইউজার ' + s2.usersWithTokens + ' · টোকেন ' + s2.tokens + (s2.appUrlSet ? '' : ' · ⚠️ APP_URL সেট নেই'); }
+                        catch (e) { st.textContent = '❌ ' + (e.message || e); }
+                    };
+                    document.getElementById('notify-run').onclick = async () => {
+                        const u = get(); if (!u || !window.confirm('এখনই নতুন নোটিশ/চ্যাট/মেসেজের নোটিফিকেশন পাঠানো হবে। এগোবেন?')) return; st.textContent = '⏳ চলছে...';
+                        try { await notifyCall(u, 'notify_now'); st.textContent = '✅ চালানো হয়েছে'; } catch (e) { st.textContent = '❌ ' + (e.message || e); }
+                    };
+                })();
+                // 🆕 [v16.5.51] ছবির মেয়াদ-প্যানেল (শুধু এডমিন; সেটিংস-সেভের অংশ নয় — নিজস্ব "সংরক্ষণ" বাটন)
+                (() => {
+                    const listEl = document.getElementById('img-ret-list'), st = document.getElementById('img-ret-st');
+                    if (!listEl) return;
+                    const render = (j) => {
+                        listEl.innerHTML = (j.folders || []).map(n => `<div style="display:flex;align-items:center;gap:8px;margin:3px 0;"><span style="flex:1;">📁 ${escapeHtml(n)}</span><input type="number" min="0" max="3650" data-ret-name="${escapeHtml(n)}" value="${Number((j.retention || {})[n]) || 0}" style="width:84px;"> <span class="muted">দিন</span></div>`).join('') || 'কোনো ফোল্ডার নেই';
+                    };
+                    const collect = () => { const o = {}; listEl.querySelectorAll('[data-ret-name]').forEach(i => { o[i.dataset.retName] = parseInt(i.value, 10) || 0; }); return o; };
+                    const run = async (mode, ret, okMsg) => {
+                        st.textContent = '⏳...';
+                        try { const j = await imgRetentionCall(mode, ret); render(j); st.textContent = okMsg ? okMsg(j) : ''; }
+                        catch (e) { st.textContent = '❌ ' + (e.message || e); listEl.textContent = listEl.textContent.indexOf('লোড') >= 0 ? '—' : listEl.textContent; }
+                    };
+                    run('get');
+                    document.getElementById('img-ret-diag').onclick = async () => {
+                        st.textContent = '⏳ পরীক্ষা চলছে...';
+                        try {
+                            const j = await imgRetentionCall('diag');
+                            listEl.innerHTML = (j.steps || []).map(x => `<div style="margin:2px 0;color:${x.ok ? 'inherit' : '#b3261e'};">${x.ok ? '✅' : '❌'} ${escapeHtml(x.n)}${x.m ? ' — ' + escapeHtml(x.m) : ''}</div>`).join('') + '<div class="muted" style="margin-top:4px;">(ফলাফল দেখা শেষে মোডাল বন্ধ করে আবার খুললে ফোল্ডার-তালিকা ফিরবে)</div>';
+                            st.textContent = '';
+                        } catch (e) { st.textContent = '❌ ' + (e.message || e); }
+                    };
+                    document.getElementById('img-ret-save').onclick = () => run('set', collect(), () => '✅ সংরক্ষিত');
+                    document.getElementById('img-ret-run').onclick = () => { if (window.confirm('মেয়াদ-পেরোনো ছবি এখনই Drive-ট্র্যাশে পাঠানো হবে। এগোবেন?')) run('run', null, j => '🧹 ' + (j.trashed >= 0 ? j.trashed : 0) + 'টি ছবি ট্র্যাশে'); };
+                })();
 
                 // 🆕 [বাগ-ফিক্স] লোগো আপলোড/মুছার সাথে সাথে এম্বেড-ভার্সনও (pendingLogoDataUrl)
                 // আপডেট রাখা হচ্ছে — বিদ্যমান সেভ করা ভার্সন দিয়ে শুরু, যাতে অন্য কোনো
@@ -11503,7 +11615,7 @@ body.dark-mode .btn-outline{border-color:var(--gold-300)!important;color:var(--g
             toast('📤 ছবি পাঠানো হচ্ছে...');
             try {
                 _chatImgLog('আপলোড শুরু (Apps Script-এ পাঠানো হচ্ছে)');
-                const imageUrl = await uploadImageToDrive(file, chatImageFileTag(displayName), '', '');
+                const imageUrl = await uploadImageToDrive(file, chatImageFileTag(displayName), '', '', null, '', 'chat');
                 _chatImgLog('Drive থেকে URL এলো:', imageUrl);
                 const msg = { id: uid(), text: '', imageUrl, sender: user.email, displayName, timestamp: new Date()
                         .toISOString() };
@@ -12247,7 +12359,7 @@ body.dark-mode .btn-outline{border-color:var(--gold-300)!important;color:var(--g
             toast('📤 ছবি পাঠানো হচ্ছে...');
             try {
                 _chatImgLog('আপলোড শুরু (Apps Script-এ পাঠানো হচ্ছে)');
-                const imageUrl = await uploadImageToDrive(file, chatImageFileTag(displayName), '', '');
+                const imageUrl = await uploadImageToDrive(file, chatImageFileTag(displayName), '', '', null, '', 'chat');
                 _chatImgLog('Drive থেকে URL এলো:', imageUrl);
                 const { collection, addDoc, doc, setDoc } = window._firestore;
                 await addDoc(collection(window._firestoreDb, 'dm_threads', dmCurrentThreadId, 'messages'), {
@@ -25079,7 +25191,7 @@ body.dark-mode .btn-outline{border-color:var(--gold-300)!important;color:var(--g
         if (!/^image\/(jpeg|png|webp)$/.test(file.type)) return Promise.reject(new Error('শুধু JPG/PNG/WEBP ছবি'));
         if (file.size > 8 * 1024 * 1024) return Promise.reject(new Error('ছবি ৮ MB-এর বেশি'));
         if (typeof window.mfUploadImage !== 'function') return Promise.reject(new Error('আপলোড ফাংশন পাওয়া যায়নি'));
-        return window.mfUploadImage(file, 'about', '', oldUrl || '', null);
+        return window.mfUploadImage(file, 'about', '', oldUrl || '', null, '', 'about');
     };
     var save = function (btn) {
         var clean = AB.norm(E), now = new Date().toISOString(), by = (window.currentUser && window.currentUser.email) || '';
