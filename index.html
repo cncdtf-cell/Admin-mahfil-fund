@@ -2,9 +2,15 @@
 <html lang="bn">
 <head>
     <meta charset="UTF-8" />
+    <!-- 🆕 [v16.5.63] চ্যাট: গ্রুপ ও DM একই ডিজাইন/ইমোজি; মেসেঞ্জার-স্টাইল 'কে কোন মেসেজ পর্যন্ত দেখেছেন' (ছোট ছবি); চ্যাট-ডকে 📎 ছবি বাটন; অ্যাডমিনে DM-এ ব্লু-টিক/ওয়াচডগ পার্সোনালের সমান। এক্সেল টেমপ্লেটে প্রতি মাসের মেথড ও রিসিভ তারিখ। (+v16.5.61-62: হেডার গ্রিড, অ্যাডমিন গ্রুপ-চ্যাট রিয়্যাকশন/পিন/চ্যাট-বার, ইমপোর্ট টেমপ্লেট) -->
     <!-- 🔧 [v16.5.46] এডমিনে সদস্য-তালিকার নতুন কলাম (WhatsApp নম্বর, Facebook/Messenger) না দেখানোর ত্রুটি ঠিক: লগইনের পর ক্লাউডের পুরনো কলাম-কনফিগ নতুন ডিফল্ট কলাম বাদ দিয়ে ক্যাশে বসত। -->
     <!-- 🆕 [v16.5.45] DM-এ ➡️ ফরওয়ার্ড (ওভারলে, ব্যবহারকারী বাছাই) + দিনের বিভাজক ("আজ/গতকাল/তারিখ") যোগ। -->
     <!-- 🆕 [v16.5.44] ব্যক্তিগত মেসেজে (DM) রিয়্যাক্ট · উত্তর · পিন · কপি · এডিট · মুছুন — রিয়্যাকশন/পিন থ্রেড-ডকে; Rules অপরিবর্তিত। -->
+    <!-- 🆕 [v16.5.60] অপশন A (সার্চ + ফিল্টার-শিট): মোবাইলে সার্চের পাশে 🎚 ফিল্টার (সক্রিয় সংখ্যার ব্যাজ) ও ⋯ আরও (এক্সেল / প্রিন্ট ও ছবি / সেটিংস গ্রুপে); পেজে শুধু ➕ নতুন + 💰 সংগ্রহ; তারিখ-ফিল্টারও শিটে। 📤📥 মাসিক ডেটা এক্সেল এক্সপোর্ট/ইমপোর্ট যোগ। ডক (v59) বাদ। -->
+    <!-- 🆕 [v16.5.59] মোবাইলে "অ্যাকশন ডক" (অপশন C): মাসিক · সদস্য · বার্ষিক · ব্যয় পেজে ➕ নতুন · 💰 সংগ্রহ · ফিল্টার · আরও — নিচে থাম্ব-জোনে; ফিল্টার/এক্সেল/প্রিন্ট/সেটিংস বটম-শিটে। আগের বাটন ডম-এ থাকে (মোবাইলে লুকানো), ডেস্কটপ অপরিবর্তিত। -->
+    <!-- 🆕 [v16.5.58] ইউনিফাইড ⚙️ টেবিল সেটিংস হাব: ট্যাব — 🗂 কলাম · 🎛 লেখা ও ঘনত্ব (ইউজার/পার্সোনালের জন্য এডমিন-নিয়ন্ত্রিত: লেখার সাইজ, Wrap, ঘনত্ব, ডোরাকাটা, মোবাইলে অটো-স্থির-প্রথম-কলাম, ইউজার-টুলবার লুকানো, জোর-প্রয়োগ) · 📐 এক্সপোর্ট। ডেটা app_settings/table_prefs (নতুন রুলস লাগে না)। personal_v16_5_56-এর সাথে ব্যবহার করুন। -->
+    <!-- 🆕 [v16.5.57] কলাম সেটিংস (ডিটেলস সহ সব টেবিল): প্রতিটি সারিতে সরাসরি চিপ — 👥 ইউজার (এডমিনের মতো/দেখায়/লুকানো ঘোরে), ❄️ ইউজার, ❄️ এডমিন; উপরে বাল্ক বাটন (সব দেখাও / এডমিনের মতো / প্রথম কলাম ফ্রিজ / ইউজার ভিউ রিসেট) + "ইউজার দেখবে:" লাইভ প্রিভিউ; ডিটেলস সাব-টেবিলে ফ্রিজ নির্ভরযোগ্য (data-mf-tid)। personal_v16_5_55-এর সাথে ব্যবহার করুন। -->
+    <!-- 🆕 [v16.5.56] কলাম সেটিংস: প্রতিটি কলামে "👥 ইউজার/পার্সোনাল ভিউ" (এডমিনের মতো / সবসময় দেখাবে / লুকাবে) + গোপনীয় চালু/বন্ধ — মডাল রি-ওপেন ছাড়াই সেভ; ইউজার-প্রস্থ ও ফ্রিজ আগের মতোই। personal_v16_5_54-এর সাথে ব্যবহার করুন। -->
     <!-- 🆕 [v16.5.55] ক্লাউড-সেভ ব্যর্থ হলে টোস্টে আসল কারণ/কোড দেখায় (অনুমতি/লগইন/নেটওয়ার্ক আলাদা)। -->
     <!-- 🆕 [v16.5.54] বাগ-ফিক্স: নোটিফিকেশন URL সেভ হতো না (ফরম্যাট না মিললে চুপচাপ ফাঁকা থাকত) — এখন পেস্ট করা লেখা থেকে URL বের করে নেয়, ভুল হলে স্পষ্ট বার্তা দেয়, আর ঠিক URL দিলে/পরীক্ষা করলে সাথে সাথে সেভ হয়। -->
     <!-- 🆕 [v16.5.53] সেটিংসে "🔔 নোটিফিকেশন — Apps Script Web App URL" (পেস্ট, পরীক্ষা, এখনই চালান) — Notify_v3.gs লাগবে (Web App হিসেবে ডিপ্লয়)। -->
@@ -8528,7 +8534,7 @@ body.dark-mode .btn-outline{border-color:var(--gold-300)!important;color:var(--g
         const getGlobalColFlags = (tableId, key) => {
             const t = GLOBAL_COL_VISIBILITY.tables && GLOBAL_COL_VISIBILITY.tables[tableId];
             const c = t && t[key];
-            return { hidden: !!(c && c.hidden), confidentialOnly: !!(c && c.confidentialOnly) };
+            return { hidden: !!(c && c.hidden), confidentialOnly: !!(c && c.confidentialOnly), showToUsers: !!(c && c.showToUsers) };   // 🆕 [v16.5.56] showToUsers = এডমিন নিজে লুকালেও ইউজারে দেখাবে
         };
 
         // patch যেমন { hidden: true } বা { confidentialOnly: true } — আগে লোকালে সাথে
@@ -8552,6 +8558,21 @@ body.dark-mode .btn-outline{border-color:var(--gold-300)!important;color:var(--g
         };
 
         // রিয়েল-টাইম শোনা — অন্য এডমিন ডিভাইসে বদলালেও এই ডিভাইসে সাথে সাথে প্রতিফলিত হবে
+        // 🆕 [v16.5.57] একাধিক কলামের ফ্ল্যাগ একসাথে (১টি Firestore লেখায়) — patches = { colKey: {hidden?, showToUsers?, confidentialOnly?} }
+        const saveGlobalColFlagsBulk = async (tableId, patches) => {
+            if (!GLOBAL_COL_VISIBILITY.tables) GLOBAL_COL_VISIBILITY.tables = {};
+            if (!GLOBAL_COL_VISIBILITY.tables[tableId]) GLOBAL_COL_VISIBILITY.tables[tableId] = {};
+            Object.keys(patches).forEach(k => {
+                const cur = GLOBAL_COL_VISIBILITY.tables[tableId][k] || { hidden: false, confidentialOnly: false };
+                GLOBAL_COL_VISIBILITY.tables[tableId][k] = { ...cur, ...patches[k] };
+            });
+            try { localStorage.setItem(GLOBAL_COL_VIS_LOCAL_KEY, JSON.stringify(GLOBAL_COL_VISIBILITY)); } catch (e) {}
+            if (typeof window._firestore !== 'undefined' && window._firestoreDb) {
+                const { doc, setDoc } = window._firestore;
+                try { await setDoc(doc(window._firestoreDb, 'app_settings', 'column_visibility'), GLOBAL_COL_VISIBILITY); }
+                catch (err) { console.error('গ্লোবাল কলাম ভিজিবিলিটি ক্লাউড সেভ ব্যর্থ:', err); toast('❌ ক্লাউডে সেভ ব্যর্থ হয়েছে, আবার চেষ্টা করুন'); throw err; }
+            }
+        };
         const startGlobalColVisibilitySync = () => {
             if (_globalColVisUnsub || typeof window._firestore === 'undefined' || !window._firestoreDb) return;
             try {
@@ -8569,6 +8590,7 @@ body.dark-mode .btn-outline{border-color:var(--gold-300)!important;color:var(--g
         };
         window.getGlobalColFlags = getGlobalColFlags;
         window.saveGlobalColFlags = saveGlobalColFlags;
+        window.saveGlobalColFlagsBulk = saveGlobalColFlagsBulk;
         window.startGlobalColVisibilitySync = startGlobalColVisibilitySync;
         window.stopGlobalColVisibilitySync = () => {
             if (_globalColVisUnsub) { _globalColVisUnsub(); _globalColVisUnsub = null; }
@@ -8792,7 +8814,7 @@ body.dark-mode .btn-outline{border-color:var(--gold-300)!important;color:var(--g
         // 🆕 [ধাপ ৮] টেবিলের A−/A+ ও Wrap টুলবার এখন পেজের শেষের 'টেবিল ইঞ্জিন' স্ক্রিপ্ট নিজে প্রতিটা টেবিলের
         // উপরে বসায় (সব টেবিলে, সব প্যানেলে একই) — তাই এখানে আলাদা কিছু লাগে না
         const columnSettingsButtonHtml = (tableId) =>
-            `<button class="btn btn-outline btn-sm no-print" id="btn-col-settings-${tableId}" title="কলাম দেখাও/লুকাও, সাজাও, নাম বদলাও">⚙️ কলাম সেটিংস</button>`;
+            `<button class="btn btn-outline btn-sm no-print" id="btn-col-settings-${tableId}" title="কলাম · লেখা ও ঘনত্ব · এক্সপোর্ট — সব সেটিংস এক জায়গায়">⚙️ টেবিল সেটিংস</button>`;
 
         // মোডালের ভেতরের কলাম-তালিকার একটা সারি — [⠿ ড্র্যাগ-হ্যান্ডেল] [checkbox] [নাম-ইনপুট] [প্রস্থ-ইনপুট]
         // (⠿ ও প্রস্থ-ইনপুট STEP 4/5-এর আগ পর্যন্ত সাজানো শুধু, কার্যকর নয়)
@@ -8810,7 +8832,8 @@ body.dark-mode .btn-outline{border-color:var(--gold-300)!important;color:var(--g
             // ⋮ বাটনের রঙ দিয়েই বোঝা যাবে প্যানেল না খুলেই কলামটার অবস্থা কী
             const moreBtnClass = flags.hidden ? 'btn-danger' : (flags.confidentialOnly ? 'btn-success' : 'btn-outline');
             const statusBits = [];
-            if (flags.hidden) statusBits.push('🚫 সবার জন্য লুকানো');
+            if (flags.hidden) statusBits.push('🚫 ইউজারে লুকানো');
+            if (flags.showToUsers && !flags.hidden) statusBits.push('✅ ইউজারে সবসময় দেখায়');
             if (flags.confidentialOnly) statusBits.push('🔒 গোপনীয়');
             const _uw = getUserColWidth(tableId, c.key);
             if (_uw) statusBits.push(`👥 ইউজার প্রস্থ ${_uw}px`);
@@ -8831,10 +8854,22 @@ body.dark-mode .btn-outline{border-color:var(--gold-300)!important;color:var(--g
                 <span class="muted small">px</span>
               </span>
               <button type="button" class="btn btn-sm ${moreBtnClass} col-more-toggle" title="${moreTitle}">⋮</button>
+              <div class="col-chips no-print" style="display:flex;gap:6px;flex-wrap:wrap;width:100%;">
+                <button type="button" class="btn btn-sm btn-outline cq-uvis" data-col-key="${escapeHtml(c.key)}" title="ইউজার ভিউ: ট্যাপ করলে ঘোরে — এডমিনের মতো → সবসময় দেখাবে → লুকাবে">${flags.hidden ? '🚫 ইউজারে লুকানো' : (flags.showToUsers ? '✅ ইউজারে দেখায়' : '👥 ইউজার: এডমিনের মতো')}</button>
+                <button type="button" class="btn btn-sm ${_frzU ? 'btn-success' : 'btn-outline'} cq-frz" data-col-key="${escapeHtml(c.key)}" data-mode="user" title="ইউজার/পার্সোনালে ফ্রিজ">❄️ ইউজার</button>
+                <button type="button" class="btn btn-sm ${_frzA ? 'btn-success' : 'btn-outline'} cq-frz" data-col-key="${escapeHtml(c.key)}" data-mode="admin" title="এডমিন প্যানেলে ফ্রিজ">❄️ এডমিন</button>
+              </div>
               <div class="col-more-panel" style="display:none;width:100%;align-items:center;gap:8px;flex-wrap:wrap;padding-top:8px;margin-top:2px;border-top:1px dashed var(--line);">
                 <input type="number" class="col-width-input" value="${c.width || ''}" min="40" placeholder="auto" title="প্রস্থ (px)" style="width:78px;flex-shrink:0;">
-                <button type="button" class="btn btn-sm ${flags.hidden ? 'btn-outline' : 'btn-success'} col-global-hide-toggle" data-col-key="${escapeHtml(c.key)}" title="সাধারণ (অ-অনুমতিপ্রাপ্ত) সব ইউজারের জন্য কলামটি দেখাবে/লুকাবে। যাদের 'গোপনীয় তথ্য দেখার' অনুমতি আছে, তারা এই Hide সত্ত্বেও দেখতে পাবেন (যদি কলামটি একই সাথে 'গোপনীয়' চিহ্নিত থাকে)।">${flags.hidden ? 'Show' : 'Hide'}</button>
-                <button type="button" class="btn btn-sm ${flags.confidentialOnly ? 'btn-success' : 'btn-outline'} col-confidential-toggle" data-col-key="${escapeHtml(c.key)}" title="গোপনীয় করলে শুধু বিশেষ অনুমতিপ্রাপ্ত (নির্বাচিত) ইউজাররাই এই কলাম দেখতে পারবেন — এমনকি Hide করা থাকলেও তাদের জন্য দেখা যাবে, কারণ অনুমতিই শেষ কথা।">গোপনীয়: ${flags.confidentialOnly ? 'Hide' : 'Show'}</button>
+                <div class="col-user-view-wrap" style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;width:100%;">
+                  <label class="small" style="color:var(--emerald-800);font-weight:600;">👥 ইউজার/পার্সোনাল ভিউ:</label>
+                  <select class="col-user-vis" data-col-key="${escapeHtml(c.key)}" title="এই কলাম ইউজার/পার্সোনাল প্যানেলে দেখা যাবে কিনা — এডমিনের নিজের চেকবক্স থেকে আলাদাভাবে ঠিক করুন। বদলালেই সাথে সাথে সেভ হয়।" style="min-width:150px;">
+                    <option value="default" ${(!flags.hidden && !flags.showToUsers) ? 'selected' : ''}>👁 এডমিনের মতো</option>
+                    <option value="show" ${(!flags.hidden && flags.showToUsers) ? 'selected' : ''}>✅ ইউজারে সবসময় দেখাবে</option>
+                    <option value="hide" ${flags.hidden ? 'selected' : ''}>🚫 ইউজারে লুকাবে</option>
+                  </select>
+                  <button type="button" class="btn btn-sm ${flags.confidentialOnly ? 'btn-success' : 'btn-outline'} col-confidential-toggle" data-col-key="${escapeHtml(c.key)}" title="গোপনীয় করলে শুধু বিশেষ অনুমতিপ্রাপ্ত (নির্বাচিত) ইউজাররাই এই কলাম দেখতে পারবেন — অনুমতিই শেষ কথা।">🔒 গোপনীয়: ${flags.confidentialOnly ? 'চালু' : 'বন্ধ'}</button>
+                </div>
                 <div class="col-freeze-wrap" style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;width:100%;">
                   <label class="small" style="color:var(--emerald-800);font-weight:600;">❄️ ফ্রিজ (পাশে স্ক্রল করলেও বাঁ-দিকে স্থির):</label>
                   <button type="button" class="btn btn-sm ${_frzA ? 'btn-success' : 'btn-outline'} col-freeze-toggle" data-col-key="${escapeHtml(c.key)}" data-mode="admin" title="শুধু এডমিন প্যানেলের এই টেবিলে — ক্লিক করলেই সাথে সাথে সেভ হয়">এডমিন প্যানেল: ${_frzA ? 'ফ্রিজ' : 'ফ্রিজ নয়'}</button>
@@ -8857,12 +8892,20 @@ body.dark-mode .btn-outline{border-color:var(--gold-300)!important;color:var(--g
             const config = getColumnConfig(tableId, defaultColumns);
             const rows = [...config.columns].sort((a, b) => a.order - b.order);
             return `
-            <h3>⚙️ কলাম সেটিংস</h3>
+            <h3>⚙️ টেবিল সেটিংস</h3>
+            ${hubTabsHtml('cols', tableId)}
             <p class="muted small" style="margin:4px 0 14px;">কোন কলাম দেখাবেন, তাদের ক্রম, প্রস্থ ও নাম এখান থেকে ঠিক করুন। 🗑 দিয়ে কলাম সম্পূর্ণ ডিলিট করা যায়, নিচের বাটন দিয়ে নতুন কাস্টম কলাম (প্রতি-এন্ট্রি টেক্সট) যোগ করা যায়।</p>
             <div class="no-print" style="margin-bottom:6px;display:flex;gap:8px;flex-wrap:wrap;align-items:center;">
               <button type="button" class="btn btn-outline btn-sm" id="col-settings-add-new">➕ নতুন কলাম যোগ করুন</button>
             </div>
             <p class="small" style="margin:0 0 10px;color:var(--gold-600,#a9822f);">🌐 প্রতিটা কলামের পাশের চেকবক্স (দেখাবে/লুকাবে) ক্লিক করলেই সাথে সাথে কার্যকর হয় — Save চাপার দরকার নেই — এবং তা সবসময় সব ইউজারের প্যানেলেও একইভাবে প্রয়োগ হয়। "সংরক্ষণ করুন" বাটন শুধু নাম/প্রস্থ/ক্রম বদলানোর জন্য প্রয়োজন। এটা এখন থেকে সবগুলো মেনুর জন্যই একই নিয়মে কাজ করে।</p>
+            <div class="col-quick-bar no-print" style="display:flex;gap:6px;flex-wrap:wrap;margin:0 0 8px;">
+              <button type="button" class="btn btn-outline btn-sm" id="cq-user-all" title="ইউজার প্যানেলে সব কলাম দেখাবে (এডমিন নিজে লুকালেও)">👥 ইউজারে সব দেখাও</button>
+              <button type="button" class="btn btn-outline btn-sm" id="cq-user-same" title="ইউজার ভিউ আবার এডমিনের সেটিং অনুযায়ী (সব 'এডমিনের মতো')">👁 ইউজার = এডমিনের মতো</button>
+              <button type="button" class="btn btn-outline btn-sm" id="cq-freeze-first" title="ইউজার ও এডমিন — দুই প্যানেলেই প্রথম দৃশ্যমান কলাম ফ্রিজ/আনফ্রিজ">❄️ প্রথম কলাম ফ্রিজ</button>
+              <button type="button" class="btn btn-outline btn-sm" id="cq-user-reset" title="এই টেবিলের ইউজার-ভিউ পুরো রিসেট: লুকানো/গোপনীয়/ফ্রিজ/প্রস্থ সব ডিফল্ট">↩️ ইউজার ভিউ রিসেট</button>
+            </div>
+            <div id="cq-preview" class="small" style="margin:0 0 10px;padding:8px 10px;border:1px dashed var(--line);border-radius:10px;background:var(--paper-raised);"></div>
             <div class="col-settings-list" style="display:flex;flex-direction:column;gap:8px;max-height:52vh;overflow-y:auto;padding-right:4px;">
               ${rows.map(c => _columnSettingsRowHtml(c, tableId)).join('')}
             </div>
@@ -9001,8 +9044,91 @@ body.dark-mode .btn-outline{border-color:var(--gold-300)!important;color:var(--g
         // - Save: checkbox/width/label-এর বর্তমান মান সেভ করে, toast দেখায়, মোডাল বন্ধ করে,
         //   টেবিল রি-রেন্ডার করে (Firestore সেভ ব্যর্থ হলেও localStorage সেভ অক্ষত থাকে —
         //   saveColumnConfig()-এর ভেতরেই এই গ্রেসফুল ফলব্যাক করা আছে)
+        // ======================================================================
+        // 🆕 [v16.5.58] ইউনিফাইড "⚙️ টেবিল সেটিংস" হাব — কলাম · লেখা ও ঘনত্ব (ইউজারদের জন্য এডমিন-নিয়ন্ত্রিত ডিফল্ট) · এক্সপোর্ট — এক জায়গায়
+        // ডেটা: app_settings/table_prefs  { scale, wrapMode, density, zebra, stickyFirst, userTools:'show'|'hide', force }
+        // (রুলস: app_settings পড়া সব সাইন-ইন, লেখা শুধু এডমিন — আগের রুলসেই চলে, নতুন রুলস লাগে না)
+        // ======================================================================
+        const TP_LOCAL_KEY = 'mahfil_table_policy_v1';
+        const TP_DEFAULT = { scale: 1, wrapMode: 'auto', density: 'normal', zebra: true, stickyFirst: false, userTools: 'show', force: false };
+        let TABLE_POLICY = (() => { try { return Object.assign({}, TP_DEFAULT, JSON.parse(localStorage.getItem(TP_LOCAL_KEY) || 'null') || {}); } catch (e) { return Object.assign({}, TP_DEFAULT); } })();
+        const EXPORT_TYPE_BY_TABLE = { 'members': 'members-list', 'monthly': 'monthly', 'yearly-matrix': 'yearly-matrix', 'member-details-monthly-yearly': 'member-details', 'yearly-paid': 'yearly', 'yearly-unpaid': 'yearly' };
+        const hubTabsHtml = (active, tableId) => `<div class="mf-hub-tabs no-print" style="display:flex;gap:6px;flex-wrap:wrap;margin:6px 0 12px;">
+            <button type="button" class="btn btn-sm ${active === 'cols' ? 'btn-primary' : 'btn-outline'}" data-hub="cols">🗂 কলাম</button>
+            <button type="button" class="btn btn-sm ${active === 'look' ? 'btn-primary' : 'btn-outline'}" data-hub="look">🎛 লেখা ও ঘনত্ব</button>
+            ${EXPORT_TYPE_BY_TABLE[tableId] ? `<button type="button" class="btn btn-sm btn-outline" data-hub="export">📐 এক্সপোর্ট</button>` : ''}
+          </div>`;
+        const wireHubTabs = (tableId, defaultColumns, onSaved) => {
+            document.querySelectorAll('.mf-hub-tabs [data-hub]').forEach(b => {
+                b.onclick = () => {
+                    const w = b.dataset.hub;
+                    if (w === 'cols') openColumnSettingsModal(tableId, defaultColumns, onSaved);
+                    else if (w === 'look') openTablePolicyModal(tableId, defaultColumns, onSaved);
+                    else if (w === 'export') openExportSettingsModal(tableId, EXPORT_TYPE_BY_TABLE[tableId], defaultColumns, onSaved);
+                };
+            });
+        };
+        const saveTablePolicy = async (patch) => {
+            TABLE_POLICY = Object.assign({}, TP_DEFAULT, TABLE_POLICY, patch, { updatedAt: new Date().toISOString(), updatedBy: window.currentUser?.email || '' });
+            try { localStorage.setItem(TP_LOCAL_KEY, JSON.stringify(TABLE_POLICY)); } catch (e) {}
+            if (typeof window._firestore !== 'undefined' && window._firestoreDb) {
+                const { doc, setDoc } = window._firestore;
+                try { await setDoc(doc(window._firestoreDb, 'app_settings', 'table_prefs'), TABLE_POLICY); }
+                catch (err) { console.error('টেবিল-নীতি ক্লাউড সেভ ব্যর্থ:', err); toast('❌ ক্লাউডে সেভ ব্যর্থ — ' + String((err && err.code) || 'আবার চেষ্টা করুন')); throw err; }
+            }
+        };
+        const openTablePolicyModal = (tableId, defaultColumns, onSaved) => {
+            const P = () => TABLE_POLICY;
+            const opt = (v, cur, label) => `<option value="${v}" ${String(cur) === String(v) ? 'selected' : ''}>${label}</option>`;
+            const row = (title, hint, ctl) => `<div style="display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;padding:10px 12px;border:1px solid var(--line);border-radius:10px;background:var(--paper-raised);">
+                <div style="flex:1;min-width:150px;"><div style="font-weight:700;">${title}</div><div class="small muted">${hint}</div></div>${ctl}</div>`;
+            const body = () => `
+              <h3>⚙️ টেবিল সেটিংস</h3>
+              ${hubTabsHtml('look', tableId)}
+              <p class="small muted" style="margin:0 0 10px;">👥 এখানকার সেটিং <b>ইউজার ও পার্সোনাল প্যানেলের সব টেবিলে</b> প্রযোজ্য হবে (এডমিনের নিজের টেবিলে নয়)। বদলালেই সাথে সাথে সেভ হয়।</p>
+              <div style="display:flex;flex-direction:column;gap:8px;max-height:56vh;overflow-y:auto;">
+                ${row('🔠 লেখার সাইজ', 'টেবিলের লেখা ছোট/বড়', `<select id="tp-scale">${[0.8, 0.9, 1, 1.1, 1.2, 1.3, 1.4, 1.6].map(x => opt(x, P().scale, Math.round(x * 100) + '%')).join('')}</select>`)}
+                ${row('↩ লেখা ভাঙা (Wrap)', 'অটো = প্রস্থ ঠিক করা কলামে বড় লেখা নামবে · সব = সব লেখা নামবে · বন্ধ = এক লাইন', `<select id="tp-wrap">${opt('auto', P().wrapMode, 'অটো')}${opt('all', P().wrapMode, 'সব ভাঙবে')}${opt('off', P().wrapMode, 'বন্ধ')}</select>`)}
+                ${row('▤ ঘনত্ব', 'সারির উচ্চতা — কম জায়গা মানে বেশি সারি এক স্ক্রিনে', `<select id="tp-dens">${opt('compact', P().density, 'কম জায়গা')}${opt('normal', P().density, 'স্বাভাবিক')}${opt('comfy', P().density, 'প্রশস্ত')}</select>`)}
+                ${row('▥ ডোরাকাটা সারি', 'একটা-পর-একটা সারিতে হালকা রং', `<select id="tp-zebra">${opt('1', P().zebra ? 1 : 0, 'চালু')}${opt('0', P().zebra ? 1 : 0, 'বন্ধ')}</select>`)}
+                ${row('❄️ মোবাইলে প্রথম কলাম আপনা-আপনি স্থির', 'বন্ধ রাখলে কেবল আপনার কলাম-সেটিংসের ❄️ ফ্রিজ করা কলামই স্থির থাকবে (প্রস্তাবিত)', `<select id="tp-sticky">${opt('0', P().stickyFirst ? 1 : 0, 'বন্ধ')}${opt('1', P().stickyFirst ? 1 : 0, 'চালু')}</select>`)}
+                ${row('🧰 ইউজারের টেবিল-টুলবার (A−/A+/Wrap)', 'লুকালে ইউজার নিজে টেবিল সেটিং বদলাতে পারবে না — শুধু আপনার ঠিক করা মান চলবে', `<select id="tp-tools">${opt('show', P().userTools, 'দেখাবে')}${opt('hide', P().userTools, 'লুকাবে')}</select>`)}
+                ${row('🔒 আমার মান জোর করে প্রয়োগ', 'চালু থাকলে ইউজারের আগের সেভ-করা নিজস্ব পছন্দও উপেক্ষা হবে; বন্ধ থাকলে ইউজার নিজে বদলালে তার পছন্দ চলবে', `<select id="tp-force">${opt('0', P().force ? 1 : 0, 'বন্ধ')}${opt('1', P().force ? 1 : 0, 'চালু')}</select>`)}
+              </div>
+              <div class="modal-actions" style="margin-top:14px;display:flex;justify-content:space-between;gap:8px;flex-wrap:wrap;">
+                <button class="btn btn-outline btn-sm" id="tp-reset">↩️ ডিফল্ট</button>
+                <button class="btn btn-primary" id="tp-close">বন্ধ করুন</button>
+              </div>`;
+            openModal(body(), () => {
+                wireHubTabs(tableId, defaultColumns, onSaved);
+                const bind = (id, fn) => { const el = document.getElementById(id); if (el) el.onchange = async () => { el.disabled = true; try { await saveTablePolicy(fn(el.value)); toast('✅ সেভ হয়েছে — ইউজার প্যানেলে প্রযোজ্য'); } catch (e) {} el.disabled = false; }; };
+                bind('tp-scale', v => ({ scale: Number(v) }));
+                bind('tp-wrap', v => ({ wrapMode: v }));
+                bind('tp-dens', v => ({ density: v }));
+                bind('tp-zebra', v => ({ zebra: v === '1' }));
+                bind('tp-sticky', v => ({ stickyFirst: v === '1' }));
+                bind('tp-tools', v => ({ userTools: v }));
+                bind('tp-force', v => ({ force: v === '1' }));
+                document.getElementById('tp-close').onclick = closeModal;
+                document.getElementById('tp-reset').onclick = async () => { try { await saveTablePolicy(Object.assign({}, TP_DEFAULT)); toast('↩️ ডিফল্টে ফিরেছে'); openTablePolicyModal(tableId, defaultColumns, onSaved); } catch (e) {} };
+                // সার্ভারের সর্বশেষ মান টেনে ফর্ম আপডেট (অন্য এডমিন বদলালে)
+                if (window._firestore && window._firestoreDb) {
+                    const { doc, getDoc } = window._firestore;
+                    getDoc(doc(window._firestoreDb, 'app_settings', 'table_prefs')).then(sn => {
+                        if (!sn.exists()) return;
+                        TABLE_POLICY = Object.assign({}, TP_DEFAULT, sn.data());
+                        try { localStorage.setItem(TP_LOCAL_KEY, JSON.stringify(TABLE_POLICY)); } catch (e) {}
+                        const set = (id, v) => { const el = document.getElementById(id); if (el) el.value = String(v); };
+                        set('tp-scale', TABLE_POLICY.scale); set('tp-wrap', TABLE_POLICY.wrapMode); set('tp-dens', TABLE_POLICY.density);
+                        set('tp-zebra', TABLE_POLICY.zebra ? 1 : 0); set('tp-sticky', TABLE_POLICY.stickyFirst ? 1 : 0); set('tp-tools', TABLE_POLICY.userTools); set('tp-force', TABLE_POLICY.force ? 1 : 0);
+                    }).catch(() => {});
+                }
+            });
+        };
+        window.openTablePolicyModal = openTablePolicyModal;
         const openColumnSettingsModal = (tableId, defaultColumns, onSaved) => {
             openModal(columnSettingsModalHtml(tableId, defaultColumns), () => {
+                wireHubTabs(tableId, defaultColumns, onSaved);
                 document.getElementById('col-settings-cancel').onclick = closeModal;
                 document.getElementById('col-settings-reset').onclick = () =>
                     resetColumnSettingsFromModal(tableId, defaultColumns, onSaved);
@@ -9080,16 +9206,23 @@ body.dark-mode .btn-outline{border-color:var(--gold-300)!important;color:var(--g
                 // Firestore-এ সেভ হয়ে যায় এবং মোডাল নতুন অবস্থা দেখাতে রি-রেন্ডার হয়
                 // (Note: মোডাল রি-রেন্ডার হওয়ায় সেভ-না-করা checkbox/label/width পরিবর্তন
                 // থাকলে তা হারিয়ে যাবে — কারণ এই দুটো বাটন গ্লোবাল সেটিং, সঙ্গে সঙ্গেই কার্যকর)
-                document.querySelectorAll('.col-global-hide-toggle').forEach(btn => {
-                    btn.onclick = async () => {
-                        const key = btn.dataset.colKey;
-                        const cur = getGlobalColFlags(tableId, key);
-                        btn.disabled = true;
+                // 🆕 [v16.5.56] ইউজার-ভিউ সিলেক্ট + গোপনীয় বাটন — মডাল রি-ওপেন ছাড়াই জায়গায় আপডেট হয় (সেভ-না-করা নাম/প্রস্থ হারায় না)
+                const _refreshMoreBtn = (row, f) => {
+                    const mb = row && row.querySelector('.col-more-toggle'); if (!mb) return;
+                    mb.className = 'btn btn-sm ' + (f.hidden ? 'btn-danger' : (f.confidentialOnly ? 'btn-success' : 'btn-outline')) + ' col-more-toggle';
+                };
+                document.querySelectorAll('.col-user-vis').forEach(sel => {
+                    let last = sel.value;
+                    sel.onchange = async () => {
+                        const key = sel.dataset.colKey, v = sel.value;
+                        sel.disabled = true;
                         try {
-                            await saveGlobalColFlags(tableId, key, { hidden: !cur.hidden });
-                            toast(!cur.hidden ? '🚫 কলামটি ইউজার প্যানেলে সবার জন্য লুকানো হলো' : '✅ কলামটি ইউজার প্যানেলে আবার দেখা যাবে');
-                            openColumnSettingsModal(tableId, defaultColumns, onSaved);
-                        } catch (e) { btn.disabled = false; }
+                            await saveGlobalColFlags(tableId, key, { hidden: v === 'hide', showToUsers: v === 'show' });
+                            last = v; _refreshMoreBtn(sel.closest('.col-settings-row'), getGlobalColFlags(tableId, key));
+                            toast(v === 'hide' ? '🚫 ইউজার প্যানেলে লুকানো হলো' : v === 'show' ? '✅ ইউজার প্যানেলে সবসময় দেখাবে' : '👁 ইউজারে এখন এডমিনের সেটিং অনুযায়ী');
+                            if (typeof onSaved === 'function') onSaved();
+                        } catch (e) { sel.value = last; }
+                        sel.disabled = false;
                     };
                 });
                 document.querySelectorAll('.col-confidential-toggle').forEach(btn => {
@@ -9099,11 +9232,71 @@ body.dark-mode .btn-outline{border-color:var(--gold-300)!important;color:var(--g
                         btn.disabled = true;
                         try {
                             await saveGlobalColFlags(tableId, key, { confidentialOnly: !cur.confidentialOnly });
-                            toast(!cur.confidentialOnly ? '🔒 কলামটি এখন গোপনীয় — শুধু বিশেষ অনুমতিপ্রাপ্ত ইউজাররাই দেখতে পারবেন' : '🔓 কলামটি আর গোপনীয় নয়');
-                            openColumnSettingsModal(tableId, defaultColumns, onSaved);
-                        } catch (e) { btn.disabled = false; }
+                            const nf = getGlobalColFlags(tableId, key);
+                            btn.className = 'btn btn-sm ' + (nf.confidentialOnly ? 'btn-success' : 'btn-outline') + ' col-confidential-toggle';
+                            btn.textContent = '🔒 গোপনীয়: ' + (nf.confidentialOnly ? 'চালু' : 'বন্ধ');
+                            _refreshMoreBtn(btn.closest('.col-settings-row'), nf);
+                            toast(nf.confidentialOnly ? '🔒 এখন শুধু বিশেষ অনুমতিপ্রাপ্ত ইউজাররা দেখবেন' : '🔓 গোপনীয় চিহ্ন সরানো হলো');
+                        } catch (e) { }
+                        btn.disabled = false;
                     };
                 });
+                // 🆕 [v16.5.57] দ্রুত চিপ/বাল্ক বাটন + "ইউজার যা দেখবে" লাইভ প্রিভিউ
+                const _cfgCols = () => [...getColumnConfig(tableId, defaultColumns).columns].sort((a, b) => a.order - b.order);
+                const _userSees = (c) => { const f = getGlobalColFlags(tableId, c.key); return !f.hidden && (c.visible || f.showToUsers) && !f.confidentialOnly; };
+                const renderPreview = () => {
+                    const el = document.getElementById('cq-preview'); if (!el) return;
+                    const cols = _cfgCols(), shown = cols.filter(_userSees), lockd = cols.filter(c => { const f = getGlobalColFlags(tableId, c.key); return !f.hidden && (c.visible || f.showToUsers) && f.confidentialOnly; });
+                    const fz = window.mfGetFrozenKeys(tableId, 'user');
+                    el.innerHTML = '👥 <b>ইউজার দেখবে:</b> ' + (shown.length ? shown.map(c => (fz.indexOf(c.key) >= 0 ? '❄️' : '') + escapeHtml(c.label)).join(' · ') : '—')
+                        + (lockd.length ? '<br>🔒 <b>শুধু অনুমতিপ্রাপ্ত:</b> ' + lockd.map(c => escapeHtml(c.label)).join(' · ') : '');
+                };
+                const _syncRowUi = (row) => {
+                    const key = row.dataset.colKey, f = getGlobalColFlags(tableId, key);
+                    const q = row.querySelector('.cq-uvis'); if (q) q.textContent = f.hidden ? '🚫 ইউজারে লুকানো' : (f.showToUsers ? '✅ ইউজারে দেখায়' : '👥 ইউজার: এডমিনের মতো');
+                    const sel = row.querySelector('.col-user-vis'); if (sel) sel.value = f.hidden ? 'hide' : (f.showToUsers ? 'show' : 'default');
+                    const ct = row.querySelector('.col-confidential-toggle'); if (ct) { ct.className = 'btn btn-sm ' + (f.confidentialOnly ? 'btn-success' : 'btn-outline') + ' col-confidential-toggle'; ct.textContent = '🔒 গোপনীয়: ' + (f.confidentialOnly ? 'চালু' : 'বন্ধ'); }
+                    ['user', 'admin'].forEach(md => { const b = row.querySelector('.cq-frz[data-mode="' + md + '"]'), fb = row.querySelector('.col-freeze-toggle[data-mode="' + md + '"]'), on = window.mfGetFrozenKeys(tableId, md).indexOf(key) >= 0;
+                        if (b) b.className = 'btn btn-sm ' + (on ? 'btn-success' : 'btn-outline') + ' cq-frz';
+                        if (fb) { fb.className = 'btn btn-sm ' + (on ? 'btn-success' : 'btn-outline') + ' col-freeze-toggle'; fb.textContent = (md === 'admin' ? 'এডমিন প্যানেল: ' : 'ইউজার/পার্সোনাল: ') + (on ? 'ফ্রিজ' : 'ফ্রিজ নয়'); } });
+                    _refreshMoreBtn(row, f);
+                };
+                const _syncAllRows = () => { document.querySelectorAll('.col-settings-row').forEach(_syncRowUi); renderPreview(); };
+                document.querySelectorAll('.cq-uvis').forEach(btn => {
+                    btn.onclick = async () => {
+                        const key = btn.dataset.colKey, f = getGlobalColFlags(tableId, key);
+                        const nxt = (!f.hidden && !f.showToUsers) ? 'show' : (f.showToUsers && !f.hidden ? 'hide' : 'default');
+                        btn.disabled = true;
+                        try { await saveGlobalColFlags(tableId, key, { hidden: nxt === 'hide', showToUsers: nxt === 'show' }); _syncRowUi(btn.closest('.col-settings-row')); renderPreview(); if (typeof onSaved === 'function') onSaved(); } catch (e) { }
+                        btn.disabled = false;
+                    };
+                });
+                document.querySelectorAll('.cq-frz').forEach(btn => {
+                    btn.onclick = async () => {
+                        const key = btn.dataset.colKey, mode = btn.dataset.mode, cur = window.mfGetFrozenKeys(tableId, mode).slice(), i = cur.indexOf(key);
+                        if (i >= 0) cur.splice(i, 1); else cur.push(key);
+                        btn.disabled = true;
+                        try { await window.mfSaveColFreeze(tableId, mode, cur); _syncRowUi(btn.closest('.col-settings-row')); renderPreview(); } catch (e) { toast('❌ ফ্রিজ সেভ ব্যর্থ — আবার চেষ্টা করুন'); }
+                        btn.disabled = false;
+                    };
+                });
+                const _bulk = async (fn, okMsg) => { try { await fn(); _syncAllRows(); toast(okMsg); if (typeof onSaved === 'function') onSaved(); } catch (e) { console.error(e); } };
+                document.getElementById('cq-user-all').onclick = () => _bulk(() => { const p = {}; _cfgCols().forEach(c => { p[c.key] = { hidden: false, showToUsers: true }; }); return saveGlobalColFlagsBulk(tableId, p); }, '✅ ইউজার প্যানেলে সব কলাম দেখাবে');
+                document.getElementById('cq-user-same').onclick = () => _bulk(() => { const p = {}; _cfgCols().forEach(c => { p[c.key] = { hidden: false, showToUsers: false }; }); return saveGlobalColFlagsBulk(tableId, p); }, '👁 ইউজার ভিউ এখন এডমিনের সেটিং অনুযায়ী');
+                document.getElementById('cq-freeze-first').onclick = () => _bulk(async () => {
+                    const first = _cfgCols().find(c => c.visible); if (!first) return;
+                    const anyOn = ['user', 'admin'].some(md => window.mfGetFrozenKeys(tableId, md).indexOf(first.key) >= 0);   // কোনো এক প্যানেলে ফ্রিজ থাকলে দুটোতেই খোলে, নইলে দুটোতেই লাগায়
+                    for (const md of ['user', 'admin']) { const cur = window.mfGetFrozenKeys(tableId, md).filter(k => k !== first.key); await window.mfSaveColFreeze(tableId, md, anyOn ? cur : cur.concat(first.key)); }
+                }, '❄️ প্রথম কলাম ফ্রিজ/আনফ্রিজ হলো');
+                document.getElementById('cq-user-reset').onclick = () => confirmDelete('এই টেবিলের ইউজার-ভিউ পুরো রিসেট হবে (লুকানো, গোপনীয়, ফ্রিজ, ইউজার-প্রস্থ)। এডমিনের নিজের সেটিং বদলাবে না। এগোবেন?', () => _bulk(async () => {
+                    const p = {}; _cfgCols().forEach(c => { p[c.key] = { hidden: false, showToUsers: false, confidentialOnly: false }; });
+                    await saveGlobalColFlagsBulk(tableId, p);
+                    await window.mfSaveColFreeze(tableId, 'user', []);
+                    await resetUserColWidths(tableId);
+                    document.querySelectorAll('.col-user-width-input').forEach(i => { i.value = ''; });
+                }, '↩️ ইউজার ভিউ রিসেট হয়েছে'));
+                renderPreview();
+                document.querySelectorAll('.col-user-vis, .col-confidential-toggle, .col-freeze-toggle, .col-visible-toggle').forEach(el => el.addEventListener(el.tagName === 'SELECT' || el.type === 'checkbox' ? 'change' : 'click', () => setTimeout(_syncAllRows, 350)));
                 // 🆕 [আপডেট] প্রতিটা কলামের পাশের চেকবক্স (দেখাবে/লুকাবে) এখন Save বাটনের
                 // জন্য অপেক্ষা না করে ক্লিক করলেই সাথে সাথে কার্যকর হয় — ঠিক উপরের
                 // Hide/Show ও গোপনীয় বাটনের প্যাটার্নের মতোই। এটাই সেই কলামের
@@ -11747,6 +11940,7 @@ body.dark-mode .btn-outline{border-color:var(--gold-300)!important;color:var(--g
                         localStorage.setItem(CONFIG.STORAGE_KEY, JSON.stringify(state));
                         if (currentTab === 'chat') { renderMain(); markChatRead(); }
                         renderTabs();
+                        if (window.mfCdRefresh) window.mfCdRefresh(); // 🆕 [চ্যাট ডক]
                     }
                 }, () => {});
                 _chatListeners.push(unsub);
@@ -11821,6 +12015,7 @@ body.dark-mode .btn-outline{border-color:var(--gold-300)!important;color:var(--g
                     snap.forEach(d => { map[d.id] = d.data(); });
                     presenceMap = map;
                     updateChatPresenceUI();
+                    if (window.mfCdRefresh) window.mfCdRefresh(); // 🆕 [চ্যাট ডক]
                     updateActiveUsersBadge(); // 🆕 হেডারের "সক্রিয়" বাটনের লাইভ কাউন্ট আপডেট (personal/user.html-এর মতোই)
                 }, () => {});
             } catch (e) {}
@@ -11856,6 +12051,7 @@ body.dark-mode .btn-outline{border-color:var(--gold-300)!important;color:var(--g
                     // (read-receipt আপডেট হলেই) সবার স্ক্রিনে পুরো চ্যাট রি-বিল্ড হয়ে "কাঁপত" এবং
                     // টাইপ করা/সেন্ড করা ব্যাহত হতো। এখন শুধু "দেখেছেন" লেখাটুকু হালকাভাবে আপডেট হয়।
                     if (currentTab === 'chat') updateChatSeenIndicatorOnly();
+                    if (window.mfCdRefresh) window.mfCdRefresh(); // 🆕 [চ্যাট ডক] দেখেছেন-ছবি ও রিয়্যাক্ট লাইভ
                 }, () => {});
             } catch (e) {}
         };
@@ -11988,6 +12184,10 @@ body.dark-mode .btn-outline{border-color:var(--gold-300)!important;color:var(--g
 
         let dmUnsub = null;
         let dmCurrentThreadId = null;
+        let dmThreadUnsub = null; // 🆕 [ব্লু-টিক] থ্রেড ডকুমেন্টের lastReadBy ফিল্ড রিয়েল-টাইমে শোনার জন্য
+        let dmOtherEmail = null; // 🆕 [ব্লু-টিক] বর্তমানে খোলা DM-এর অপরপক্ষের ইমেইল
+        let dmOtherLastReadAt = null; // 🆕 [ব্লু-টিক] অপরপক্ষ সর্বশেষ কখন পড়েছেন
+        let _dmLastRenderedMsgs = null; // 🆕 [ব্লু-টিক] থ্রেড-লিসেনারের রি-রেন্ডারের জন্য ক্যাশ
 
         const ensureDmThread = async (otherEmail) => {
             const { doc, setDoc, getDoc } = window._firestore;
@@ -12014,6 +12214,7 @@ body.dark-mode .btn-outline{border-color:var(--gold-300)!important;color:var(--g
                 return;
             }
             dmCurrentThreadId = tid;
+            dmOtherEmail = otherEmail; // 🆕 [ব্লু-টিক]
             const avatar = otherPhotoUrl ? `<img src="${escapeHtml(toDirectImageUrl(otherPhotoUrl))}">` : '👤';
             openModal(`
               <div class="dm-modal-header">
@@ -12030,6 +12231,12 @@ body.dark-mode .btn-outline{border-color:var(--gold-300)!important;color:var(--g
                 <button class="btn btn-primary btn-send" id="dm-send-btn">📨 পাঠান</button>
               </div>
             `, () => {
+                // 🔧 [v16.5.46 মূল কারণ-সংশোধন] openModal() শুরুতেই closeModal() চালায়, আর সেটা closeDmChat() ডেকে dmCurrentThreadId/dmOtherEmail খালি (null) করে দেয় —
+                // ফলে নিচের লিসেনার খালি থ্রেডে চলে ব্যর্থ হতো ও "লোড হচ্ছে..." আটকে থাকত। তাই মোডাল বসার *পরে* মান আবার বসানো হলো।
+                dmCurrentThreadId = tid;
+                dmOtherEmail = otherEmail;
+                dmOtherLastReadAt = null; _dmLastRenderedMsgs = null;
+                dmxReset(); dmxWire();   // 🆕 [DM-X]
                 const input = document.getElementById('dm-input');
                 const sendBtn = document.getElementById('dm-send-btn');
                 if (input) {
@@ -12052,36 +12259,91 @@ body.dark-mode .btn-outline{border-color:var(--gold-300)!important;color:var(--g
                 } else {
                     _chatImgLog('⚠ dm-attach-btn পাওয়া যায়নি');
                 }
-                dmxReset(); dmxWire();   // 🆕 [DM-X]
                 listenDmMessages();
-                dmxListenThread();
+                listenDmThread(); // 🆕 [ব্লু-টিক] অপরপক্ষের lastReadBy রিয়েল-টাইমে শোনা
+                markDmThreadRead(); // 🆕 [ব্লু-টিক] আমি এখন দেখছি — নিজের lastReadBy আপডেট
             });
         };
 
         const closeDmChat = () => {
             if (dmUnsub) { try { dmUnsub(); } catch (e) {}
                 dmUnsub = null; }
+            if (dmThreadUnsub) { try { dmThreadUnsub(); } catch (e) {}
+                dmThreadUnsub = null; } // 🆕 [ব্লু-টিক]
             dmCurrentThreadId = null;
-            if (dmxThreadUnsub) { try { dmxThreadUnsub(); } catch (e) {} dmxThreadUnsub = null; }   // 🆕 [DM-X]
-            dmxReset();
+            dmOtherEmail = null; // 🆕 [ব্লু-টিক]
+            dmOtherLastReadAt = null; // 🆕 [ব্লু-টিক]
+            dmxReset();   // 🆕 [DM-X]
         };
 
+        // 🆕 [ব্লু-টিক] নিজের "সর্বশেষ পঠিত" সময় থ্রেড ডকুমেন্টে সেভ — DM ইমেইলের মতোই
+        // প্যাটার্ন, কিন্তু প্রতিটা থ্রেডে আলাদা (map ফিল্ড, participant-এর ইমেইল দিয়ে key করা)
+        const markDmThreadRead = () => {
+            if (!dmCurrentThreadId || !window.currentUser) return;
+            try {
+                const { doc, setDoc } = window._firestore;
+                const myEmail = window.currentUser.email;
+                setDoc(doc(window._firestoreDb, 'dm_threads', dmCurrentThreadId), {
+                    lastReadBy: { [myEmail]: new Date().toISOString() }
+                }, { merge: true }).catch(() => {});
+            } catch (e) {}
+        };
+
+        // 🆕 [ব্লু-টিক] থ্রেড ডকুমেন্টের lastReadBy ফিল্ড রিয়েল-টাইমে শোনা — অপরপক্ষ কখন পড়লেন
+        // তা জানলেই নিজের পাঠানো মেসেজের টিক লাইভ নীল রঙে বদলে যাবে
+        const listenDmThread = () => {
+            if (dmThreadUnsub) { try { dmThreadUnsub(); } catch (e) {} }
+            const { doc, onSnapshot } = window._firestore;
+            dmThreadUnsub = onSnapshot(doc(window._firestoreDb, 'dm_threads', dmCurrentThreadId), snap => {
+                const data = snap.data();
+                dmOtherLastReadAt = (data && data.lastReadBy && dmOtherEmail && data.lastReadBy[dmOtherEmail]) || null;
+                // বর্তমানে রেন্ডার করা মেসেজগুলোর টিক আপডেট করতে মেসেজ-তালিকা আবার আঁকা হচ্ছে
+                dmxApplyThread(data);   // 🆕 [DM-X] রিয়্যাকশন/পিন
+                if (_dmLastRenderedMsgs) renderDmMessages(_dmLastRenderedMsgs);
+            }, () => {});
+        };
+
+        // 🔧 [v16.5.46] ব্যক্তিগত মেসেজ "লোড হচ্ছে..."-তে আটকে যাওয়া ঠেকাতে: (১) প্রথম ডেটা ৭ সেকেন্ডে না এলে সরাসরি একবার ডেটা এনে দেখানো (getDocs),
+        // (২) যেকোনো ব্যর্থতায় পর্দায় আসল কারণ (কোড) + "আবার চেষ্টা" বাটন, (৩) রেন্ডারে কোনো মেসেজ ভাঙলেও বাকিগুলো দেখানো। পুরনো আচরণ (রিয়েল-টাইম লিসেনার) অপরিবর্তিত।
+        const dmShowError = (err, retry) => {
+            const box = document.getElementById('dm-messages'); if (!box) return;
+            const code = (err && err.code) || '';
+            const hint = /permission/i.test(code + ' ' + ((err && err.message) || '')) ? 'এই চ্যাট দেখার অনুমতি পাওয়া যায়নি — আপনার অ্যাকাউন্ট "সক্রিয়" কিনা এডমিনের কাছে দেখে নিন।'
+                : /unavailable|network|offline/i.test(code + ' ' + ((err && err.message) || '')) ? 'ইন্টারনেট সংযোগ ঠিক আছে কিনা দেখুন।' : '';
+            box.innerHTML = '<div class="small" style="padding:16px;text-align:center;color:#b3261e;">❌ মেসেজ লোড করা যায়নি' + (code ? ' (' + escapeHtml(code) + ')' : '') + (hint ? '<div class="muted" style="margin-top:6px;">' + escapeHtml(hint) + '</div>' : '') +
+                '<div style="margin-top:10px;"><button type="button" class="btn btn-outline btn-sm" id="dm-retry">🔄 আবার চেষ্টা করুন</button></div></div>';
+            const b = document.getElementById('dm-retry'); if (b) b.onclick = () => { box.innerHTML = '<div class="small muted" style="padding:16px;text-align:center;">লোড হচ্ছে...</div>'; retry(); };
+        };
         const listenDmMessages = () => {
             if (dmUnsub) { try { dmUnsub(); } catch (e) {} }
-            const { collection, query, orderBy, onSnapshot } = window._firestore;
-            const q = query(collection(window._firestoreDb, 'dm_threads', dmCurrentThreadId, 'messages'), orderBy(
-                'timestamp'));
-            dmUnsub = onSnapshot(q, snap => {
-                const msgs = [];
-                snap.forEach(d => msgs.push({ id: d.id, ...d.data() }));
-                renderDmMessages(msgs);
-            }, (err) => {
+            const { collection, query, orderBy, onSnapshot, getDocs } = window._firestore;
+            const tid = dmCurrentThreadId;
+            const q = query(collection(window._firestoreDb, 'dm_threads', tid, 'messages'), orderBy('timestamp'));
+            let got = false;
+            const onMsgs = (snap) => {
+                got = true;
+                try {
+                    const msgs = [];
+                    snap.forEach(d => msgs.push({ id: d.id, ...d.data() }));
+                    _dmLastRenderedMsgs = msgs; // 🆕 [ব্লু-টিক]
+                    renderDmMessages(msgs);
+                    markDmThreadRead(); // 🆕 [ব্লু-টিক] থ্রেড খোলা অবস্থায় নতুন মেসেজ এলেও তা সাথে সাথে "পঠিত"
+                } catch (e) { console.error('[DM] রেন্ডার ব্যর্থ:', e); dmShowError(e, listenDmMessages); }
+            };
+            const onErr = (err) => {
+                got = true;
                 console.error('[DM] মেসেজ লোড ব্যর্থ:', err);
-                const box = document.getElementById('dm-messages');
-                if (box) box.innerHTML = '<div class="small muted" style="padding:16px;text-align:center;">❌ মেসেজ লোড করা যায়নি: ' + escapeHtml((err && err.message) || 'অজানা এরর') + '</div>';
+                dmShowError(err, listenDmMessages);
                 toast('মেসেজ লোড করা যায়নি: ' + ((err && err.message) || 'অজানা এরর'));
-            });
+            };
+            dmUnsub = onSnapshot(q, onMsgs, onErr);
+            setTimeout(async () => {   // ওয়াচডগ: ৭ সেকেন্ডেও কিছু না এলে একবার সরাসরি আনা
+                if (got || dmCurrentThreadId !== tid) return;
+                try { const snap = await getDocs(q); if (!got && dmCurrentThreadId === tid) onMsgs(snap); }
+                catch (e) { if (!got && dmCurrentThreadId === tid) onErr(e); }
+            }, 7000);
         };
+
 
         // ======================================================================
         //  🆕 [DM-X] ব্যক্তিগত মেসেজে রিয়্যাক্ট · উত্তর (রিপ্লাই) · পিন · ফরওয়ার্ড · কপি · এডিট · মুছুন · দিনের বিভাজক (গ্রুপ-চ্যাটের মতো)
@@ -12089,11 +12351,11 @@ body.dark-mode .btn-outline{border-color:var(--gold-300)!important;color:var(--g
         //  উত্তর মেসেজের নিজের ডকে (replyTo); এডিট/মোছা শুধু নিজের মেসেজ (আগের Rules অনুযায়ী)। পুরনো মেসেজে এসব ফিল্ড না থাকলেও সমস্যা নেই।
         // ======================================================================
         let dmxThread = { reactions: {}, pins: {} };
-        let dmxReply = null, dmxMenuFor = null, dmxMsgs = [], dmxLastCount = -1, dmxPinIdx = 0, dmxThreadUnsub = null;
+        let dmxMoreFor = null, dmxReply = null, dmxMenuFor = null, dmxMsgs = [], dmxLastCount = -1, dmxPinIdx = 0, dmxThreadUnsub = null;
         const DMX_EMOJIS = ['👍', '❤️', '😂', '😮', '😢', '🙏', '🤲', '👎'];
         const dmxMe = () => (window.currentUser && window.currentUser.email) || '';
         const dmxKey = (email) => String(email || '').trim().toLowerCase().replace(/[.#$\[\]\/~*]/g, '_');
-        const dmxReset = () => { try { const f = document.getElementById('dmx-fwd'); if (f) f.remove(); } catch (e) {} dmxThread = { reactions: {}, pins: {} }; dmxReply = null; dmxMenuFor = null; dmxMsgs = []; dmxLastCount = -1; dmxPinIdx = 0; };
+        const dmxReset = () => { try { const f = document.getElementById('dmx-fwd'); if (f) f.remove(); } catch (e) {} dmxThread = { reactions: {}, pins: {} }; dmxReply = null; dmxMenuFor = null; dmxMoreFor = null; dmxMsgs = []; dmxLastCount = -1; dmxPinIdx = 0; };
         const dmxEnsureCss = () => {
             if (document.getElementById('dmx-css')) return;
             const st = document.createElement('style'); st.id = 'dmx-css';
@@ -12252,28 +12514,41 @@ body.dark-mode .btn-outline{border-color:var(--gold-300)!important;color:var(--g
             const first = dmxLastCount < 0, grew = msgs.length > dmxLastCount;
             const near = el.scrollHeight - el.scrollTop - el.clientHeight < 90, prevTop = el.scrollTop;
             dmxMsgs = msgs; dmxLastCount = msgs.length;
-            const me = dmxMe(), mk = dmxKey(me), tickOn = typeof dmOtherLastReadAt !== 'undefined';
+            const me = dmxMe(), mk = dmxKey(me);
+            cdEnsureCss(); el.classList.add('cd-tab-msgs');
             let _lastDay = '';
+            // 🆕 [v16.5.63] মেসেঞ্জার-স্টাইল: অপরপক্ষ যে পর্যন্ত পড়েছেন, আমার সেই সর্বশেষ মেসেজের নিচে তাঁর ছোট ছবি
+            let seenId = '', lastMineId = '';
+            msgs.forEach(x => { if (x.sender === me) { lastMineId = x.id; if (dmOtherLastReadAt && x.timestamp && new Date(x.timestamp) <= new Date(dmOtherLastReadAt)) seenId = x.id; } });
+            const oth = dmOtherEmail || '';
             el.innerHTML = msgs.length ? msgs.map(m => {
                 const mine = m.sender === me;
                 const _dk = m.timestamp ? dmxDayKey(m.timestamp) : '';
-                const dayHtml = (_dk && _dk !== _lastDay) ? `<div class="dmx-day"><span>${escapeHtml(dmxDayLabel(m.timestamp))}</span></div>` : '';
+                const dayHtml = (_dk && _dk !== _lastDay) ? `<div class="cd-day"><span>${escapeHtml(dmxDayLabel(m.timestamp))}</span></div>` : '';
                 if (_dk) _lastDay = _dk;
-                const seen = tickOn && mine && dmOtherLastReadAt && m.timestamp && new Date(m.timestamp) <= new Date(dmOtherLastReadAt);
-                const tick = (tickOn && mine) ? `<span class="msg-tick ${seen ? 'seen' : ''}">✓✓</span>` : '';
+                const nm = m.senderName || cdName(m.sender);
                 const rx = dmxThread.reactions[m.id] || {}, counts = {}, myR = rx[mk] || '';
                 Object.keys(rx).forEach(k => { if (rx[k]) counts[rx[k]] = (counts[rx[k]] || 0) + 1; });
-                const chips = Object.keys(counts).map(e => `<span data-mf-noicon class="dmx-chip${e === myR ? ' mine' : ''}" data-dmx-react="${m.id}" data-emoji="${e}">${e}${counts[e] > 1 ? ' ' + counts[e] : ''}</span>`).join('');
-                const q = m.replyTo ? `<div class="dmx-quote" data-dmx-goto="${escapeHtml(m.replyTo.id || '')}"><b>${escapeHtml(m.replyTo.name || '')}</b><span>${escapeHtml(m.replyTo.text || '')}</span></div>` : '';
+                const chips = Object.keys(counts).sort((x, y) => DMX_EMOJIS.indexOf(x) - DMX_EMOJIS.indexOf(y)).map(e => `<button type="button" data-mf-noicon class="cd-chip${e === myR ? ' mine' : ''}" data-dmx-react="${m.id}" data-emoji="${e}">${e}<small>${counts[e]}</small></button>`).join('');
+                const q = m.replyTo ? `<div class="cd-quote" data-dmx-goto="${escapeHtml(m.replyTo.id || '')}"><b>${escapeHtml(m.replyTo.name || '')}</b><span>${escapeHtml(m.replyTo.text || '')}</span></div>` : '';
                 const pinned = !!(dmxThread.pins && dmxThread.pins[m.id]);
-                const menu = dmxMenuFor === m.id ? `<div class="dmx-menu"><div class="dmx-emojis">${DMX_EMOJIS.map(e => `<span data-mf-noicon data-dmx-react="${m.id}" data-emoji="${e}" class="${e === myR ? 'on' : ''}">${e}</span>`).join('')}</div><div class="dmx-acts"><button type="button" data-dmx-act="reply" data-id="${m.id}">↩ উত্তর</button><button type="button" data-dmx-act="pin" data-id="${m.id}">${pinned ? '📌 আনপিন' : '📌 পিন'}</button><button type="button" data-dmx-act="fwd" data-id="${m.id}">➡️ ফরওয়ার্ড</button>${m.text ? `<button type="button" data-dmx-act="copy" data-id="${m.id}">📋 কপি</button>` : ''}${mine && m.text ? `<button type="button" data-dmx-act="edit" data-id="${m.id}">✎ এডিট</button>` : ''}${mine ? `<button type="button" data-dmx-act="del" data-id="${m.id}">🗑 মুছুন</button>` : ''}</div></div>` : '';
-                return dayHtml + `<div class="chat-msg ${mine ? 'me' : 'other'} dmx-msg" id="dmx-m-${m.id}" data-dmx-msg="${m.id}">
-                  ${pinned ? '<div class="dmx-pin">📌 পিন করা</div>' : ''}${q}
-                  ${m.imageUrl ? `<div class="msg-image"><img src="${escapeHtml(toDirectImageUrl(m.imageUrl))}" data-preview-image="${escapeHtml(m.imageUrl)}" style="max-width:220px;max-height:220px;border-radius:10px;cursor:zoom-in;display:block;"></div>` : ''}
-                  ${m.text ? `<div class="msg-text">${escapeHtml(m.text)}${m.editedAt ? ' <span class="muted small">(এডিটেড)</span>' : ''}</div>` : ''}
-                  <div class="msg-time">${m.timestamp ? fmtDate(m.timestamp) : ''}${tick}<button type="button" class="dmx-more" data-dmx-more="${m.id}" title="অপশন">⋯</button></div>
-                  ${chips ? `<div class="dmx-chips">${chips}</div>` : ''}${menu}
-                </div>`;
+                const menu = dmxMenuFor === m.id ? `<div class="dmx-menu"><div class="cd-pick">${DMX_EMOJIS.map(e => `<button type="button" data-mf-noicon class="${e === myR ? 'on' : ''}" data-dmx-react="${m.id}" data-emoji="${e}">${e}</button>`).join('')}</div>
+                    <div class="cd-acts"><button type="button" data-dmx-act="reply" data-id="${m.id}">↩ উত্তর</button>${m.text ? `<button type="button" data-dmx-act="copy" data-id="${m.id}">📋 কপি</button>` : ''}<button type="button" class="${dmxMoreFor === m.id ? 'on' : ''}" data-dmx-more="${m.id}">⋯ আরও</button></div>
+                    ${dmxMoreFor === m.id ? `<div class="cd-acts"><button type="button" data-dmx-act="pin" data-id="${m.id}">📌 ${pinned ? 'পিন সরান' : 'পিন করুন'}</button><button type="button" data-dmx-act="fwd" data-id="${m.id}">➡️ ফরওয়ার্ড</button>${mine && m.text ? `<button type="button" data-dmx-act="edit" data-id="${m.id}">✎ সম্পাদনা</button>` : ''}${mine ? `<button type="button" data-dmx-act="del" data-id="${m.id}">🗑 মুছুন</button>` : ''}</div>` : ''}</div>` : '';
+                const seenHtml = (m.id === seenId && oth) ? `<div class="cd-seen" title="${escapeHtml(cdName(oth))} দেখেছেন">${cdAvatar(oth, cdName(oth), 16)}</div>`
+                    : (m.id === lastMineId ? `<div class="cd-seen"><span class="cd-seen-t">✓ পাঠানো হয়েছে</span></div>` : '');
+                return dayHtml + `<div class="cd-row ${mine ? 'me' : ''}" id="dmx-m-${m.id}">
+                  ${mine ? '' : cdAvatar(m.sender, nm, 30)}
+                  <div class="cd-col">
+                    <div class="cd-bub" data-dmx-msg="${m.id}">
+                      ${q}${m.forwarded ? `<div class="cd-fwd">↪ ফরওয়ার্ড করা মেসেজ</div>` : ''}
+                      ${m.imageUrl ? `<img class="cd-img" src="${escapeHtml(toDirectImageUrl(m.imageUrl))}" data-preview-image="${escapeHtml(m.imageUrl)}" alt="">` : ''}
+                      ${m.text ? `<div class="cd-tx">${escapeHtml(m.text)}${m.editedAt ? ' <span class="small" style="opacity:.7;">(এডিটেড)</span>' : ''}</div>` : ''}
+                      <div class="cd-tm">${pinned ? '📌 ' : ''}${m.timestamp ? escapeHtml(cdTime(m.timestamp)) : ''}</div>
+                    </div>
+                    ${chips ? `<div class="cd-chips">${chips}</div>` : ''}${menu}
+                  </div>
+                </div>${seenHtml}`;
             }).join('') : `<div class="chat-empty"><div class="em">💬</div><div>এখনো কোনো মেসেজ নেই</div><div class="small muted">প্রথম মেসেজ পাঠিয়ে আলাপ শুরু করুন</div></div>`;
             if (first || grew || near) el.scrollTop = el.scrollHeight; else el.scrollTop = prevTop;
             el.querySelectorAll('[data-preview-image]').forEach(img => { img.addEventListener('click', () => openImagePreview(img.dataset.previewImage, { el: img })); });
@@ -12284,11 +12559,12 @@ body.dark-mode .btn-outline{border-color:var(--gold-300)!important;color:var(--g
             el.dataset.dmxWired = '1'; dmxEnsureCss();
             el.addEventListener('click', (ev) => {
                 const t = ev.target; let b;
+                if ((b = t.closest('[data-dmx-more]'))) { const id = b.dataset.dmxMore; dmxMoreFor = dmxMoreFor === id ? null : id; dmxRerender(); return; }
                 if ((b = t.closest('[data-dmx-react]'))) { dmxReact(b.dataset.dmxReact, b.dataset.emoji); return; }
                 if ((b = t.closest('[data-dmx-act]'))) { dmxAct(b.dataset.dmxAct, b.dataset.id); return; }
                 if ((b = t.closest('[data-dmx-goto]'))) { dmxGoto(b.dataset.dmxGoto); return; }
                 if (t.closest('[data-preview-image]') || t.closest('.dmx-menu')) return;
-                if ((b = t.closest('[data-dmx-more]') || t.closest('[data-dmx-msg]'))) { const id = b.dataset.dmxMore || b.dataset.dmxMsg; dmxMenuFor = dmxMenuFor === id ? null : id; dmxRerender(); }
+                if ((b = t.closest('[data-dmx-msg]'))) { const id = b.dataset.dmxMsg; dmxMenuFor = dmxMenuFor === id ? null : id; dmxMoreFor = null; dmxRerender(); }
             });
         };
         // থ্রেড-ডক লিসেনার (রিয়্যাকশন/পিন রিয়েল-টাইম)। personal-এ বিদ্যমান listenDmThread-ই dmxApplyThread ডাকে; admin-এ এটি আলাদা।
@@ -12303,7 +12579,13 @@ body.dark-mode .btn-outline{border-color:var(--gold-300)!important;color:var(--g
 
         const renderDmMessages = (msgs) => {
             try { return dmxRender(msgs); }
-            catch (e) { console.error('[DM] রেন্ডার ব্যর্থ:', e); return _renderDmMessagesRaw(msgs); }
+            catch (e) {   // 🔧 [v16.5.46] কোনো একটি মেসেজের ডেটা অস্বাভাবিক হলেও পুরো চ্যাট যেন আটকে না যায় — সাদামাটা তালিকা দেখানো
+                console.error('[DM] রেন্ডার ব্যর্থ, সাদামাটা তালিকা:', e);
+                const el = document.getElementById('dm-messages'); if (!el) return;
+                const me = window.currentUser.email;
+                el.innerHTML = (msgs || []).map(m => `<div class="chat-msg ${m.sender === me ? 'me' : 'other'}"><div class="msg-text">${escapeHtml(String(m.text || (m.imageUrl ? '📷 ছবি' : '')))}</div></div>`).join('') || '<div class="small muted" style="padding:16px;text-align:center;">এখনো কোনো মেসেজ নেই</div>';
+                el.scrollTop = el.scrollHeight;
+            }
         };
         const _renderDmMessagesRaw = (msgs) => {
             const el = document.getElementById('dm-messages');
@@ -12311,17 +12593,22 @@ body.dark-mode .btn-outline{border-color:var(--gold-300)!important;color:var(--g
             const myEmail = window.currentUser.email;
             el.innerHTML = msgs.length ? msgs.map(m => {
                 const isMine = m.sender === myEmail;
+                // 🆕 [ব্লু-টিক] শুধু নিজের পাঠানো মেসেজেই টিক দেখানো হয় (WhatsApp-এর নিয়ম অনুযায়ী)।
+                // অপরপক্ষ এই মেসেজের সময়ের পর/সমান সময় পর্যন্ত পড়ে থাকলে নীল, নাহলে ধূসর।
+                const seen = isMine && dmOtherLastReadAt && m.timestamp && new Date(m.timestamp) <= new Date(
+                    dmOtherLastReadAt);
+                const tickHtml = isMine ? `<span class="msg-tick ${seen ? 'seen' : ''}">✓✓</span>` : '';
                 return `
                 <div class="chat-msg ${isMine ? 'me' : 'other'}">
                   ${m.imageUrl ? `<div class="msg-image"><img src="${escapeHtml(toDirectImageUrl(m.imageUrl))}" data-preview-image="${escapeHtml(m.imageUrl)}" style="max-width:220px;max-height:220px;border-radius:10px;cursor:zoom-in;display:block;"></div>` : ''}
                   ${m.text ? `<div class="msg-text">${escapeHtml(m.text)}</div>` : ''}
-                  <div class="msg-time">${m.timestamp ? fmtDate(m.timestamp) : ''}</div>
+                  <div class="msg-time">${m.timestamp ? fmtDate(m.timestamp) : ''}${tickHtml}</div>
                 </div>`;
             }).join('') : `<div class="chat-empty"><div class="em">💬</div><div>এখনো কোনো মেসেজ নেই</div><div class="small muted">প্রথম মেসেজ পাঠান</div></div>`;
-            el.scrollTop = el.scrollHeight;
             el.querySelectorAll('[data-preview-image]').forEach(img => {
                 img.addEventListener('click', () => openImagePreview(img.dataset.previewImage, { el: img }));
             });
+            el.scrollTop = el.scrollHeight;
         };
 
         const sendDmMessage = async () => {
@@ -16953,7 +17240,7 @@ body.dark-mode .btn-outline{border-color:var(--gold-300)!important;color:var(--g
                 if (k === 'actions') return actionsHtmlFn(r);
                 return cellDefs[k] ? cellDefs[k].td(r) : '';
             }).join('')}</tr>`).join('');
-            return `<table style="min-width:0;"><thead><tr>${theadHtml}</tr></thead><tbody>${bodyHtml}</tbody></table>`;
+            return `<table style="min-width:0;" data-mf-tid="${escapeHtml(tableId)}"><thead><tr>${theadHtml}</tr></thead><tbody>${bodyHtml}</tbody></table>`;
         };
         window.MEMBER_DETAILS_MONTHLY_CELLS = {
             month: { label: 'মাস', td: (r) => `<td>${escapeHtml(r.month)}</td>` },
@@ -17642,6 +17929,10 @@ body.dark-mode .btn-outline{border-color:var(--gold-300)!important;color:var(--g
                 <button class="btn btn-outline btn-sm" id="btn-monthly-yearly-jpg" title="সম্পূর্ণ বছরের সব মাসের অনুদানের হিসাব একসাথে JPG করুন">🖼️ বার্ষিক JPG</button>
                 <button class="btn btn-outline btn-sm" id="btn-monthly-yearly-print" title="সম্পূর্ণ বছরের সব মাসের অনুদানের হিসাব একসাথে প্রিন্ট করুন">🖨️ বার্ষিক প্রিন্ট</button>
                 <button class="btn btn-outline btn-sm" id="btn-monthly-yearly-excel" title="সম্পূর্ণ বছরের সব মাসের অনুদানের হিসাব একসাথে এক্সেল ফাইলে ডাউনলোড করুন">📊 বার্ষিক এক্সেল</button>
+                <input type="file" id="monthly-excel-input" accept=".xlsx,.xls" style="display:none;">
+                <button class="btn btn-outline btn-sm" id="btn-export-monthly-excel" title="নির্বাচিত অর্থবছরের মাসিক অনুদানের ডেটা এক্সেলে ডাউনলোড (সদস্য × মাস)">📤 মাসিক ডেটা এক্সপোর্ট</button>
+                <button class="btn btn-outline btn-sm" id="btn-template-monthly-excel" title="সব সদস্য × ১২ মাসের ইমপোর্ট টেমপ্লেট (বর্তমান ডাটাসহ) ডাউনলোড">📄 ইমপোর্ট টেমপ্লেট</button>
+                <button class="btn btn-outline btn-sm" id="btn-import-monthly-excel" title="এক্সেল ফাইল থেকে মাসিক অনুদান যোগ/হালনাগাদ — কলাম: সদস্যের নাম/আইডি, মাস, পরিমাণ, মেথড, সংগ্রাহক, তারিখ">📥 মাসিক ডেটা ইমপোর্ট</button>
                 ${columnSettingsButtonHtml('yearly-matrix')}
                 ${exportSettingsButtonHtml('yearly-matrix')}
               </div>
@@ -18731,6 +19022,11 @@ body.dark-mode .btn-outline{border-color:var(--gold-300)!important;color:var(--g
             const yeBtn = document.getElementById('btn-monthly-yearly-excel');
             if (yeBtn) yeBtn.addEventListener('click', exportMonthlyYearlySummaryToExcel);
             // 🆕 STEP 11 — "বার্ষিক ম্যাট্রিক্স" এক্সপোর্ট টেবিলের কলাম-সেটিংস বাটন
+            // 🆕 [v16.5.60] মাসিক ডেটা — এক্সেল ইমপোর্ট/এক্সপোর্ট
+            { const _mx = document.getElementById('monthly-excel-input'), _mi = document.getElementById('btn-import-monthly-excel'), _me = document.getElementById('btn-export-monthly-excel');
+              if (_me) _me.addEventListener('click', exportMonthlyToExcel);
+              { const _mt = document.getElementById('btn-template-monthly-excel'); if (_mt) _mt.addEventListener('click', downloadMonthlyTemplate); }
+              if (_mi && _mx) { _mi.addEventListener('click', () => _mx.click()); _mx.addEventListener('change', (ev) => { const f = ev.target.files && ev.target.files[0]; if (f) handleMonthlyExcelFile(f); ev.target.value = ''; }); } }
             const btnColSettingsYearlyMatrix = document.getElementById('btn-col-settings-yearly-matrix');
             if (btnColSettingsYearlyMatrix) btnColSettingsYearlyMatrix.addEventListener('click', () =>
                 openColumnSettingsModal('yearly-matrix', window.YEARLY_MATRIX_DEFAULT_COLUMNS));
@@ -18974,6 +19270,145 @@ body.dark-mode .btn-outline{border-color:var(--gold-300)!important;color:var(--g
             <div class="no-print" style="display:flex;justify-content:flex-end;margin-bottom:8px;">${columnSettingsButtonHtml('main-entries')}</div>
             <div class="table-wrap"><table><thead><tr>${theadHtml}</tr></thead><tbody>${bodyHtml}</tbody></table></div>
           `;
+        };
+
+        // ======================================================================
+        // 🆕 [v16.5.60] মাসিক অনুদান — এক্সেল এক্সপোর্ট / ইমপোর্ট
+        // এক্সপোর্ট: নির্বাচিত অর্থবছরের (selectedYear) সব মাসিক এন্ট্রি, প্রতি সারিতে একটি (সদস্য × মাস)।
+        // ইমপোর্ট: একই কলাম-নামে ফাইল; সদস্য শনাক্ত আইডি নম্বর → নাম+মোবাইল → নাম। মাস "June-2026" / "জুন ২০২৬" / "2026-06" সবই চলে।
+        //   (সদস্য × মাস) আগে থেকে থাকলে সেই এন্ট্রি হালনাগাদ হয়, না থাকলে নতুন; সদস্য/মাস/পরিমাণ না মিললে সারিটি বাদ।
+        // ======================================================================
+        const parseImportedMonthKey = (raw) => {
+            let t = String(raw || '').trim(); if (!t) return '';
+            const bn = '০১২৩৪৫৬৭৮৯';
+            t = t.replace(/[০-৯]/g, c => String(bn.indexOf(c)));
+            let m = /^([A-Za-z]+)[\s\-\/,.]+(\d{4})$/.exec(t);
+            if (m) { const i = MONTH_NAMES_EN.findIndex(x => x.toLowerCase().slice(0, 3) === m[1].toLowerCase().slice(0, 3)); if (i >= 0) return MONTH_NAMES_EN[i] + '-' + m[2]; }
+            m = /^(\d{4})[\-\/](\d{1,2})$/.exec(t);
+            if (m) { const i = parseInt(m[2], 10) - 1; if (MONTH_NAMES_EN[i]) return MONTH_NAMES_EN[i] + '-' + m[1]; }
+            const mn = (state.settings && state.settings.monthNames) || CONFIG.DEFAULT_SETTINGS.monthNames;
+            m = /^(\S+)[\s\-\/,.]+(\d{4})$/.exec(t);
+            if (m) { const eng = MONTH_NAMES_EN.find(e => (mn[e] || '') === m[1]); if (eng) return eng + '-' + m[2]; }
+            return '';
+        };
+        const exportMonthlyToExcel = () => {
+            const dateStr = new Date().toISOString().slice(0, 10);
+            const keys = new Set(getMonthsForYear(selectedYear).map(x => x.key));
+            const rows = state.monthly.filter(r => keys.has(r.month)).sort((a, b) => monthKeySortValue(a.month) - monthKeySortValue(b.month) || (memberById(a.memberId)?.name || '').localeCompare(memberById(b.memberId)?.name || ''));
+            const cols = ['নং', 'আইডি নম্বর', 'সদস্যের নাম', 'পিতা/স্বামীর নাম', 'মোবাইল', 'মাস', 'তারিখ', 'পরিমাণ', 'মেথড', 'রিসিপ্ট নং', 'সংগ্রাহক'];
+            const aoa = [
+                [`মাসিক অনুদান — অর্থবছর ${selectedYear} — মোট ${toBengaliNum(rows.length)} টি এন্ট্রি — তারিখ ${dateStr}  (ইমপোর্টে "মাস" কলামে June-2026 ধাঁচ রাখুন)`],
+                cols,
+                ...rows.map((r, i) => {
+                    const m = memberById(r.memberId);
+                    return [i + 1, m ? (m.idNumber || '') : '', m ? m.name : 'অজানা', m ? (m.father || '') : '', m ? (m.mobile || '') : '', r.month, r.date || '', Number(r.amount) || 0, r.method || '',
+                        (window.mfRno && window.mfRno.noOf) ? window.mfRno.noOf(r) : '', r.collector || ''];
+                })
+            ];
+            downloadStyledExcel(aoa, {
+                sheetName: 'মাসিক অনুদান', fileName: `মাসিক_অনুদান_${String(selectedYear).replace(/[^0-9\-]/g, '')}_${dateStr}.xlsx`,
+                colWidths: [{ wch: 6 }, { wch: 12 }, { wch: 24 }, { wch: 24 }, { wch: 15 }, { wch: 14 }, { wch: 13 }, { wch: 12 }, { wch: 12 }, { wch: 14 }, { wch: 22 }],
+                dataRowCount: rows.length, hasTotalRow: false
+            });
+            toast('✅ মাসিক ডেটার এক্সেল ফাইল ডাউনলোড হচ্ছে');
+        };
+        const importMonthlyFromRows = (rows) => {
+            let added = 0, updated = 0, skipped = 0; const why = {};
+            const bad = (k) => { skipped++; why[k] = (why[k] || 0) + 1; };
+            const NOT_MONTH_COL = ['মাস', 'month', 'Month'];
+            rows.forEach(row => {
+                const idNumber = pickRowField(row, ['আইডি নম্বর', 'আইডি নাম্বার', 'আইডি', 'আইডি নং', 'ID', 'Id', 'id']);
+                const name = pickRowField(row, ['সদস্যের নাম', 'নাম', 'Name', 'name']);
+                const mobile = pickRowField(row, ['মোবাইল নাম্বার', 'মোবাইল', 'Mobile', 'mobile']);
+                const dateRaw = pickRowField(row, ['রিসিভ তারিখ', 'রিসিভ ডেট', 'ডিফল্ট রিসিভ তারিখ', 'তারিখ', 'Date', 'date']);
+                const rowMethod = pickRowField(row, ['ডিফল্ট মেথড', 'মেথড', 'পদ্ধতি', 'Method', 'method']);
+                const collector = pickRowField(row, ['ডিফল্ট সংগ্রাহক', 'সংগ্রাহক', 'Collector', 'collector']);
+                // 🆕 [v16.5.61] দুই ধরনের ফাইল: (১) লম্বা — প্রতি সারিতে একটি মাস ("মাস"+"পরিমাণ" কলাম);
+                // (২) পাশাপাশি — প্রতিটি মাসের নামে আলাদা কলাম (যেমন July-2026), সারিতে সদস্য ১ জন; যেকোনো কয়েক মাস/১২ মাস একসাথে।
+                const items = [];
+                const mk = parseImportedMonthKey(pickRowField(row, NOT_MONTH_COL));
+                const amt1 = Number(pickRowField(row, ['পরিমাণ', 'Amount', 'amount'])) || 0;
+                const hasMonthCell = pickRowField(row, NOT_MONTH_COL) !== '';
+                if (hasMonthCell || amt1) items.push({ monthKey: mk, amount: amt1 });
+                Object.keys(row).forEach(k => {
+                    const kk = String(k).trim(); if (NOT_MONTH_COL.includes(kk)) return;
+                    const key = parseImportedMonthKey(kk); if (!key) return;
+                    const raw = row[k]; if (raw === '' || raw === null || raw === undefined) return;
+                    const bn = '০১২৩৪৫৬৭৮৯';
+                    const a = Number(String(raw).replace(/[০-৯]/g, c => String(bn.indexOf(c))).replace(/[,\s৳]/g, ''));
+                    if (!a || isNaN(a) || a <= 0) return;
+                    const gv = (suffixes) => { for (const sx of suffixes) { const v = row[kk + ' ' + sx]; if (v !== '' && v !== null && v !== undefined) return String(v).trim(); } return ''; };
+                    items.push({ monthKey: key, amount: a, method: gv(['মেথড', 'পদ্ধতি']), dateRaw: gv(['রিসিভ তারিখ', 'রিসিভ ডেট', 'তারিখ']) });   // 🆕 মাস-ভিত্তিক মেথড ও রিসিভ তারিখ
+                });
+                if (!idNumber && !name && !mobile && !items.length) return;   // ফাঁকা/শিরোনাম সারি
+                if (!items.length) return;   // নাম আছে কিন্তু কোনো মাসে টাকা নেই — বাদ নয়, শুধু এড়ানো
+                const nId = (idNumber || '').toString().trim(), nName = normalizeNameForMatch(name), nMobile = normalizeMobileForMatch(mobile);
+                let m = null;
+                if (nId) m = state.members.find(x => (x.idNumber || '').toString().trim() === nId);
+                if (!m && name && mobile) m = state.members.find(x => normalizeNameForMatch(x.name) === nName && normalizeMobileForMatch(x.mobile) === nMobile);
+                if (!m && name) m = state.members.find(x => normalizeNameForMatch(x.name) === nName);
+                const rowDate = parseImportedDate(dateRaw);
+                items.forEach(it => {
+                    const method = it.method || rowMethod, date = it.dateRaw ? (parseImportedDate(it.dateRaw) || rowDate) : rowDate;
+                    if (!m) return bad('সদস্য মেলেনি');
+                    if (!it.monthKey) return bad('মাস বোঝা যায়নি');
+                    if (!it.amount) return bad('পরিমাণ নেই');
+                    const ex = getMonthlyEntry(m.id, it.monthKey);
+                    if (ex) {
+                        if (Number(ex.amount) === it.amount && (!method || ex.method === method) && (!collector || ex.collector === collector) && (!date || ex.date === date)) return;   // অপরিবর্তিত
+                        ex.amount = it.amount; if (method) ex.method = method; if (collector) ex.collector = collector; if (date) ex.date = date; updated++;
+                    } else { state.monthly.push({ id: uid(), memberId: m.id, month: it.monthKey, amount: it.amount, method: method || '', collector: collector || '', date: date || todayISO() }); added++; }
+                });
+            });
+            return { added, updated, skipped, why };
+        };
+        // 🆕 [v16.5.61] টেমপ্লেট: সব সদস্য × নির্বাচিত অর্থবছরের ১২ মাস (পাশাপাশি); বর্তমান পরিমাণ আগে থেকে ভরা থাকে
+        const downloadMonthlyTemplate = () => {
+            const months = getMonthsForYear(selectedYear);
+            const head = ['আইডি নম্বর', 'সদস্যের নাম', 'পিতা/স্বামীর নাম', 'মোবাইল', ...months.flatMap(x => [x.key, x.key + ' মেথড', x.key + ' রিসিভ তারিখ']), 'ডিফল্ট মেথড', 'ডিফল্ট সংগ্রাহক', 'ডিফল্ট রিসিভ তারিখ'];
+            const members = [...state.members].sort((a, b) => String(a.idNumber || '').localeCompare(String(b.idNumber || ''), undefined, { numeric: true }) || String(a.name || '').localeCompare(String(b.name || '')));
+            const aoa = [head, ...members.map(m => [m.idNumber || '', m.name || '', m.father || '', m.mobile || '',
+                ...months.flatMap(x => { const e = getMonthlyEntry(m.id, x.key); return e ? [Number(e.amount) || '', e.method || '', e.date || ''] : ['', '', '']; }), '', '', ''])];
+            const help = [['মাসিক অনুদান ইমপোর্ট — নির্দেশনা'], [''],
+                ['১) "মাসিক ডাটা" শিটে প্রতি সারিতে একজন সদস্য; যে মাসের টাকা জমা হয়েছে সেই মাসের ঘরে শুধু সংখ্যা লিখুন (যেমন 500)।'],
+                ['২) প্রতিটি মাসের তিনটি ঘর: পরিমাণ | মেথড (নগদ/বিকাশ ইত্যাদি) | রিসিভ তারিখ। যেকোনো কয়েক মাস বা ১২ মাস একসাথে ভরতে পারেন; খালি ঘর বাদ যাবে, আগের এন্ট্রি মুছবে না।'],
+                ['৩) সদস্য শনাক্ত হয় আইডি নম্বর দিয়ে; না থাকলে নাম+মোবাইল, তারপর শুধু নাম। প্রথম চার কলাম বদলাবেন না।'],
+                ['৪) মাসের কলামের নাম (July-2026 ইত্যাদি) পরিবর্তন করবেন না। অন্য বছরের ডাটা দিতে চাইলে কলামের নাম সেভাবে লিখুন (যেমন June-2027, 2027-06, জুন ২০২৭)।'],
+                ['৫) শেষের তিন কলাম (ডিফল্ট মেথড / সংগ্রাহক / রিসিভ তারিখ) ঐচ্ছিক — যে মাসের নিজের মেথড/তারিখ ফাঁকা, সেখানে এগুলো বসবে। তারিখ: 2026-07-15 বা 15/07/2026।'],
+                ['৬) আগে থেকে থাকা (সদস্য × মাস) এন্ট্রির পরিমাণ বদলালে হালনাগাদ হবে। ইমপোর্টের আগে ব্যাকআপ নিন।']];
+            const wb = XLSX.utils.book_new();
+            const ws = XLSX.utils.aoa_to_sheet(aoa);
+            ws['!cols'] = [{ wch: 12 }, { wch: 24 }, { wch: 24 }, { wch: 15 }, ...months.flatMap(() => [{ wch: 12 }, { wch: 12 }, { wch: 14 }]), { wch: 14 }, { wch: 16 }, { wch: 18 }];
+            ws['!freeze'] = { xSplit: 2, ySplit: 1 };
+            XLSX.utils.book_append_sheet(wb, ws, 'মাসিক ডাটা');
+            const wh = XLSX.utils.aoa_to_sheet(help); wh['!cols'] = [{ wch: 120 }];
+            XLSX.utils.book_append_sheet(wb, wh, 'নির্দেশনা');
+            XLSX.writeFile(wb, `মাসিক_ইমপোর্ট_টেমপ্লেট_${String(selectedYear).replace(/[^0-9\-]/g, '')}.xlsx`);
+            toast('✅ টেমপ্লেট ডাউনলোড হচ্ছে — ' + toBengaliNum(members.length) + ' জন সদস্য × ' + toBengaliNum(months.length) + ' মাস');
+        };
+        window.mfMonthlyExcel = { parseMonthKey: parseImportedMonthKey, importRows: importMonthlyFromRows, exportXlsx: exportMonthlyToExcel, template: downloadMonthlyTemplate };
+        const handleMonthlyExcelFile = (file) => {
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                try {
+                    const wb = XLSX.read(new Uint8Array(e.target.result), { type: 'array' });
+                    const isHead = (c) => { const t = String(c).trim(); return ['মাস', 'Month', 'month', 'সদস্যের নাম', 'আইডি নম্বর'].includes(t) || !!parseImportedMonthKey(t); };
+                    let rows = [];
+                    wb.SheetNames.forEach(sn => {
+                        const sh = wb.Sheets[sn]; const a = XLSX.utils.sheet_to_json(sh, { header: 1, defval: '' });
+                        const hi = a.findIndex(r => r.some(isHead)); if (hi < 0) return;   // নির্দেশনা শিট ইত্যাদি এড়ানো
+                        rows = rows.concat(XLSX.utils.sheet_to_json(sh, { defval: '', range: hi }));
+                    });
+                    const { added, updated, skipped, why } = importMonthlyFromRows(rows);
+                    if (added || updated) { saveState(); addActivityLog('add', 'monthly', '', `এক্সেল ইমপোর্ট (মাসিক): নতুন ${added} টি, হালনাগাদ ${updated} টি, বাদ ${skipped} সারি`); renderMain(); }
+                    const whyTxt = Object.keys(why).map(k => `${k}: ${why[k]}`).join(', ');
+                    toast(`ইমপোর্ট সম্পন্ন — নতুন ${added} · হালনাগাদ ${updated}${skipped ? ` · বাদ ${skipped} (${whyTxt})` : ''}`);
+                } catch (err) {
+                    console.error(err);
+                    toast('এক্সেল ফাইল পড়তে সমস্যা হয়েছে — .xlsx ফরম্যাট ও কলামের নাম (সদস্যের নাম, মাস, পরিমাণ…) দেখুন');
+                }
+            };
+            reader.readAsArrayBuffer(file);
         };
 
         // 🆕 এক্সেল এক্সপোর্ট (বার্ষিক অনুদান)
@@ -21240,7 +21675,9 @@ body.dark-mode .btn-outline{border-color:var(--gold-300)!important;color:var(--g
             const displayName = user ? getProfileDisplayName(user.email, user.displayName) : 'অতিথি';
             const lastMsgId = msgs.length ? msgs[msgs.length - 1].id : null;
 
-            const msgsHtml = msgs.length ? msgs.map(msg => {
+            cdEnsureCss();
+            const msgsHtml = cdMsgsHtml();
+            const _oldMsgsHtml = msgs.length ? msgs.map(msg => {
                 const isMine = msg.sender === email;
                 const senderName = msg.displayName || getProfileDisplayName(msg.sender);
                 // ★★★ সংশোধন ★★★ settings.adminEmail-এর বদলে isAdminEmail() — এখন সেকেন্ডারি এডমিনরাও 👑 ব্যাজ পাবেন
@@ -21275,7 +21712,9 @@ body.dark-mode .btn-outline{border-color:var(--gold-300)!important;color:var(--g
             <div class="chat-container">
               <div class="chat-online-indicator no-print"><span class="dot"></span> ${isLoggedIn ? `${escapeHtml(displayName)} — সংযুক্ত` : 'অতিথি — লগইন করুন'}</div>
               <div id="chat-presence-info" class="chat-presence-info no-print"><span class="active-count-pill">🟢 …</span></div>
-              <div class="chat-messages" id="chat-messages">${msgsHtml}</div>
+              <div class="cd-pinbar"></div>
+              <div class="chat-messages cd-tab-msgs" id="chat-messages">${msgsHtml}</div>
+              <div class="cd-replybar"></div>
               <div class="chat-input-area no-print">
                 <button class="btn btn-outline btn-attach" id="chat-attach-btn" type="button" title="ছবি পাঠান (সর্বোচ্চ ১০ এমবি)" ${disabled}>📎</button>
                 <input type="file" id="chat-image-input" accept="image/*" style="display:none;">
@@ -21291,6 +21730,8 @@ body.dark-mode .btn-outline{border-color:var(--gold-300)!important;color:var(--g
             if (backBtn) backBtn.addEventListener('click', () => { chatView = 'home';
                 renderMain(); });
             const container = document.getElementById('chat-messages');
+            if (container && container.classList.contains('cd-tab-msgs')) { container.addEventListener('click', cdHandleClick); container.dataset.sig = container.innerHTML; }
+            cdUpdateReplyBars(); cdRefresh();
             const input = document.getElementById('chat-input');
             const sendBtn = document.getElementById('chat-send-btn');
             if (input) {
@@ -21929,6 +22370,670 @@ body.dark-mode .btn-outline{border-color:var(--gold-300)!important;color:var(--g
             });
         };
 
+
+        // ======================================================================
+        //  🆕 [চ্যাট ডক] মাসিক অনুদান (ফান্ড কালেক্ট) পেজের নিচে লেগে থাকা মেসেঞ্জার-স্টাইল চ্যাট বার।
+        //  বারে ক্লিক করলে নিচ থেকে স্লাইড হয়ে চ্যাট খোলে। আগের গ্রুপ-চ্যাটের মেসেজ (state.chat /
+        //  chat_messages), সক্রিয়-তালিকা (presence) ও পঠিত-সময় (chat_reads) হুবহু পুনর্ব্যবহার করা
+        //  হয়েছে — তাই "চ্যাট" ট্যাব ও এই বারে একই মেসেজ দেখা যায়। রিয়্যাক্ট জমা হয় নিজের
+        //  chat_reads/{ইমেইল}.reactions-এ (নিজের ডকুমেন্টে লেখা যায়, তাই Firestore Rules বদলাতে হয় না)।
+        //  কোন কোন পেজে বার দেখাবে তা বদলাতে শুধু নিচের CHATDOCK_TABS তালিকা বদলান।
+        // ======================================================================
+        const CHATDOCK_TABS = ['monthly'];
+        const CD_REACTIONS = ['👍', '❤️', '😂', '😮', '😢', '🙏', '🤲', '👎'];
+        let _cdOpen = false;
+        let _cdPickFor = null;
+        let _cdSig = '';
+        let _cdReadTimer = null;
+        let _cdMoreFor = null;
+        let _cdReply = null;
+        let _cdPinIdx = 0;
+
+        const _cdCss = `
+        .cd-bar-wrap{position:sticky;bottom:12px;z-index:30;margin-top:16px;padding-bottom:4px}
+        @media (max-width:820px){.cd-bar-wrap{bottom:calc(78px + env(safe-area-inset-bottom,0px))}}
+        .cd-bar{width:100%;display:flex;align-items:center;gap:10px;text-align:left;font:inherit;background:var(--paper-raised,#fff);color:var(--ink,#0e2b22);border:1.5px solid var(--gold-500,#cc9c3c);border-radius:14px;padding:9px 12px;cursor:pointer;box-shadow:var(--shadow)}
+        .cd-bar:active{transform:scale(.99)}
+        .cd-dot{width:10px;height:10px;border-radius:50%;background:#22c55e;flex-shrink:0;box-shadow:0 0 0 3px rgba(34,197,94,.2)}
+        .cd-dot.off{background:#9aa5a0;box-shadow:none}
+        .cd-bar-txt{flex:1;min-width:0}
+        .cd-bar-top{font-size:12px;font-weight:700}
+        .cd-bar-last{font-size:12.5px;opacity:.75;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+        .cd-bar-avs{display:flex;flex-shrink:0}
+        .cd-bar-avs .cd-av{margin-left:-7px}
+        .cd-bar-avs .cd-av:first-child{margin-left:0}
+        .cd-badge{background:var(--gold-500,#cc9c3c);color:#0c2c22;border-radius:999px;font-size:11px;font-weight:700;padding:1px 8px;flex-shrink:0}
+        .cd-chev{display:flex;color:var(--emerald-700,#17513c);flex-shrink:0}
+        body.dark-mode .cd-chev{color:var(--gold-300)}
+        .cd-av{display:inline-flex;align-items:center;justify-content:center;border-radius:50%;overflow:hidden;font-weight:700;flex-shrink:0;border:1.5px solid var(--paper-raised,#fff);box-sizing:border-box}
+        .cd-av img{width:100%;height:100%;object-fit:cover;display:block}
+        #cd-backdrop{position:fixed;inset:0;background:rgba(0,0,0,.38);z-index:8999;opacity:0;pointer-events:none;transition:opacity .28s ease}
+        #cd-backdrop.open{opacity:1;pointer-events:auto}
+        #cd-panel{position:fixed;left:50%;bottom:var(--mf-kb,0px);width:100%;max-width:560px;height:min(80dvh,660px);z-index:9000;display:flex;flex-direction:column;background:var(--paper-raised,#fff);color:var(--ink,#0e2b22);border-radius:18px 18px 0 0;box-shadow:0 -10px 40px rgba(0,0,0,.28);transform:translate(-50%,105%);visibility:hidden;transition:transform .34s cubic-bezier(.22,1,.36,1),visibility 0s linear .34s;font-family:var(--font-body)}
+        #cd-panel.open{transform:translate(-50%,0);visibility:visible;transition:transform .34s cubic-bezier(.22,1,.36,1),visibility 0s}
+        .cd-head{display:flex;align-items:center;gap:10px;padding:10px 12px;background:linear-gradient(135deg,var(--emerald-700,#17513c),var(--emerald-900,#0c2c22));color:var(--gold-100,#f7ecd0);border-radius:18px 18px 0 0;flex-shrink:0}
+        body.dark-mode .cd-head{color:var(--gold-300)}
+        .cd-head-ico{width:36px;height:36px;border-radius:50%;background:var(--gold-300,#e8c877);color:#0c2c22;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0}
+        .cd-head-t{flex:1;min-width:0}
+        .cd-head-t b{display:block;font-size:15px}
+        .cd-head-t span{font-size:12px;opacity:.85}
+        .cd-x{background:rgba(255,255,255,.14);border:0;color:inherit;width:34px;height:34px;border-radius:50%;cursor:pointer;display:flex;align-items:center;justify-content:center}
+        #cd-msgs{flex:1;overflow-y:auto;padding:12px 10px 4px;background:var(--paper,#f6f3ea);overscroll-behavior:contain}
+        .cd-day{text-align:center;margin:8px 0 12px}
+        .cd-day span{background:var(--gold-100,#f7ecd0);color:var(--ink-soft,#2c4a3e);font-size:11px;border-radius:999px;padding:2px 12px;border:1px solid var(--line,#e1dac6)}
+        .cd-row{display:flex;gap:8px;align-items:flex-end;margin-bottom:8px}
+        .cd-row.me{flex-direction:row-reverse}
+        .cd-col{max-width:78%;min-width:0;display:flex;flex-direction:column}
+        .cd-row.me .cd-col{align-items:flex-end}
+        .cd-bub{background:var(--paper-raised,#fff);border:1px solid var(--line,#e1dac6);border-radius:15px 15px 15px 4px;padding:7px 11px;cursor:pointer;word-break:break-word}
+        .cd-row.me .cd-bub{background:linear-gradient(160deg,var(--emerald-600,#1f6b4d),var(--emerald-700,#17513c));color:#fff;border-color:transparent;border-radius:15px 15px 4px 15px}
+        .cd-nm{font-size:11.5px;font-weight:700;color:var(--emerald-600,#1f6b4d);margin-bottom:2px}
+        body.dark-mode .cd-nm{color:var(--gold-300)}
+        .cd-tx{font-size:14.5px;line-height:1.5;white-space:pre-wrap}
+        .cd-img{display:block;max-width:100%;max-height:200px;border-radius:10px;margin-bottom:4px;cursor:zoom-in}
+        .cd-tm{font-size:10.5px;opacity:.65;text-align:right;margin-top:3px}
+        .cd-chips{display:flex;flex-wrap:wrap;gap:4px;margin-top:3px}
+        .cd-chip{display:inline-flex;align-items:center;gap:4px;white-space:nowrap;line-height:1.4;background:var(--paper-raised,#fff);color:var(--ink,#0e2b22);border:1px solid var(--line,#e1dac6);border-radius:999px;padding:1px 8px;font:inherit;font-size:13px;cursor:pointer}
+        .cd-chip small{font-size:11px;font-weight:700}
+        .cd-chip.mine{border-color:var(--gold-500,#cc9c3c);background:var(--gold-100,#f7ecd0)}
+        body.dark-mode .cd-chip.mine{background:#3a3220}
+        .cd-pick{display:flex;flex-wrap:wrap;gap:2px;background:var(--paper-raised,#fff);border:1px solid var(--line,#e1dac6);border-radius:999px;padding:3px 7px;margin-top:4px;width:fit-content;max-width:100%;box-shadow:var(--shadow);animation:cdPop .16s ease-out}
+        .cd-pick button{background:none;border:0;font-size:21px;line-height:1;padding:3px 2px;border-radius:50%;cursor:pointer}
+        .cd-pick button.on{background:var(--gold-100,#f7ecd0)}
+        body.dark-mode .cd-pick button.on{background:#3a3220}
+        @keyframes cdPop{from{opacity:0;transform:scale(.85)}to{opacity:1;transform:scale(1)}}
+        .chat-presence-info:empty{display:none}
+        .chat-presence-info .chat-presence-line{padding:2px 16px}
+        .chat-messages.cd-tab-msgs{gap:1px;padding:6px 10px 2px}
+        .cd-tab-msgs .cd-row{margin-bottom:1px}
+        .cd-tab-msgs .cd-day{margin:2px 0 3px}
+        .cd-tab-msgs .cd-seen{margin:1px 2px 1px}
+        .cd-acts{display:flex;flex-wrap:wrap;gap:6px;margin-top:4px}
+        .cd-acts button.on{background:var(--gold-100,#f7ecd0);border-color:var(--gold-500,#cc9c3c)}
+        body.dark-mode .cd-acts button.on{background:#3a3220}
+        .cd-quote{border-left:3px solid var(--gold-500,#cc9c3c);background:rgba(0,0,0,.06);border-radius:6px;padding:3px 8px;margin-bottom:4px;font-size:12px;cursor:pointer;max-width:100%}
+        .cd-row.me .cd-quote{background:rgba(255,255,255,.18)}
+        .cd-quote b{display:block;font-size:11.5px}
+        .cd-quote span{display:block;opacity:.85;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:210px}
+        .cd-fwd{font-size:11px;opacity:.7;font-style:italic;margin-bottom:2px}
+        .cd-pinbar:empty{display:none}
+        .cd-pinrow{display:flex;align-items:center;gap:8px;padding:6px 12px;background:var(--gold-100,#f7ecd0);border-bottom:1px solid var(--line,#e1dac6);font-size:12.5px;cursor:pointer;color:var(--ink,#0e2b22)}
+        body.dark-mode .cd-pinrow{background:#3a3220;color:#f3efe2}
+        .cd-pin-t{flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+        .cd-pinrow small{opacity:.7;flex-shrink:0}
+        .cd-replybar{display:flex;align-items:center;gap:8px;padding:6px 12px;background:var(--gold-100,#f7ecd0);border-top:1px solid var(--line,#e1dac6);font-size:12.5px;color:var(--ink,#0e2b22)}
+        body.dark-mode .cd-replybar{background:#3a3220;color:#f3efe2}
+        .cd-replybar:empty{display:none}
+        .cd-replybar>span{flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+        .cd-replybar button{background:none;border:0;color:inherit;font-size:15px;cursor:pointer;padding:2px 6px}
+        .cd-flash .cd-bub{animation:cdFlash 1.2s ease}
+        @keyframes cdFlash{0%,60%{box-shadow:0 0 0 3px var(--gold-500,#cc9c3c)}100%{box-shadow:0 0 0 0 transparent}}
+        .cd-fw-prev{background:var(--gold-100,#f7ecd0);border-left:3px solid var(--gold-500,#cc9c3c);border-radius:6px;padding:6px 10px;font-size:13px;margin-bottom:10px;max-height:70px;overflow:hidden}
+        body.dark-mode .cd-fw-prev{background:#3a3220}
+        .cd-fw-list{max-height:46vh;overflow-y:auto;margin:6px 0 10px}
+        .cd-fw-item{display:flex;align-items:center;gap:10px;padding:8px 6px;border-bottom:1px solid var(--line,#e1dac6);cursor:pointer}
+        .cd-fw-item:active,.cd-fw-item:hover{background:var(--gold-100,#f7ecd0)}
+        body.dark-mode .cd-fw-item:hover{background:rgba(255,255,255,.08)}
+        .cd-acts button{font:inherit;font-size:12px;background:var(--paper-raised,#fff);color:var(--ink,#0e2b22);border:1px solid var(--line,#e1dac6);border-radius:999px;padding:2px 10px;cursor:pointer}
+        .cd-tab-msgs{background:var(--paper,#f6f3ea);border-radius:12px;padding:12px 10px 4px}
+        .cd-seen{display:flex;justify-content:flex-end;align-items:center;gap:3px;font-size:10.5px;opacity:.9;margin:0 4px 8px}
+        .cd-seen .cd-av{margin-left:0;border-width:1px}
+        .cd-seen-t{opacity:.75}
+        .cd-typing{font-size:12px;padding:2px 14px 4px;min-height:0;background:var(--paper,#f6f3ea);color:var(--ink-soft,#2c4a3e)}
+        .cd-typing:empty{display:none}
+        .cd-empty{text-align:center;padding:40px 10px;opacity:.7;font-size:14px}
+        .cd-inp{display:flex;gap:8px;align-items:flex-end;padding:8px 10px calc(8px + env(safe-area-inset-bottom,0px));border-top:1px solid var(--line,#e1dac6);background:var(--paper-raised,#fff);flex-shrink:0}
+        .cd-inp textarea{flex:1;resize:none;border-radius:20px;padding:9px 14px;font:inherit;font-size:14.5px;max-height:110px;min-height:40px;box-sizing:border-box}
+        .cd-att{width:42px;height:42px;border-radius:50%;border:1px solid var(--line,#e1dac6);background:var(--paper-raised,#fff);color:var(--emerald-700,#17513c);cursor:pointer;flex-shrink:0;display:flex;align-items:center;justify-content:center}
+        body.dark-mode .cd-att{color:var(--gold-300)}
+        .cd-send{width:42px;height:42px;border-radius:50%;border:0;background:var(--emerald-700,#17513c);color:#fff;cursor:pointer;flex-shrink:0;display:flex;align-items:center;justify-content:center}
+        body.dark-mode .cd-send{background:var(--gold-500)}
+        /* 🆕 [v16.5.63] ব্যক্তিগত মেসেজ (DM) গ্রুপ-চ্যাটের মতোই দেখাবে */
+        #dm-messages.cd-tab-msgs{padding:10px 10px 4px}
+        .dmx-menu{background:none!important;border:0!important;padding:0!important;margin:0!important;box-shadow:none!important}
+        .dmx-flash .cd-bub{animation:cdFlash 1.2s ease}
+        #dmx-pinbar{display:flex;align-items:center;gap:8px;padding:6px 12px;background:var(--gold-100,#f7ecd0);border:0;border-bottom:1px solid var(--line,#e1dac6);border-radius:10px 10px 0 0;margin:0;font-size:12.5px;cursor:pointer;color:var(--ink,#0e2b22)}
+        body.dark-mode #dmx-pinbar{background:#3a3220;color:#f3efe2}
+        #dmx-replybar{display:flex;align-items:center;gap:8px;padding:6px 12px;background:var(--gold-100,#f7ecd0);border:0;border-top:1px solid var(--line,#e1dac6);border-radius:0;margin:0;font-size:12.5px;color:var(--ink,#0e2b22)}
+        body.dark-mode #dmx-replybar{background:#3a3220;color:#f3efe2}
+        @media print{.cd-bar-wrap,#cd-panel,#cd-backdrop{display:none!important}}
+        `;
+        const cdEnsureCss = () => {
+            if (document.getElementById('mf-cd-css')) return;
+            const s = document.createElement('style');
+            s.id = 'mf-cd-css';
+            s.textContent = _cdCss;
+            document.head.appendChild(s);
+        };
+
+        const cdMe = () => (window.currentUser && window.currentUser.email) || '';
+        const cdUser = (email) => (typeof userList !== 'undefined' && userList.find(u => u.email === email)) || null;
+        const cdName = (email, fb) => {
+            const u = cdUser(email), p = presenceMap[email], r = chatReadsMap[email];
+            return (u && u.displayName) || (p && p.displayName) || (r && r.displayName) || fb || String(email || '').split('@')[0] || 'অজানা';
+        };
+        const cdPhoto = (email) => {
+            const u = cdUser(email), p = presenceMap[email];
+            return (u && u.photoUrl) || (p && p.photoUrl) || '';
+        };
+        const cdAvatar = (email, name, px) => {
+            const ph = cdPhoto(email);
+            const pal = ['#cecbf6|#3c3489', '#9fe1cb|#085041', '#f5c4b3|#712b13', '#fac775|#633806', '#b5d4f4|#0c447c', '#f4c0d1|#72243e'];
+            let h = 0;
+            for (const c of String(email || name || '')) h = (h * 31 + c.charCodeAt(0)) >>> 0;
+            const [bg, fg] = pal[h % pal.length].split('|');
+            const st = `width:${px}px;height:${px}px;font-size:${Math.round(px * 0.42)}px;`;
+            if (ph) return `<span class="cd-av" style="${st}"><img src="${escapeHtml(toDirectImageUrl(ph))}" alt=""></span>`;
+            return `<span class="cd-av" style="${st}background:${bg};color:${fg};">${escapeHtml([...String(name || '?')][0] || '?')}</span>`;
+        };
+
+        const cdSortedMsgs = () => (state.chat || []).slice().sort((a, b) => new Date(a.timestamp) - new Date(b.timestamp));
+        const cdDayKey = (d) => { const x = new Date(d); return x.getFullYear() + '-' + x.getMonth() + '-' + x.getDate(); };
+        const cdFullDate = (iso) => { try { return new Date(iso).toLocaleDateString('bn-BD', { day: 'numeric', month: 'long', year: 'numeric' }); } catch (e) { return ''; } };
+        const cdDayLabel = (iso) => {
+            const y = new Date(); y.setDate(y.getDate() - 1);
+            const k = cdDayKey(iso);
+            if (k === cdDayKey(new Date())) return 'আজ';
+            if (k === cdDayKey(y)) return 'গতকাল, ' + cdFullDate(iso);
+            return cdFullDate(iso);
+        };
+        const cdTime = (iso) => {
+            try {
+                const t = new Date(iso).toLocaleTimeString('bn-BD', { hour: 'numeric', minute: '2-digit', hour12: true });
+                if (cdDayKey(iso) === cdDayKey(new Date())) return t;
+                return new Date(iso).toLocaleDateString('bn-BD', { day: 'numeric', month: 'short' }) + ', ' + t;
+            } catch (e) { return ''; }
+        };
+
+        const cdReacts = (msgId) => {
+            const map = {};
+            Object.entries(chatReadsMap).forEach(([em, r]) => {
+                const e = r && r.reactions && r.reactions[msgId];
+                if (e) (map[e] = map[e] || []).push(em);
+            });
+            return map;
+        };
+
+        const cdUnreadCount = () => {
+            const me = cdMe();
+            const mine = chatReadsMap[me];
+            const t = mine && mine.lastReadAt ? new Date(mine.lastReadAt).getTime() : 0;
+            return (state.chat || []).filter(m => m.sender !== me && new Date(m.timestamp).getTime() > t).length;
+        };
+
+        // 🆕 [v16.5.63] মেসেঞ্জার-স্টাইল "কে কোন মেসেজ পর্যন্ত দেখেছেন": প্রতিজনের সর্বশেষ-পঠিত মেসেজের নিচে তাঁর ছোট ছবি
+        const cdSeenMap = () => {
+            const msgs = cdSortedMsgs(), map = {};
+            Object.entries(chatReadsMap).forEach(([em, r]) => {
+                if (!r || !r.lastReadAt) return;
+                const t = new Date(r.lastReadAt).getTime();
+                for (let k = msgs.length - 1; k >= 0; k--) {
+                    const x = msgs[k];
+                    if (x.sender === em) continue;   // নিজের পাঠানো মেসেজে নিজের "দেখেছেন" দেখানো হয় না
+                    if (new Date(x.timestamp).getTime() <= t) { (map[x.id] = map[x.id] || []).push(em); break; }
+                }
+            });
+            return map;
+        };
+        const cdSeenHtml = (m, smap, lastId) => {
+            const me = cdMe();
+            const v = ((smap && smap[m.id]) || []).filter(em => em !== me);
+            if (!v.length) return (m.id === lastId && m.sender === me) ? `<div class="cd-seen"><span class="cd-seen-t">✓ পাঠানো হয়েছে</span></div>` : '';
+            const shown = v.slice(0, 7).map(em => `<span title="${escapeHtml(cdName(em))} দেখেছেন">${cdAvatar(em, cdName(em), 16)}</span>`).join('');
+            return `<div class="cd-seen">${shown}${v.length > 7 ? `<span class="cd-seen-t">+${v.length - 7}</span>` : ''}</div>`;
+        };
+
+        const cdBarHtml = () => {
+            const me = cdMe();
+            const act = getActiveUsersList();
+            const msgs = cdSortedMsgs();
+            const last = msgs[msgs.length - 1];
+            const unread = cdUnreadCount();
+            const lastTxt = last ? `<b>${escapeHtml(last.displayName || cdName(last.sender))}:</b> ${last.imageUrl ? '📷 ছবি' : escapeHtml((last.text || '').slice(0, 60))}` : 'এখনো কোনো মেসেজ নেই — প্রথম মেসেজ পাঠান';
+            const avs = act.filter(p => p.email !== me).slice(0, 3).map(p => cdAvatar(p.email, cdName(p.email), 24)).join('');
+            return `
+              <span class="cd-dot ${act.length ? '' : 'off'}"></span>
+              <span class="cd-bar-txt">
+                <div class="cd-bar-top">${act.length ? act.length + ' জন অ্যাক্টিভ' : 'গ্রুপ চ্যাট'}</div>
+                <div class="cd-bar-last">${lastTxt}</div>
+              </span>
+              ${avs ? `<span class="cd-bar-avs">${avs}</span>` : ''}
+              ${unread > 0 ? `<span class="cd-badge">${unread > 99 ? '99+' : unread}</span>` : ''}
+              <span class="cd-chev"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 15l6-6 6 6"/></svg></span>`;
+        };
+
+        const cdMsgsHtml = () => {
+            const me = cdMe();
+            const msgs = cdSortedMsgs();
+            if (!msgs.length) return `<div class="cd-empty"><div style="font-size:34px;">💬</div>কোনো মেসেজ নেই<br><small>প্রথম মেসেজ পাঠান</small></div>`;
+            const lastId = msgs[msgs.length - 1].id;
+            const smap = cdSeenMap();
+            let prevDay = '';
+            return msgs.map(m => {
+                const mine = m.sender === me;
+                const name = m.displayName || cdName(m.sender);
+                const dk = cdDayKey(m.timestamp);
+                const sep = dk !== prevDay ? `<div class="cd-day"><span>${escapeHtml(cdDayLabel(m.timestamp))}</span></div>` : '';
+                prevDay = dk;
+                const rx = cdReacts(m.id);
+                const myRx = (chatReadsMap[me] && chatReadsMap[me].reactions && chatReadsMap[me].reactions[m.id]) || '';
+                const chips = Object.entries(rx).sort((a, b) => CD_REACTIONS.indexOf(a[0]) - CD_REACTIONS.indexOf(b[0])).map(([e, ems]) =>
+                    `<button type="button" data-mf-noicon class="cd-chip ${ems.includes(me) ? 'mine' : ''}" data-cd-react="${m.id}" data-emoji="${e}" title="${escapeHtml(ems.map(x => cdName(x)).join(', '))}">${e}<small>${ems.length}</small></button>`).join('');
+                const canDel = mine || isAdminUser();
+                const canEd = (mine || isAdminUser()) && !m.imageUrl;
+                const pinned = cdIsPinned(m);
+                const picker = _cdPickFor === m.id ? `<div class="cd-pick">${CD_REACTIONS.map(e => `<button type="button" data-mf-noicon class="${e === myRx ? 'on' : ''}" data-cd-react="${m.id}" data-emoji="${e}">${e}</button>`).join('')}</div>
+                    <div class="cd-acts">
+                      <button type="button" data-cd-reply="${m.id}">↩ উত্তর</button>
+                      <button type="button" data-cd-copy="${m.id}">📋 কপি</button>
+                      <button type="button" class="${_cdMoreFor === m.id ? 'on' : ''}" data-cd-more="${m.id}">⋯ আরও</button>
+                    </div>
+                    ${_cdMoreFor === m.id ? `<div class="cd-acts">
+                      <button type="button" data-cd-pin="${m.id}">📌 ${pinned ? 'পিন সরান' : 'পিন করুন'}</button>
+                      <button type="button" data-cd-fwd="${m.id}">➡️ ফরওয়ার্ড</button>
+                      ${canEd ? `<button type="button" data-cd-edit="${m.id}">✎ সম্পাদনা</button>` : ''}
+                      ${canDel ? `<button type="button" data-cd-del="${m.id}">🗑 মুছুন</button>` : ''}
+                    </div>` : ''}` : '';
+                const quote = m.replyTo ? `<div class="cd-quote" data-cd-goto="${escapeHtml(m.replyTo.id)}"><b>${escapeHtml(m.replyTo.name || '')}</b><span>${escapeHtml(m.replyTo.text || '')}</span></div>` : '';
+                return `${sep}
+                <div class="cd-row ${mine ? 'me' : ''}" data-cd-mid="${m.id}">
+                  ${mine ? '' : cdAvatar(m.sender, name, 30)}
+                  <div class="cd-col">
+                    <div class="cd-bub" data-cd-pick="${m.id}">
+                      ${mine ? '' : `<div class="cd-nm">${escapeHtml(name)}${isAdminEmail(m.sender) ? ' 👑' : ''}</div>`}
+                      ${m.forwarded ? `<div class="cd-fwd">↪ ফরওয়ার্ড করা মেসেজ</div>` : ''}
+                      ${quote}
+                      ${m.imageUrl ? `<img class="cd-img" src="${escapeHtml(toDirectImageUrl(m.imageUrl))}" data-cd-img="${escapeHtml(m.imageUrl)}" alt="">` : ''}
+                      ${m.text ? `<div class="cd-tx">${escapeHtml(m.text)}</div>` : ''}
+                      <div class="cd-tm">${pinned ? '📌 ' : ''}${escapeHtml(cdTime(m.timestamp))}</div>
+                    </div>
+                    ${chips ? `<div class="cd-chips">${chips}</div>` : ''}
+                    ${picker}
+                  </div>
+                </div>
+                ${cdSeenHtml(m, smap, lastId)}`;
+            }).join('');
+        };
+
+        const cdFindMsg = (id) => (state.chat || []).find(m => m.id === id);
+        const cdIsPinned = (m) => {
+            if (!m) return false;
+            const r = chatReadsMap[cdMe()];
+            return !!(m.pinned || (r && r.pins && r.pins[m.id]));
+        };
+        const cdPinnedList = () => cdSortedMsgs().filter(cdIsPinned).sort((a, b) => new Date(b.pinnedAt || b.timestamp) - new Date(a.pinnedAt || a.timestamp));
+        const cdPinBarHtml = () => {
+            const list = cdPinnedList();
+            if (!list.length) return '';
+            const m = list[_cdPinIdx % list.length];
+            const personalOnly = !m.pinned;
+            return `<div class="cd-pinrow" data-cd-pinbar="1"><span>📌</span><span class="cd-pin-t"><b>${escapeHtml(m.displayName || cdName(m.sender))}:</b> ${m.imageUrl && !m.text ? '📷 ছবি' : escapeHtml((m.text || '').slice(0, 80))}</span>${personalOnly ? '<small>ব্যক্তিগত</small>' : ''}${list.length > 1 ? `<small>${_cdPinIdx % list.length + 1}/${list.length}</small>` : ''}</div>`;
+        };
+        const cdReplyBarHtml = () => _cdReply ? `<span>↩ <b>${escapeHtml(_cdReply.name)}</b>-কে উত্তর: ${escapeHtml(_cdReply.text)}</span><button type="button" data-cd-cancelreply="1" aria-label="উত্তর বাতিল">✕</button>` : '';
+        const cdUpdateReplyBars = () => { document.querySelectorAll('.cd-replybar').forEach(el => { el.innerHTML = cdReplyBarHtml(); }); };
+        const cdResetMenus = () => { _cdPickFor = null; _cdMoreFor = null; };
+
+        const cdSetReply = (id) => {
+            const m = cdFindMsg(id);
+            if (!m) return;
+            _cdReply = { id: m.id, name: m.displayName || cdName(m.sender), text: (m.text || (m.imageUrl ? '📷 ছবি' : '')).slice(0, 80) };
+            cdResetMenus();
+            cdRefresh();
+            cdUpdateReplyBars();
+            const inp = document.getElementById(_cdOpen ? 'cd-input' : 'chat-input');
+            if (inp && window.currentUser) setTimeout(() => inp.focus(), 60);
+        };
+
+        const cdCopy = async (id) => {
+            const m = cdFindMsg(id);
+            if (!m) return;
+            const t = m.text || m.imageUrl || '';
+            cdResetMenus();
+            cdRefresh();
+            try { await navigator.clipboard.writeText(t); } catch (e) {
+                try {
+                    const ta = document.createElement('textarea');
+                    ta.value = t; ta.style.cssText = 'position:fixed;left:-9999px;top:0;';
+                    document.body.appendChild(ta); ta.select(); document.execCommand('copy'); ta.remove();
+                } catch (er) { toast('❌ কপি করা যায়নি'); return; }
+            }
+            toast('📋 কপি হয়েছে');
+        };
+
+        const cdGoto = (id) => {
+            const scope = document.getElementById(_cdOpen ? 'cd-msgs' : 'chat-messages');
+            if (!scope) return;
+            const el = scope.querySelector(`[data-cd-mid="${id}"]`);
+            if (!el) { toast('মূল মেসেজটি পাওয়া যায়নি'); return; }
+            el.scrollIntoView({ block: 'center', behavior: 'smooth' });
+            el.classList.add('cd-flash');
+            setTimeout(() => el.classList.remove('cd-flash'), 1300);
+        };
+
+        // পিন: আগে সবার জন্য (মেসেজ ডকুমেন্টে) চেষ্টা; Rules অনুমতি না দিলে শুধু নিজের জন্য (chat_reads.pins)
+        const cdPinToggle = async (id) => {
+            const me = cdMe();
+            const m = cdFindMsg(id);
+            cdResetMenus();
+            if (!me || !window.currentUser) { toast('পিন করতে লগইন করুন'); openLoginModal(); return; }
+            if (!m) return;
+            const shared = !!m.pinned;
+            const r0 = chatReadsMap[me];
+            const personal = !!(r0 && r0.pins && r0.pins[id]);
+            const setPersonal = (val) => {
+                const prev = chatReadsMap[me] || {};
+                chatReadsMap[me] = Object.assign({}, prev, { pins: Object.assign({}, prev.pins || {}, { [id]: val }) });
+                try {
+                    const { doc, setDoc } = window._firestore;
+                    setDoc(doc(window._firestoreDb, 'chat_reads', me), {
+                        email: me, displayName: getProfileDisplayName(me, window.currentUser.displayName), pins: { [id]: val }
+                    }, { merge: true }).catch(() => {});
+                } catch (e) {}
+            };
+            if (personal && !shared) { setPersonal(false); toast('📌 পিন সরানো হয়েছে'); cdRefresh(); return; }
+            const val = !shared;
+            try {
+                if (typeof window._firestore === 'undefined') throw new Error('offline');
+                const { collection, query, where, getDocs, doc, updateDoc } = window._firestore;
+                const snap = await getDocs(query(collection(window._firestoreDb, 'chat_messages'), where('id', '==', id)));
+                if (snap.empty) throw new Error('not-found');
+                const at = new Date().toISOString();
+                const jobs = [];
+                snap.forEach(d => jobs.push(updateDoc(doc(window._firestoreDb, 'chat_messages', d.id), { pinned: val, pinnedBy: me, pinnedAt: at })));
+                await Promise.all(jobs);
+                m.pinned = val; m.pinnedBy = me; m.pinnedAt = at;
+                if (!val && personal) setPersonal(false);
+                toast(val ? '📌 সবার জন্য পিন করা হয়েছে' : '📌 পিন সরানো হয়েছে');
+            } catch (e) {
+                console.warn('[চ্যাট ডক] সবার জন্য পিন সম্ভব হয়নি:', e && e.message);
+                if (val) { setPersonal(true); toast('📌 শুধু আপনার জন্য পিন হয়েছে (সবার জন্য করতে Firestore Rules-এ পিনের অনুমতি লাগবে)'); }
+                else toast('❌ পিন সরানো যায়নি');
+            }
+            cdRefresh();
+        };
+
+        const cdForward = (id) => {
+            const m = cdFindMsg(id);
+            cdResetMenus();
+            cdRefresh();
+            if (!m) return;
+            if (!window.currentUser) { toast('ফরওয়ার্ড করতে লগইন করুন'); openLoginModal(); return; }
+            const me = cdMe();
+            const snippet = m.text ? escapeHtml(m.text.slice(0, 120)) : '📷 ছবি';
+            const users = (typeof userList !== 'undefined' ? userList : []).filter(u => u.email && u.email !== me && u.status !== 'inactive');
+            const now = Date.now();
+            const isAct = (u) => { const p = presenceMap[u.email]; return !!(p && p.lastActive && (now - new Date(p.lastActive).getTime()) < ACTIVE_WINDOW_MS); };
+            users.sort((a, b) => (isAct(b) ? 1 : 0) - (isAct(a) ? 1 : 0) || (a.displayName || a.email).localeCompare(b.displayName || b.email, 'bn'));
+            openModal(`
+              <h3>➡️ ফরওয়ার্ড করুন</h3>
+              <div class="cd-fw-prev">${snippet}</div>
+              <div class="field"><input type="search" id="cd-fw-search" placeholder="নাম লিখে খুঁজুন..."></div>
+              <div class="cd-fw-list" id="cd-fw-list"></div>
+              <div class="modal-actions"><button class="btn btn-outline" id="cd-fw-cancel">বাতিল</button></div>
+            `, () => {
+                const list = document.getElementById('cd-fw-list');
+                const draw = (q) => {
+                    const qq = (q || '').trim().toLowerCase();
+                    const rows = users.filter(u => !qq || (u.displayName || u.email).toLowerCase().includes(qq));
+                    list.innerHTML = rows.length ? rows.map(u => {
+                        const nm = u.displayName || u.email.split('@')[0];
+                        return `<div class="cd-fw-item" data-fw-email="${escapeHtml(u.email)}">${cdAvatar(u.email, nm, 32)}<span>${escapeHtml(nm)}</span>${isAct(u) ? '<i class="cd-dot" style="margin-left:auto"></i>' : ''}</div>`;
+                    }).join('') : '<div class="small muted" style="padding:16px;text-align:center;">কাউকে পাওয়া যায়নি</div>';
+                };
+                draw('');
+                document.getElementById('cd-fw-search').addEventListener('input', e => draw(e.target.value));
+                document.getElementById('cd-fw-cancel').onclick = closeModal;
+                list.addEventListener('click', async (e) => {
+                    const it = e.target.closest('[data-fw-email]');
+                    if (!it) return;
+                    const email = it.dataset.fwEmail;
+                    try {
+                        const tid = await ensureDmThread(email);
+                        const { collection, addDoc, doc, setDoc } = window._firestore;
+                        const myName = getProfileDisplayName(me, window.currentUser.displayName);
+                        const text = `↪ ফরওয়ার্ড করা মেসেজ (${m.displayName || cdName(m.sender)})${m.text ? ':\n' + m.text : ''}`;
+                        const payload = { sender: me, senderName: myName, text, forwarded: true, timestamp: new Date().toISOString() };
+                        if (m.imageUrl) payload.imageUrl = m.imageUrl;
+                        await addDoc(collection(window._firestoreDb, 'dm_threads', tid, 'messages'), payload);
+                        await setDoc(doc(window._firestoreDb, 'dm_threads', tid), { lastMessage: text.substring(0, 80), lastMessageAt: payload.timestamp, lastSender: me }, { merge: true });
+                        closeModal();
+                        toast('✅ ফরওয়ার্ড করা হয়েছে');
+                    } catch (er) {
+                        console.error('[চ্যাট ডক] ফরওয়ার্ড ব্যর্থ:', er);
+                        toast('❌ ফরওয়ার্ড করা যায়নি');
+                    }
+                });
+            });
+        };
+
+        const cdTypingText = () => {
+            const me = cdMe(), now = Date.now();
+            const names = Object.entries(presenceMap)
+                .filter(([em, p]) => em !== me && p.typing && p.lastActive && (now - new Date(p.lastActive).getTime()) < TYPING_WINDOW_MS)
+                .map(([em, p]) => p.displayName || cdName(em));
+            if (!names.length) return '';
+            return names.length === 1 ? `✍️ ${escapeHtml(names[0])} লিখছেন…` : `✍️ ${names.length} জন লিখছেন…`;
+        };
+
+        const cdMarkReadSoon = () => {
+            if (_cdReadTimer) return;
+            _cdReadTimer = setTimeout(() => { _cdReadTimer = null; if (_cdOpen) markChatRead(); }, 1200);
+        };
+
+        const cdRefresh = (forceBottom) => {
+            const bar = document.getElementById('cd-bar');
+            if (bar) bar.innerHTML = cdBarHtml();
+            const _pb = cdPinBarHtml();
+            document.querySelectorAll('.cd-pinbar').forEach(el => { if (el.dataset.h !== _pb) { el.dataset.h = _pb; el.innerHTML = _pb; } });
+            const tabBox = document.querySelector('#chat-messages.cd-tab-msgs');
+            if (tabBox) {
+                const th = cdMsgsHtml();
+                if (tabBox.dataset.sig !== th) {
+                    const atB = (tabBox.scrollHeight - tabBox.scrollTop - tabBox.clientHeight) < 80;
+                    tabBox.dataset.sig = th;
+                    tabBox.innerHTML = th;
+                    if (atB) tabBox.scrollTop = tabBox.scrollHeight;
+                }
+            }
+            if (!_cdOpen) return;
+            const act = getActiveUsersList();
+            const sub = document.getElementById('cd-sub');
+            if (sub) sub.textContent = act.length ? act.length + ' জন অ্যাক্টিভ' : 'এই মুহূর্তে কেউ অ্যাক্টিভ নেই';
+            const ty = document.getElementById('cd-typing');
+            if (ty) ty.innerHTML = cdTypingText();
+            const box = document.getElementById('cd-msgs');
+            if (!box) return;
+            const html = cdMsgsHtml();
+            const sig = html + '|' + (cdMe());
+            if (sig === _cdSig && !forceBottom) return;
+            _cdSig = sig;
+            const wasBottom = forceBottom || (box.scrollHeight - box.scrollTop - box.clientHeight) < 80;
+            box.innerHTML = html;
+            if (wasBottom) box.scrollTop = box.scrollHeight;
+            cdMarkReadSoon();
+        };
+
+        const cdReact = (msgId, emoji) => {
+            const me = cdMe();
+            if (!me || !window.currentUser) { toast('রিয়্যাক্ট দিতে লগইন করুন'); openLoginModal(); return; }
+            const cur = (chatReadsMap[me] && chatReadsMap[me].reactions && chatReadsMap[me].reactions[msgId]) || '';
+            const val = cur === emoji ? '' : emoji; // একই ইমোজিতে আবার ট্যাপ = রিয়্যাক্ট তুলে নেওয়া
+            const prev = chatReadsMap[me] || {};
+            chatReadsMap[me] = Object.assign({}, prev, { reactions: Object.assign({}, prev.reactions || {}, { [msgId]: val }) });
+            _cdPickFor = null;
+            cdRefresh();
+            if (typeof window._firestore === 'undefined') return;
+            try {
+                const { doc, setDoc } = window._firestore;
+                setDoc(doc(window._firestoreDb, 'chat_reads', me), {
+                    email: me, displayName: getProfileDisplayName(me, window.currentUser.displayName),
+                    reactions: { [msgId]: val }
+                }, { merge: true }).catch(e => console.error('[চ্যাট ডক] রিয়্যাক্ট সিঙ্ক ব্যর্থ:', e));
+            } catch (e) {}
+        };
+
+        const cdSend = () => {
+            const input = document.getElementById('cd-input');
+            if (!input) return;
+            const text = input.value.trim();
+            if (!text) return;
+            const user = window.currentUser;
+            if (!user) { toast('মেসেজ পাঠাতে লগইন করুন'); openLoginModal(); return; }
+            const msg = { id: uid(), text, sender: user.email, displayName: getProfileDisplayName(user.email, user.displayName), timestamp: new Date().toISOString() };
+            if (_cdReply) { msg.replyTo = _cdReply; _cdReply = null; cdUpdateReplyBars(); }
+            state.chat = state.chat || [];
+            state.chat.push(msg);
+            saveState();
+            addActivityLog('add', 'chat', msg.id, `"${msg.displayName}" মেসেজ পাঠিয়েছেন: "${msg.text.slice(0, 30)}${msg.text.length > 30 ? '…' : ''}"`);
+            input.value = '';
+            input.style.height = 'auto';
+            if (typeof window._firestore !== 'undefined' && window._firestore.addDoc) {
+                try {
+                    window._chatSending = true;
+                    window._firestore.addDoc(window._firestore.collection(window._firestoreDb, 'chat_messages'), msg)
+                        .catch(e => console.error('[চ্যাট ডক] মেসেজ Firestore-এ সিঙ্ক ব্যর্থ:', e))
+                        .finally(() => { window._chatSending = false; });
+                } catch (e) { window._chatSending = false; }
+            }
+            cdRefresh(true);
+            markChatRead();
+        };
+
+        // চ্যাট-বার প্যানেল ও "চ্যাট" ট্যাব — দুই জায়গার মেসেজ-তালিকার ক্লিক এক ফাংশনেই সামলানো হয়
+        const cdHandleClick = (e) => {
+            const t = e.target;
+            if (t.closest('[data-cd-close]')) { cdClose(); return; }
+            if (t.closest('#cd-att')) { if (!window.currentUser) { toast('ছবি পাঠাতে লগইন করুন'); openLoginModal(); return; } try { pickChatImage('group'); } catch (er) { toast('❌ ছবি বাছাই চালু করা যায়নি'); } return; }
+            const rb = t.closest('[data-cd-react]');
+            if (rb) { cdReact(rb.dataset.cdReact, rb.dataset.emoji); return; }
+            const gt = t.closest('[data-cd-goto]');
+            if (gt) { cdGoto(gt.dataset.cdGoto); return; }
+            const rp = t.closest('[data-cd-reply]');
+            if (rp) { cdSetReply(rp.dataset.cdReply); return; }
+            const cp = t.closest('[data-cd-copy]');
+            if (cp) { cdCopy(cp.dataset.cdCopy); return; }
+            const mo = t.closest('[data-cd-more]');
+            if (mo) { const id = mo.dataset.cdMore; _cdMoreFor = (_cdMoreFor === id) ? null : id; cdRefresh(); return; }
+            const pn = t.closest('[data-cd-pin]');
+            if (pn) { cdPinToggle(pn.dataset.cdPin); return; }
+            const fw = t.closest('[data-cd-fwd]');
+            if (fw) { cdForward(fw.dataset.cdFwd); return; }
+            const ed = t.closest('[data-cd-edit]');
+            if (ed) { cdResetMenus(); openChatEditForm(ed.dataset.cdEdit); return; }
+            const dl = t.closest('[data-cd-del]');
+            if (dl) { const id = dl.dataset.cdDel; cdResetMenus(); confirmDelete('মেসেজ মুছে ফেলা হবে?', () => deleteChatMessage(id)); return; }
+            const im = t.closest('[data-cd-img]');
+            if (im) { try { openImagePreview(toDirectImageUrl(im.dataset.cdImg), { el: im }); } catch (er) {} return; }
+            const bub = t.closest('[data-cd-pick]');
+            if (bub) { const id = bub.dataset.cdPick; _cdPickFor = (_cdPickFor === id) ? null : id; _cdMoreFor = null; cdRefresh(); return; }
+            if (t.closest('#cd-send')) { cdSend(); }
+        };
+
+        const cdEnsurePanel = () => {
+            let p = document.getElementById('cd-panel');
+            if (p) return p;
+            cdEnsureCss();
+            const bk = document.createElement('div');
+            bk.id = 'cd-backdrop';
+            bk.className = 'no-print';
+            bk.addEventListener('click', () => cdClose());
+            document.body.appendChild(bk);
+            p = document.createElement('div');
+            p.id = 'cd-panel';
+            p.className = 'no-print';
+            p.setAttribute('role', 'dialog');
+            p.setAttribute('aria-label', 'গ্রুপ চ্যাট');
+            p.innerHTML = `
+              <div class="cd-head">
+                <span class="cd-head-ico">👥</span>
+                <div class="cd-head-t"><b>সবার গ্রুপ চ্যাট</b><span id="cd-sub">…</span></div>
+                <button type="button" class="cd-x" data-cd-close="1" aria-label="চ্যাট বন্ধ করুন"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg></button>
+              </div>
+              <div class="cd-pinbar"></div>
+              <div id="cd-msgs"></div>
+              <div id="cd-typing" class="cd-typing"></div>
+              <div class="cd-replybar"></div>
+              <div class="cd-inp">
+                <button type="button" class="cd-att" id="cd-att" aria-label="ছবি পাঠান" title="ছবি পাঠান (সর্বোচ্চ ১০ এমবি)"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21.4 11.1l-8.5 8.5a5.5 5.5 0 0 1-7.8-7.8l8.5-8.5a3.7 3.7 0 0 1 5.2 5.2l-8.5 8.5a1.8 1.8 0 0 1-2.6-2.6l7.8-7.8"/></svg></button>
+                <textarea id="cd-input" rows="1" placeholder="মেসেজ লিখুন..."></textarea>
+                <button type="button" class="cd-send" id="cd-send" aria-label="পাঠান"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M22 2L11 13"/><path d="M22 2l-7 20-4-9-9-4 20-7z"/></svg></button>
+              </div>`;
+            document.body.appendChild(p);
+            p.addEventListener('click', cdHandleClick);
+            const inp = p.querySelector('#cd-input');
+            inp.addEventListener('input', function() { this.style.height = 'auto'; this.style.height = Math.min(this.scrollHeight, 110) + 'px'; notifyTyping(); });
+            inp.addEventListener('keydown', e => { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); cdSend(); } });
+            inp.addEventListener('focus', () => { if (!window.currentUser) { inp.blur(); toast('মেসেজ পাঠাতে লগইন করুন'); openLoginModal(); } });
+            return p;
+        };
+
+        const cdOpen = () => {
+            const p = cdEnsurePanel();
+            _cdOpen = true;
+            _cdSig = '';
+            startPresenceListener();
+            startChatReadsListener();
+            document.getElementById('cd-backdrop').classList.add('open');
+            requestAnimationFrame(() => p.classList.add('open'));
+            cdRefresh(true);
+            cdUpdateReplyBars();
+            markChatRead();
+        };
+
+        const cdClose = () => {
+            _cdOpen = false;
+            _cdPickFor = null;
+            const p = document.getElementById('cd-panel');
+            const bk = document.getElementById('cd-backdrop');
+            if (p) p.classList.remove('open');
+            if (bk) bk.classList.remove('open');
+            const inp = document.getElementById('cd-input');
+            if (inp) inp.blur();
+            cdRefresh();
+        };
+
+        // মেসেজ/ইমোজি-বার/সম্পাদনা-বাটনের বাইরে যেকোনো জায়গায় ক্লিক করলে ইমোজি-বার চলে যায়
+        document.addEventListener('click', (e) => {
+            const tg = e.target;
+            if (!tg || !tg.closest) return;
+            if (tg.closest('[data-cd-cancelreply]')) { _cdReply = null; cdUpdateReplyBars(); return; }
+            const pb = tg.closest('[data-cd-pinbar]');
+            if (pb) {
+                const list = cdPinnedList();
+                if (list.length) { const m = list[_cdPinIdx % list.length]; _cdPinIdx = (_cdPinIdx + 1) % list.length; cdGoto(m.id); cdRefresh(); }
+                return;
+            }
+            if (!_cdPickFor && !_cdMoreFor) return;
+            if (tg.closest('[data-cd-pick],.cd-pick,.cd-acts,[data-cd-react]')) return;
+            cdResetMenus();
+            cdRefresh();
+        });
+
+        // renderMain প্রতিবার এই ফাংশন ডাকে — চ্যাট-বারহীন পেজে গেলে খোলা চ্যাট বন্ধ হয়ে যায়
+        window.mfCdTab = (tab) => { if (!CHATDOCK_TABS.includes(tab) && _cdOpen) cdClose(); };
+        window.mfCdRefresh = () => { try { cdRefresh(); } catch (e) {} };
+
+        // পেজ আঁকার পর বারটি #main-এর একদম নিচে বসানো হয় (renderMain পুরো #main নতুন করে আঁকে, তাই প্রতিবার)
+        const mountChatDock = () => {
+            if (!CHATDOCK_TABS.includes(currentTab)) return;
+            const main = document.getElementById('main');
+            if (!main) return;
+            cdEnsureCss();
+            let w = document.getElementById('cd-bar-wrap');
+            if (!w) {
+                w = document.createElement('div');
+                w.id = 'cd-bar-wrap';
+                w.className = 'cd-bar-wrap no-print';
+                w.innerHTML = '<button type="button" id="cd-bar" class="cd-bar" aria-label="গ্রুপ চ্যাট খুলুন"></button>';
+                w.addEventListener('click', cdOpen);
+                main.appendChild(w);
+            }
+            startPresenceListener();
+            startChatReadsListener();
+            cdRefresh();
+        };
+
+
         const renderTabs = () => {
             const el = document.getElementById('tabs');
             if (!el) return;
@@ -22012,6 +23117,7 @@ body.dark-mode .btn-outline{border-color:var(--gold-300)!important;color:var(--g
                 // 🆕 চ্যাট ট্যাব থেকে বের হলে উপস্থিতি/সিন-রিসিট লিসেনার বন্ধ করা হয়
                 if (_lastRenderedTab === 'chat' && currentTab !== 'chat') leaveChatPresence();
                 _lastRenderedTab = currentTab;
+                try { if (window.mfCdTab) window.mfCdTab(currentTab); } catch (e) {} // 🆕 [চ্যাট ডক]
                 try { if (window.mfAudit) window.mfAudit.view(currentTab); } catch (e) {} // 🆕 [ধাপ ১০] অডিট
                 switch (currentTab) {
                     case 'dashboard':
@@ -22025,6 +23131,7 @@ body.dark-mode .btn-outline{border-color:var(--gold-300)!important;color:var(--g
                     case 'monthly':
                         main.innerHTML = viewMonthly();
                         afterMonthlyRender();
+                        try { mountChatDock(); } catch (e) { console.error('[চ্যাট ডক]', e); } // 🆕
                         break;
                     case 'yearly':
                         main.innerHTML = viewYearly();
@@ -22776,7 +23883,7 @@ body.dark-mode .btn-outline{border-color:var(--gold-300)!important;color:var(--g
                 }
 
                 log('সার্ভিস ওয়ার্কার রেজিস্টার করা হচ্ছে (/firebase-messaging-sw.js)...');
-                const registration = await navigator.serviceWorker.register('/firebase-messaging-sw.js');
+                const registration = await navigator.serviceWorker.register('./firebase-messaging-sw.js');
                 log('✅ সার্ভিস ওয়ার্কার রেজিস্টার সফল।');
 
                 let permission = Notification.permission;
@@ -23881,7 +24988,7 @@ body.dark-mode .btn-outline{border-color:var(--gold-300)!important;color:var(--g
         }
         var keys = ths.map(function (th) { return th.getAttribute('data-col-key') || ''; });
         var present = keys.filter(Boolean);
-        var id = present.length ? tableIdFor(present) : null;
+        var id = table.getAttribute('data-mf-tid') || (present.length ? tableIdFor(present) : null);   // 🆕 [v16.5.57] স্পষ্ট টেবিল-আইডি থাকলে সেটাই
         var frozen = id ? getKeys(id) : [];
         var idxs = [];
         keys.forEach(function (k, ix) { if (k && frozen.indexOf(k) >= 0) idxs.push(ix); });
@@ -27361,5 +28468,220 @@ document.addEventListener('click',function(e){
 },true);
 })();
 </script>
+<style id="mf-hdr61">
+/* 🆕 [v16.5.61] মোবাইল হেডার গোছানো: ঘড়ি+পৃষ্ঠা-সংখ্যা এক সারিতে, তারপর আইকনগুলো সমান ৬-কলামের গ্রিডে; লুকানো বাটনের ফাঁকা ঘর বাদ */
+@media (max-width:820px){
+  body .topbar-actions{display:grid !important;grid-template-columns:repeat(6,minmax(0,1fr)) !important;gap:8px !important;padding-right:0}
+  body .topbar-actions .clock{grid-column:span 4 !important;min-height:40px !important;border-radius:12px;font-size:12.5px !important;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  body .topbar-actions .mobile-tab-counter{grid-column:span 2 !important;min-height:40px !important;border-radius:12px}
+  body .topbar-actions .dragres-wrap:has(> [style*="display:none"]),
+  body .topbar-actions .dragres-wrap:has(> [style*="display: none"]){display:none !important}
+  body .topbar-actions .header-icon-btn,body .topbar-actions .mf-top-ic,body .topbar-actions #btn-active-users{height:44px !important;min-height:44px !important;border-radius:12px !important;font-size:20px}
+  body .topbar-actions #btn-active-users .icon-label{font-size:11px}
+  body .topbar-actions .dragres-wrap{display:contents !important}
+  body .topbar-inner{padding-right:0 !important}
+}
+</style>
+<style id="mf-dock-style">
+#mf-cmd,#mf-primary,#mf-sheet-back{display:none}
+@media (max-width:820px){
+  body.mf-dock-on .mf-dock-hide{display:none !important}
+  body.mf-dock-on .toolbar.mf-cmd-row{display:flex !important;flex-direction:row !important;flex-wrap:nowrap !important;align-items:flex-start;gap:8px}
+  body.mf-dock-on .toolbar.mf-cmd-row>.search-box-wrap{flex:1 1 0 !important;width:auto !important;min-width:0 !important;max-width:none !important}
+  body.mf-dock-on .toolbar.mf-cmd-row>#mf-cmd{width:auto !important;flex:none !important}
+  body.mf-dock-on .toolbar.mf-cmd-row .search-result-count{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  #mf-cmd{display:flex;gap:8px;align-items:center;flex:none}
+  #mf-cmd button{position:relative;width:46px;height:46px;border-radius:12px;border:1px solid var(--line,#ddd3b8);background:var(--paper-raised,#fff);color:var(--emerald-800,#1c4a41);display:flex;align-items:center;justify-content:center;cursor:pointer;padding:0;-webkit-tap-highlight-color:transparent}
+  #mf-cmd button.on{background:var(--emerald-800,#1c4a41);color:var(--gold-100,#f5e9c8);border-color:transparent}
+  #mf-cmd button:active{transform:scale(.94)}
+  #mf-cmd svg,#mf-primary svg{width:20px;height:20px;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+  #mf-cmd .bdg{position:absolute;top:-6px;right:-6px;min-width:19px;height:19px;border-radius:10px;background:#d1432e;color:#fff;font-size:11px;font-weight:800;display:flex;align-items:center;justify-content:center;padding:0 5px;border:2px solid var(--paper,#f3efe3)}
+  #mf-primary{display:flex;gap:8px;margin:2px 0 12px}
+  #mf-primary button{flex:1;min-height:48px;border-radius:12px;border:1px solid transparent;font:inherit;font-size:14.5px;font-weight:700;display:flex;align-items:center;justify-content:center;gap:7px;cursor:pointer;-webkit-tap-highlight-color:transparent}
+  #mf-primary button:active{transform:scale(.97)}
+  #mf-primary .pri{background:var(--emerald-800,#1c4a41);color:var(--gold-100,#f5e9c8)}
+  #mf-primary .sec{background:var(--gold-100,#f5e9c8);color:var(--emerald-900,#0e2b22);border-color:var(--gold-300,#d9bd73)}
+  #mf-sheet-back.on{display:flex;position:fixed;inset:0;z-index:900;background:rgba(0,0,0,.45);align-items:flex-end}
+  #mf-sheet{width:100%;max-height:80vh;overflow-y:auto;background:var(--paper-raised,#fff);border-radius:20px 20px 0 0;border-top:3px solid var(--gold-400,#c9a24a);padding:14px 14px calc(18px + env(safe-area-inset-bottom,0px));box-shadow:0 -10px 30px rgba(0,0,0,.3)}
+  #mf-sheet h4{margin:0 0 6px;font-size:16px;display:flex;justify-content:space-between;align-items:center}
+  #mf-sheet h4 button{border:0;background:transparent;color:var(--ink-soft,#6b7a73);cursor:pointer;width:34px;height:34px}
+  #mf-sheet h4 svg{width:20px;height:20px;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round}
+  #mf-sheet label.fl{display:block;font-size:12.5px;font-weight:700;margin:10px 0 4px;color:var(--emerald-800,#1c4a41)}
+  #mf-sheet select,#mf-sheet input[type=date]{width:100%;min-height:44px;font:inherit}
+  #mf-sheet .dr2{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+  #mf-sheet .act{display:flex;align-items:center;gap:10px;width:100%;min-height:46px;padding:10px 12px;margin:6px 0 0;text-align:left;font:inherit;font-size:14px;font-weight:600;background:var(--paper,#f3efe3);border:1px solid var(--line,#ddd3b8);border-radius:12px;color:inherit;cursor:pointer}
+  #mf-sheet .act.on{background:var(--emerald-800,#1c4a41);color:var(--gold-100,#f5e9c8);border-color:transparent}
+  #mf-sheet .act.go{background:var(--emerald-800,#1c4a41);color:var(--gold-100,#f5e9c8);border-color:transparent;justify-content:center}
+  #mf-sheet .act[disabled]{opacity:.45}
+  #mf-sheet .sec{margin:14px 0 0;font-size:12px;font-weight:800;color:var(--ink-soft,#6b7a73);letter-spacing:.3px}
+}
+</style>
+<script>
+/* 🆕 [v16.5.60] অপশন A — "সার্চ + ফিল্টার-শিট": মোবাইলে সার্চের পাশে 🎚 ফিল্টার (সক্রিয় সংখ্যা ব্যাজে) ও ⋯ আরও; নিচে শুধু দুটি প্রধান বাটন।
+   আগের সব বাটন/ফিল্টার ডম-এ থেকে যায় (মোবাইলে লুকানো) — শিট সেগুলোকেই চালায়, কোনো পেজের আচরণ বদলায়নি। ডেস্কটপ (>৮২০px) অপরিবর্তিত। */
+(function () {
+    if (window.__mfDock) return; window.__mfDock = true;
+    var mq = window.matchMedia ? matchMedia('(max-width: 820px)') : { matches: false };
+    var IC = {
+        plus: '<path d="M12 5v14M5 12h14"/>',
+        coin: '<circle cx="12" cy="12" r="8"/><path d="M12 8v8M9.5 10.2c.4-.8 1.4-1.2 2.5-1.2 1.4 0 2.5.7 2.5 1.8 0 2.4-5 1.2-5 3.6 0 1.1 1.2 1.8 2.5 1.8 1.1 0 2.1-.4 2.5-1.2"/>',
+        filter: '<path d="M4 6h16M7 12h10M10 18h4"/>',
+        more: '<circle cx="5" cy="12" r="1.4"/><circle cx="12" cy="12" r="1.4"/><circle cx="19" cy="12" r="1.4"/>',
+        close: '<path d="M6 6l12 12M18 6L6 18"/>'
+    };
+    var svg = function (n) { return '<svg viewBox="0 0 24 24" aria-hidden="true">' + (IC[n] || '') + '</svg>'; };
+    var Q = function (sel) { try { return document.querySelector(sel); } catch (e) { return null; } };
+    var QA = function (sel) { try { return Array.prototype.slice.call(document.querySelectorAll(sel)); } catch (e) { return []; } };
+    var txt = function (el) { return (el.textContent || '').replace(/\s+/g, ' ').trim(); };
+    var clean = function (t) { return String(t || '').replace(/^[^ঀ-৿A-Za-z0-9]+/, '').trim(); };
+    var colsAndExports = '#main [id^="btn-col-settings-"], #main [id^="btn-export-settings-"], #main #btn-monthly-export-settings';
+    var PAGES = [
+        { id: 'monthly', detect: '#btn-add-monthly', search: '#monthly-search',
+          primary: [['plus', '#btn-add-monthly', 'pri'], ['coin', '#btn-monthly-collection-tab', 'sec']],
+          selects: ['#monthly-filter', '#monthly-year-select'], dr: 'monthly',
+          acts: ['#toggle-unpaid-red', '#btn-amount-sort-monthly', '#toggle-monthly-edit-mode'],
+          more: ['#btn-template-monthly-excel', '#btn-export-monthly-excel', '#btn-import-monthly-excel', '#btn-monthly-yearly-jpg', '#btn-monthly-yearly-print', '#btn-monthly-yearly-excel', colsAndExports],
+          hide: [['#btn-add-monthly', '.toolbar > div'], ['#btn-monthly-collection-tab', 0], ['#monthly-filter', 0], ['#toggle-monthly-edit-mode', '.toolbar'], ['.year-selector', 0], ['#btn-col-settings-monthly', '.no-print'], ['#dr-toggle-monthly', '.no-print']] },
+        { id: 'members', detect: '#btn-add-member', search: '#member-search',
+          primary: [['plus', '#btn-add-member', 'pri'], ['coin', '#btn-monthly-collection', 'sec']],
+          selects: ['#member-filter'], dr: '',
+          acts: ['#btn-amount-sort-members', '#btn-toggle-member-select'],
+          more: ['#btn-export-members-excel', '#btn-import-members-excel', colsAndExports],
+          hide: [['#btn-add-member', '.member-add-toolbar'], ['#member-filter', 0], ['#btn-amount-sort-members', 0], ['#btn-toggle-member-select', 0], ['#btn-export-members-excel', '.member-excel-toolbar']] },
+        { id: 'yearly', detect: '#btn-add-yearly', search: '#yearly-search',
+          primary: [['plus', '#btn-add-yearly', 'pri']],
+          selects: ['#yearly-filter'], dr: 'yearly',
+          acts: ['#btn-amount-sort-yearly'],
+          more: ['#btn-export-yearly-excel', '#btn-import-yearly-excel', colsAndExports],
+          hide: [['#btn-add-yearly', 0], ['#yearly-filter', 0], ['#btn-amount-sort-yearly', 0], ['#btn-export-yearly-excel', '.member-excel-toolbar'], ['#dr-toggle-yearly', '.no-print']] },
+        { id: 'expenses', detect: '#btn-add-expense', search: '',
+          primary: [['plus', '#btn-add-expense', 'pri']],
+          selects: [], dr: '',
+          acts: ['#btn-manage-cats'],
+          more: ['#btn-export-expenses-excel', '#btn-import-expenses-excel', colsAndExports],
+          hide: [['#btn-add-expense', 0], ['#btn-manage-cats', 0], ['#btn-export-expenses-excel', '.member-excel-toolbar']] }
+    ];
+    var cur = null, back = null;
+    var ensureSheet = function () {
+        if (back) return;
+        back = document.createElement('div'); back.id = 'mf-sheet-back'; back.className = 'no-print';
+        back.innerHTML = '<div id="mf-sheet" role="dialog" aria-modal="true"></div>';
+        back.addEventListener('click', function (e) { if (e.target === back) closeSheet(); });
+        document.body.appendChild(back);
+    };
+    var closeSheet = function () { if (back) back.classList.remove('on'); };
+    var proxyClick = function (el) { closeSheet(); setTimeout(function () { try { el.click(); } catch (e) {} }, 60); };
+    var SUF = { 'yearly-matrix': 'বার্ষিক হিসাব (সব মাস)', monthly: 'মাসিক তালিকা', members: 'সদস্য তালিকা', 'members-list': 'সদস্য তালিকা', 'selected-members': 'নির্বাচিত সদস্য', 'yearly-paid': 'বার্ষিক — পরিশোধিত', 'yearly-unpaid': 'বার্ষিক — বকেয়া', yearly: 'বার্ষিক অনুদান', expenses: 'ব্যয়' };
+    var actRow = function (el) {
+        var b = document.createElement('button'); b.type = 'button';
+        b.className = 'act' + ((el.classList.contains('btn-danger') || el.classList.contains('btn-primary') || el.classList.contains('active')) ? ' on' : '');
+        var base = txt(el) || el.getAttribute('title') || '—', mm = /^btn-(?:col|export)-settings-(.+)$/.exec(el.id || '') || /^btn-(monthly)-export-settings$/.exec(el.id || '');
+        b.textContent = base + (mm && SUF[mm[1]] ? ' — ' + SUF[mm[1]] : ''); if (el.disabled) b.disabled = true;
+        b.addEventListener('click', function () { proxyClick(el); });
+        return b;
+    };
+    var secTitle = function (t) { var d = document.createElement('div'); d.className = 'sec'; d.textContent = t; return d; };
+    var groupOf = function (el) {
+        var id = el.id || '';
+        if (/excel/.test(id)) return '📊 এক্সেল (ইমপোর্ট / এক্সপোর্ট)';
+        if (/jpg|print/.test(id)) return '🖨 প্রিন্ট ও ছবি';
+        if (/settings/.test(id)) return '⚙️ সেটিংস';
+        return 'অন্যান্য';
+    };
+    var filterCount = function () {
+        if (!cur) return 0; var n = 0;
+        if (Q('[id^="dr-toggle-"].active')) n++;
+        if (Q('#toggle-unpaid-red.btn-danger')) n++;
+        cur.selects.forEach(function (s) { var o = Q(s); if (o && o.options && o.options.length && o.id !== 'monthly-year-select' && o.selectedIndex > 0) n++; });
+        var sb = Q('[id^="btn-amount-sort-"]'); if (sb && /→/.test(txt(sb))) n++;
+        return n;
+    };
+    var openSheet = function (kind) {
+        if (!cur) return; ensureSheet();
+        var sh = back.querySelector('#mf-sheet'); sh.innerHTML = '';
+        var h = document.createElement('h4'); h.innerHTML = '<span>' + (kind === 'filter' ? 'ফিল্টার ও সাজানো' : 'আরও') + '</span>';
+        var x = document.createElement('button'); x.type = 'button'; x.setAttribute('aria-label', 'বন্ধ'); x.innerHTML = svg('close'); x.addEventListener('click', closeSheet); h.appendChild(x); sh.appendChild(h);
+        var added = 0;
+        if (kind === 'filter') {
+            cur.selects.forEach(function (s) {
+                var o = Q(s); if (!o) return; added++;
+                var lb = document.createElement('label'); lb.className = 'fl';
+                var lab = o.id && Q('label[for="' + o.id + '"]');
+                lb.textContent = lab ? clean(txt(lab)).replace(/:$/, '') : ({ 'monthly-filter': 'কাদের দেখাবেন', 'member-filter': 'কাদের দেখাবেন', 'yearly-filter': 'কাদের দেখাবেন' }[o.id] || o.getAttribute('title') || 'বাছাই');
+                var m = document.createElement('select'); m.innerHTML = o.innerHTML; m.value = o.value; m.disabled = o.disabled;
+                m.addEventListener('change', function () { closeSheet(); setTimeout(function () { o.value = m.value; o.dispatchEvent(new Event('change', { bubbles: true })); }, 60); });
+                sh.appendChild(lb); sh.appendChild(m);
+            });
+            if (cur.dr) {
+                var s0 = Q('#dr-start-' + cur.dr), e0 = Q('#dr-end-' + cur.dr), ap = Q('#dr-apply-' + cur.dr), cl = Q('#dr-clear-' + cur.dr);
+                if (s0 && e0 && ap && cl) {
+                    added++; var lb2 = document.createElement('label'); lb2.className = 'fl'; lb2.textContent = 'তারিখ ফিল্টার (শুরু — শেষ)'; sh.appendChild(lb2);
+                    var g = document.createElement('div'); g.className = 'dr2';
+                    var a = document.createElement('input'); a.type = 'date'; a.value = s0.value; var z = document.createElement('input'); z.type = 'date'; z.value = e0.value;
+                    g.appendChild(a); g.appendChild(z); sh.appendChild(g);
+                    var r = document.createElement('div'); r.className = 'dr2'; r.style.marginTop = '6px';
+                    var bA = document.createElement('button'); bA.type = 'button'; bA.className = 'act go'; bA.textContent = 'প্রয়োগ';
+                    var bC = document.createElement('button'); bC.type = 'button'; bC.className = 'act'; bC.style.justifyContent = 'center'; bC.textContent = 'সাফ করুন';
+                    bA.addEventListener('click', function () { s0.value = a.value; e0.value = z.value; proxyClick(ap); });
+                    bC.addEventListener('click', function () { proxyClick(cl); });
+                    r.appendChild(bA); r.appendChild(bC); sh.appendChild(r);
+                }
+            }
+            var anyAct = false;
+            cur.acts.forEach(function (s) { var o = Q(s); if (o) { if (!anyAct) { sh.appendChild(secTitle('দ্রুত অপশন')); anyAct = true; } added++; sh.appendChild(actRow(o)); } });
+        } else {
+            var groups = {}, order = ['📊 এক্সেল (ইমপোর্ট / এক্সপোর্ট)', '🖨 প্রিন্ট ও ছবি', '⚙️ সেটিংস', 'অন্যান্য'];
+            cur.more.forEach(function (s) { QA(s).forEach(function (o) { var gname = groupOf(o); (groups[gname] = groups[gname] || []).push(o); }); });
+            order.forEach(function (gname) { if (!groups[gname]) return; sh.appendChild(secTitle(gname)); groups[gname].forEach(function (o) { added++; sh.appendChild(actRow(o)); }); });
+        }
+        if (!added) { var p = document.createElement('div'); p.className = 'small muted'; p.style.marginTop = '8px'; p.textContent = 'এই পেজে কিছু নেই'; sh.appendChild(p); }
+        back.classList.add('on');
+    };
+    var clearBuilt = function () {
+        QA('.mf-dock-hide').forEach(function (e) { e.classList.remove('mf-dock-hide'); });
+        QA('.mf-cmd-row').forEach(function (e) { e.classList.remove('mf-cmd-row'); });
+        var c = document.getElementById('mf-cmd'); if (c) c.remove();
+        var p = document.getElementById('mf-primary'); if (p) p.remove();
+    };
+    var build = function () {
+        clearBuilt();
+        var cmd = document.createElement('div'); cmd.id = 'mf-cmd'; cmd.className = 'no-print';
+        var n = filterCount();
+        cmd.innerHTML = '<button type="button" data-d="f" class="' + (n ? 'on' : '') + '" aria-label="ফিল্টার">' + svg('filter') + (n ? '<i class="bdg">' + n + '</i>' : '') + '</button><button type="button" data-d="m" aria-label="আরও">' + svg('more') + '</button>';
+        cmd.querySelector('[data-d="f"]').addEventListener('click', function () { openSheet('filter'); });
+        cmd.querySelector('[data-d="m"]').addEventListener('click', function () { openSheet('more'); });
+        var inp = cur.search ? Q(cur.search) : null, wrap = inp && inp.closest ? inp.closest('.search-box-wrap') : null, row = wrap && wrap.closest('.toolbar');
+        var mainEl = document.getElementById('main');
+        if (row) { row.classList.add('mf-cmd-row'); wrap.insertAdjacentElement('afterend', cmd); }
+        else { var first = mainEl && mainEl.querySelector('.toolbar'); cmd.style.cssText = 'justify-content:flex-end;margin:0 0 8px'; if (first) first.insertAdjacentElement('beforebegin', cmd); else if (mainEl) mainEl.insertAdjacentElement('afterbegin', cmd); }
+        var pr = document.createElement('div'); pr.id = 'mf-primary'; pr.className = 'no-print';
+        cur.primary.forEach(function (p) {
+            var el = Q(p[1]); if (!el) return;
+            var b = document.createElement('button'); b.type = 'button'; b.className = p[2]; b.innerHTML = svg(p[0]) + '<span></span>'; b.querySelector('span').textContent = clean(txt(el)) || 'নতুন';
+            b.addEventListener('click', function () { el.click(); });
+            pr.appendChild(b);
+        });
+        if (pr.children.length) { (row || cmd).insertAdjacentElement('afterend', pr); if (!row) cmd.insertAdjacentElement('afterend', pr); }
+        cur.hide.forEach(function (h) { QA(h[0]).forEach(function (e) { var t = h[1] ? e.closest(h[1]) : e; if (t && !(t.id === 'main')) t.classList.add('mf-dock-hide'); }); });
+    };
+    var sync = function () {
+        var want = null;
+        if (mq.matches) for (var i = 0; i < PAGES.length; i++) { if (Q(PAGES[i].detect)) { want = PAGES[i]; break; } }
+        if (!want) { cur = null; document.body.classList.remove('mf-dock-on'); clearBuilt(); closeSheet(); return; }
+        cur = want; document.body.classList.add('mf-dock-on'); build();
+    };
+    var tmr = null, schedule = function () { clearTimeout(tmr); tmr = setTimeout(function () { try { sync(); } catch (e) { console.error('[কমান্ড-বার]', e); } }, 100); };
+    var start = function () {
+        var m = document.getElementById('main'); if (!m) { setTimeout(start, 500); return; }
+        new MutationObserver(function (list) { for (var i = 0; i < list.length; i++) { var a = list[i].addedNodes; for (var j = 0; j < a.length; j++) { if (!a[j].id || (a[j].id !== 'mf-cmd' && a[j].id !== 'mf-primary')) { schedule(); return; } } } }).observe(m, { childList: true, subtree: true });
+        if (mq.addEventListener) mq.addEventListener('change', schedule);
+        window.addEventListener('resize', schedule);
+        schedule();
+    };
+    window.mfDockSync = schedule;
+    if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', start); else start();
+})();
+</script>
+
 </body>
 </html>
