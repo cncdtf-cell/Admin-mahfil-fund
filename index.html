@@ -2,6 +2,10 @@
 <html lang="bn">
 <head>
     <meta charset="UTF-8" />
+    <!-- 🔧 [v16.5.68] নোটিফিকেশন-ক্লিকে 404 ঠিক (SW v2 + পেজ-ঠিকানা জমা); সেটিংসে 🩺 'স্ক্রিপ্ট ও ফোল্ডার যাচাই' বাটন (স্ক্রিপ্ট v16.5.33) — কোন ভার্সন চলছে ও কোন মেনু কোন ফোল্ডারে যাবে তা দেখায়। -->
+    <!-- 🆕 [v16.5.67] সেটিংসে মেনু-ভিত্তিক Drive ফোল্ডার লিংক (আপলোড + 📁 বাটন একই ফোল্ডারে; সার্ভার যাচাই করে) — স্ক্রিপ্ট v16.5.31 লাগবে। -->
+    <!-- 🆕 [v16.5.66] "📁 ড্রাইভ ফোল্ডার" বাটন মেনু-ভিত্তিক ফোল্ডার খোলে; আপলোডের পর কোন ফোল্ডারে গেল তা দেখায় (স্ক্রিপ্ট v16.5.30)। -->
+    <!-- 🆕 [v16.5.65] মেনু-ভিত্তিক Drive ফোল্ডার (স্ক্রিপ্ট v16.5.29): নোটিশ/বিশেষ ঘোষণা/চ্যাট/আমাদের সম্পর্কে/লোগো/অন্যান্য; অ্যাডমিনে 'ব্যাকআপ' ট্যাবে Drive-এ .json ব্যাকআপ ও 'অন্যান্য ছবি' আপলোড; চ্যাটে সব প্যানেলে আসল ইমোজি (আইকন-রূপান্তর বাদ)। -->
     <!-- 🆕 [v16.5.63] চ্যাট: গ্রুপ ও DM একই ডিজাইন/ইমোজি; মেসেঞ্জার-স্টাইল 'কে কোন মেসেজ পর্যন্ত দেখেছেন' (ছোট ছবি); চ্যাট-ডকে 📎 ছবি বাটন; অ্যাডমিনে DM-এ ব্লু-টিক/ওয়াচডগ পার্সোনালের সমান। এক্সেল টেমপ্লেটে প্রতি মাসের মেথড ও রিসিভ তারিখ। (+v16.5.61-62: হেডার গ্রিড, অ্যাডমিন গ্রুপ-চ্যাট রিয়্যাকশন/পিন/চ্যাট-বার, ইমপোর্ট টেমপ্লেট) -->
     <!-- 🔧 [v16.5.46] এডমিনে সদস্য-তালিকার নতুন কলাম (WhatsApp নম্বর, Facebook/Messenger) না দেখানোর ত্রুটি ঠিক: লগইনের পর ক্লাউডের পুরনো কলাম-কনফিগ নতুন ডিফল্ট কলাম বাদ দিয়ে ক্যাশে বসত। -->
     <!-- 🆕 [v16.5.45] DM-এ ➡️ ফরওয়ার্ড (ওভারলে, ব্যবহারকারী বাছাই) + দিনের বিভাজক ("আজ/গতকাল/তারিখ") যোগ। -->
@@ -5625,6 +5629,36 @@ body.dark-mode .btn-outline{border-color:var(--gold-300)!important;color:var(--g
         };
         const NOTICE_DRIVE_FOLDER_ID = extractDriveFolderId(NOTICE_DRIVE_FOLDER_URL);
         const DEFAULT_DRIVE_FOLDER_ID = extractDriveFolderId(DEFAULT_DRIVE_FOLDER_URL);
+        // 🆕 [v16.5.66] মেনু → Drive ফোল্ডার (Apps Script v16.5.29+ এর MENU_FOLDERS-এর সাথে মিল রাখুন)
+        const _dfu = (id) => 'https://drive.google.com/drive/folders/' + id + '?usp=sharing';
+        const MENU_FOLDER_URL_BY_CAT = { notices: _dfu('1pA8reijOnkqxXOhuwvtmljg_COPgptYS'), announcements: _dfu('1QPf4A44eg_GWfrev62n_wd0Aoer9FJ9e'), chat: _dfu('1d7syhSdn_QX3irSCFYRtcYEOPI_4csvx'), about: _dfu('1eEavvva3SryTGS8F9i3Y8TBTtlf9_ouz'), logo: _dfu('1_fCbV4sEJ-kLNwh79-yRyVrgBnWj6mZg'), banner: _dfu('1_fCbV4sEJ-kLNwh79-yRyVrgBnWj6mZg'), others: _dfu('1iVUJxINIUtsYvDlxUA8duXudqWEptens'), backup: _dfu('1K9gwjtvclELfY6gOB3BBwHv3r8fsEuta') };
+        // 🆕 [v16.5.67] ফোল্ডার-লিংক এখন সেটিংসে বদলানো যায় (Firestore app_settings/drive_folders — লেখা শুধু এডমিন)। আপলোড কোন ফোল্ডারে যাবে তা সার্ভার (স্ক্রিপ্ট v16.5.31) এই এডমিন-সেটিং থেকেই যাচাই করে নেয়।
+        const DRIVE_CATS = [
+            { k: 'members', label: '👤 সদস্য / প্রোফাইল ছবি', hint: 'ফাঁকা = মূল ফোল্ডারের "সদস্য" সাব-ফোল্ডার' },
+            { k: 'notices', label: '📢 নোটিশ' }, { k: 'announcements', label: '📣 বিশেষ ঘোষণা' },
+            { k: 'about', label: 'ℹ️ আমাদের সম্পর্কে' }, { k: 'logo', label: '🕌 লোগো' }, { k: 'banner', label: '🖼️ ব্যানার' },
+            { k: 'chat', label: '💬 চ্যাট' }, { k: 'others', label: '🗂 অন্যান্য ছবি' }, { k: 'backup', label: '🗄️ ব্যাকআপ (.json)' }
+        ];
+        const DRIVE_CFG_KEY = 'mahfil_drive_folders_v1';
+        let DRIVE_CFG = { urls: {} };
+        try { const _c = JSON.parse(localStorage.getItem(DRIVE_CFG_KEY) || 'null'); if (_c && _c.urls) DRIVE_CFG = _c; } catch (e) { }
+        const mfDriveUrl = (cat) => (DRIVE_CFG.urls && DRIVE_CFG.urls[cat]) || MENU_FOLDER_URL_BY_CAT[cat] || '';
+        let _driveCfgAt = 0;
+        const mfLoadDriveCfg = async (force) => {
+            if (!window._firestore || !window._firestoreDb) return DRIVE_CFG;
+            if (!force && Date.now() - _driveCfgAt < 60000) return DRIVE_CFG;
+            try {
+                const { doc, getDoc } = window._firestore;
+                const sn = await getDoc(doc(window._firestoreDb, 'app_settings', 'drive_folders'));
+                _driveCfgAt = Date.now();
+                const d = sn.exists() ? sn.data() : {};
+                const urls = {};
+                DRIVE_CATS.forEach(c => { const id = d[c.k]; if (typeof id === 'string' && id) urls[c.k] = (d.urls && d.urls[c.k]) || ('https://drive.google.com/drive/folders/' + id + '?usp=sharing'); });
+                DRIVE_CFG = { urls };
+                try { localStorage.setItem(DRIVE_CFG_KEY, JSON.stringify(DRIVE_CFG)); } catch (e) { }
+            } catch (e) { console.warn('[Drive ফোল্ডার-সেটিং] পড়া যায়নি:', e && e.code || e); }
+            return DRIVE_CFG;
+        };
 
         const ALLOWED_IMAGE_MIME = ['image/jpeg', 'image/jpg', 'image/png', 'image/webp'];
 
@@ -5793,6 +5827,7 @@ body.dark-mode .btn-outline{border-color:var(--gold-300)!important;color:var(--g
                 throw new Error('ছবি Drive-এ সেভ হয়েছে, কিন্তু লিংক (directUrl) রেসপন্সে পাওয়া যায়নি — Apps Script-এর পুরনো ভার্সন ডিপ্লয় করা থাকতে পারে। Code.gs আপডেট থাকলে পুনরায় "New version" Deploy করুন।');
             }
             onProgress?.('done');
+            window.__mfUploadFolder = json.folder || '';   // 🆕 [v16.5.66] ছবি কোন ফোল্ডারে গেল
             window.__mfUploadNote = json.note || '';   // 🆕 [v16.5.28] সার্ভারের সতর্কতা (যেমন ফোল্ডার তৈরি যায়নি)
             return json.directUrl;
         };
@@ -5834,7 +5869,8 @@ body.dark-mode .btn-outline{border-color:var(--gold-300)!important;color:var(--g
         const imageUploadFieldHtml = (fieldId, currentUrl, label, driveFolderUrl) => {
             const url = currentUrl || '';
             const previewSrc = url ? escapeHtml(toDirectImageUrl(url)) : '';
-            const folderHref = driveFolderUrl || DEFAULT_DRIVE_FOLDER_URL;
+            // 🆕 [v16.5.66] "📁 ড্রাইভ ফোল্ডার" এখন ওই মেনুর নিজস্ব ফোল্ডার খোলে (আগে সবসময় পুরনো মূল ফোল্ডার)
+            const folderHref = mfDriveUrl(IMG_CAT_BY_FIELD[fieldId]) || driveFolderUrl || DEFAULT_DRIVE_FOLDER_URL;
             return `
             <div class="field image-upload-field" data-image-field="${fieldId}">
               <label>${escapeHtml(label || 'ছবি')}</label>
@@ -5879,6 +5915,8 @@ body.dark-mode .btn-outline{border-color:var(--gold-300)!important;color:var(--g
             category = category || IMG_CAT_BY_FIELD[fieldId] || IMG_CAT_DEFAULT;
             const wrap = document.querySelector(`[data-image-field="${fieldId}"]`);
             if (!wrap) return;
+            // 🆕 [v16.5.67] সেটিংসে ফোল্ডার-লিংক বদলানো থাকলে "📁 ড্রাইভ ফোল্ডার" বাটনের লিংক হালনাগাদ
+            mfLoadDriveCfg().then(() => { const a = wrap.querySelector('.image-upload-actions a[href*="drive.google"]'), u = mfDriveUrl(category); if (a && u) a.href = u; });
             const fileInput = wrap.querySelector(`[data-image-input="${fieldId}"]`);
             // 🆕 [পয়েন্ট ৬] ক্যামেরা-ক্যাপচার ইনপুট — নিচে একই handleFile() ফাংশন শেয়ার করে
             const cameraInput = wrap.querySelector(`[data-image-camera-input="${fieldId}"]`);
@@ -5933,7 +5971,7 @@ body.dark-mode .btn-outline{border-color:var(--gold-300)!important;color:var(--g
                     }, folderId, category);
                     urlInput.value = directUrl; justUploaded = directUrl; syncDel();
                     setPreview(directUrl);
-                    status.textContent = '✅ আপলোড সফল হয়েছে' + (window.__mfUploadNote ? ' — ⚠️ ' + window.__mfUploadNote : '');
+                    status.textContent = '✅ আপলোড সফল হয়েছে' + (window.__mfUploadFolder ? ' — 📁 ' + window.__mfUploadFolder : ' — (ফোল্ডারের নাম আসেনি: স্ক্রিপ্ট v16.5.30 ডিপ্লয় হয়নি?)') + (window.__mfUploadNote ? ' — ⚠️ ' + window.__mfUploadNote : '');
                     status.className = 'image-upload-status success';
                 } catch (err) {
                     console.error(err);
@@ -7502,6 +7540,75 @@ body.dark-mode .btn-outline{border-color:var(--gold-300)!important;color:var(--g
               <button type="button" class="btn btn-outline btn-sm" data-email-tpl-reset="${key}" style="margin-top:2px;">↺ এই টেমপ্লেট ডিফল্টে ফিরিয়ে আনুন</button>
             </div>`;
 
+        // 🆕 [v16.5.67] সেটিংসে মেনু-ভিত্তিক Drive ফোল্ডার লিংক (এডমিন) — সংরক্ষণের আগে সার্ভার দিয়ে ফোল্ডারটি খোলা যায় কিনা যাচাই
+        const wireDriveFolderSettings = () => {
+            const box = document.getElementById('drv-rows'); if (!box) return;
+            const st = document.getElementById('drv-st');
+            const draw = () => {
+                box.innerHTML = DRIVE_CATS.map(c => {
+                    const cur = (DRIVE_CFG.urls && DRIVE_CFG.urls[c.k]) || '', def = MENU_FOLDER_URL_BY_CAT[c.k] || '';
+                    return '<div style="margin-bottom:8px;"><div style="font-weight:600;">' + c.label + '</div>' +
+                        '<div style="display:flex;gap:6px;align-items:center;"><input type="text" id="drv-url-' + c.k + '" value="' + escapeHtml(cur) + '" placeholder="' + escapeHtml(def || (c.hint || 'https://drive.google.com/drive/folders/…')) + '" inputmode="url" autocomplete="off" style="flex:1;min-width:0;">' +
+                        '<a class="btn btn-outline btn-sm" id="drv-open-' + c.k + '" href="' + escapeHtml(cur || def || '#') + '" target="_blank" rel="noopener" title="ফোল্ডার খুলুন" ' + ((cur || def) ? '' : 'style="display:none;"') + '>📁</a></div></div>';
+                }).join('');
+            };
+            draw();
+            mfLoadDriveCfg(true).then(draw);
+            const callCheck = async (id) => {
+                const res = await fetch(IMAGE_UPLOAD_SCRIPT_URL, { method: 'POST', headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+                    body: JSON.stringify({ action: 'folder_check', folderId: id, idToken: (window.mfGetIdToken ? await window.mfGetIdToken() : '') }) });
+                let j; try { j = JSON.parse(await res.text()); } catch (e) { throw new Error('সার্ভার থেকে সঠিক উত্তর আসেনি — স্ক্রিপ্ট v16.5.31 ডিপ্লয় করে "New version" দিয়েছেন তো?'); }
+                return j;
+            };
+            const save = async () => {
+                const urls = {}, ids = {};
+                for (const c of DRIVE_CATS) {
+                    const v = (document.getElementById('drv-url-' + c.k).value || '').trim(); if (!v) continue;
+                    const id = extractDriveFolderId(v);
+                    if (!id || !/^[A-Za-z0-9_-]{10,100}$/.test(id)) { if (st) st.textContent = '❌ "' + c.label + '": লিংক ঠিক নয়'; toast('❌ "' + c.label + '"-এর ফোল্ডার-লিংক ঠিক নয়'); return; }
+                    urls[c.k] = v; ids[c.k] = id;
+                }
+                if (st) st.textContent = '⏳ ফোল্ডার যাচাই হচ্ছে...';
+                const bad = [];
+                for (const c of Object.keys(ids)) {
+                    if (DRIVE_CFG.urls && DRIVE_CFG.urls[c] === urls[c]) continue;   // অপরিবর্তিত — আবার যাচাই নয়
+                    try { const j = await callCheck(ids[c]); if (!j.success) bad.push((DRIVE_CATS.find(x => x.k === c) || {}).label + ': ' + (j.error || 'খোলা যায়নি')); }
+                    catch (e) { bad.push(e.message); break; }
+                }
+                const doSave = async () => {
+                    try {
+                        const { doc, setDoc } = window._firestore;
+                        await setDoc(doc(window._firestoreDb, 'app_settings', 'drive_folders'), Object.assign({}, ids, { urls, updatedAt: new Date().toISOString(), updatedBy: (window.currentUser && window.currentUser.email) || '' }));
+                        DRIVE_CFG = { urls }; _driveCfgAt = Date.now();
+                        try { localStorage.setItem(DRIVE_CFG_KEY, JSON.stringify(DRIVE_CFG)); } catch (e) { }
+                        addActivityLog('add', 'settings', '', 'Drive ফোল্ডার লিংক হালনাগাদ');
+                        if (st) st.textContent = '✅ সংরক্ষিত — নতুন আপলোড থেকে কার্যকর (সর্বোচ্চ ~২০ সেকেন্ড)';
+                        toast('✅ Drive ফোল্ডার লিংক সংরক্ষিত'); draw();
+                    } catch (e) { if (st) st.textContent = '❌ ' + (e && e.code || e.message); toast('❌ সংরক্ষণ ব্যর্থ: ' + (e && e.code || e.message)); }
+                };
+                if (bad.length) { if (st) st.textContent = '⚠️ ' + bad[0]; confirmDelete('এই ফোল্ডার(গুলো) এখন খোলা যাচ্ছে না:\n' + bad.join('\n') + '\n\nতবুও সংরক্ষণ করবেন? (এরপর ওই মেনুতে ছবি আপলোড ত্রুটি দেবে, যতক্ষণ না অ্যাক্সেস ঠিক হয়)', doSave); }
+                else await doSave();
+            };
+            document.getElementById('drv-save').onclick = save;
+            document.getElementById('drv-diag').onclick = async () => {
+                const out = document.getElementById('drv-diag-out'); out.textContent = '⏳ যাচাই হচ্ছে...';
+                try {
+                    const res = await fetch(IMAGE_UPLOAD_SCRIPT_URL, { method: 'POST', headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+                        body: JSON.stringify({ action: 'diag_folders', idToken: (window.mfGetIdToken ? await window.mfGetIdToken() : '') }) });
+                    let j; try { j = JSON.parse(await res.text()); } catch (e) { out.textContent = '❌ সার্ভার থেকে সঠিক উত্তর আসেনি — Apps Script-এ Web App ডিপ্লয়/অ্যাক্সেস "Anyone" ঠিক আছে কিনা দেখুন।'; return; }
+                    if (!j.success) { out.textContent = '❌ ' + (j.error || 'ব্যর্থ') + (/অজানা অনুরোধ/.test(j.error || '') ? '\n→ ডিপ্লয়-করা স্ক্রিপ্ট পুরনো! Code_combined_v16_5_33.gs পেস্ট করে Deploy → Manage deployments → ✏️ Edit → Version: "New version" → Deploy করুন।' : ''); return; }
+                    out.textContent = '✅ চলমান স্ক্রিপ্ট: ' + j.version + '\n' + (j.items || []).map(i => (i.ok === false ? '❌ ' : '✅ ') + i.label + ' → ' + (i.name ? '📁 ' + i.name : (i.error || 'অটো সাব-ফোল্ডার')) + ' [' + i.source + ']').join('\n');
+                } catch (e) { out.textContent = '❌ ' + (e.message || e); }
+            };
+            document.getElementById('drv-reset').onclick = () => confirmDelete('সব মেনুর ফোল্ডার ডিফল্টে ফিরবে?', async () => {
+                try {
+                    const { doc, setDoc } = window._firestore;
+                    await setDoc(doc(window._firestoreDb, 'app_settings', 'drive_folders'), { urls: {}, updatedAt: new Date().toISOString() });
+                    DRIVE_CFG = { urls: {} }; _driveCfgAt = Date.now(); try { localStorage.setItem(DRIVE_CFG_KEY, JSON.stringify(DRIVE_CFG)); } catch (e) { }
+                    draw(); toast('↺ ডিফল্টে ফিরেছে');
+                } catch (e) { toast('❌ ' + (e && e.code || e.message)); }
+            });
+        };
         const settingsFormHtml = () => {
             const s = state.settings;
             const mn = s.monthNames || CONFIG.DEFAULT_SETTINGS.monthNames;
@@ -7531,6 +7638,18 @@ body.dark-mode .btn-outline{border-color:var(--gold-300)!important;color:var(--g
                   <button type="button" class="btn btn-outline btn-sm" id="img-ret-diag">🩺 Drive পরীক্ষা</button>
                   <span id="img-ret-st" class="small"></span>
                 </div>
+              </div>
+              <div class="field" id="drv-folders-box" style="border:1px solid var(--line);border-radius:10px;padding:10px 12px;">
+                <label>📁 মেনু-ভিত্তিক Drive ফোল্ডার লিংক</label>
+                <div class="small muted" style="margin-bottom:8px;">প্রতিটি মেনুর ছবি এখানে দেওয়া ফোল্ডারে জমা হবে, আর মেনুর "📁 ড্রাইভ ফোল্ডার" বাটনও এই ফোল্ডারই খুলবে। ফোল্ডারটি স্ক্রিপ্ট-মালিকের Google একাউন্টে <b>Editor</b> অ্যাক্সেসে থাকতে হবে। ফাঁকা রাখলে ডিফল্ট ফোল্ডার।</div>
+                <div id="drv-rows" class="small">⏳ লোড হচ্ছে...</div>
+                <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:8px;align-items:center;">
+                  <button type="button" class="btn btn-outline btn-sm" id="drv-save">💾 ফোল্ডার লিংক সংরক্ষণ</button>
+                  <button type="button" class="btn btn-outline btn-sm" id="drv-reset">↺ সব ডিফল্টে ফিরুন</button>
+                  <span id="drv-st" class="small"></span>
+                </div>
+                <div style="margin-top:8px;"><button type="button" class="btn btn-outline btn-sm" id="drv-diag">🩺 স্ক্রিপ্ট ও ফোল্ডার যাচাই</button></div>
+                <div id="drv-diag-out" class="small" style="margin-top:6px;white-space:pre-wrap;overflow-wrap:anywhere;"></div>
               </div>
               <div class="field"><label>প্রতিষ্ঠানের নাম</label><input type="text" id="s-name" value="${escapeHtml(s.name)}"></div>
               <div class="field"><label>ঠিকানা</label><input type="text" id="s-address" value="${escapeHtml(s.address)}"></div>
@@ -7908,6 +8027,7 @@ body.dark-mode .btn-outline{border-color:var(--gold-300)!important;color:var(--g
                 document.getElementById('f-cancel').onclick = closeModal;
                 document.getElementById('f-save').onclick = saveSettings;
                 wireImageUploadField('s-logo-url', () => ({ name: 'logo', mobile: '' }), DEFAULT_DRIVE_FOLDER_ID);
+                wireDriveFolderSettings();
                 // 🆕 [v16.5.53] নোটিফিকেশন Web App URL: পরীক্ষা / এখনই চালান (URL-টি সেটিংস "সংরক্ষণ"-এ সেভ হয়)
                 (() => {
                     const inp = document.getElementById('s-notify-url'), st = document.getElementById('notify-st'); if (!inp) return;
@@ -20636,6 +20756,27 @@ body.dark-mode .btn-outline{border-color:var(--gold-300)!important;color:var(--g
               <div class="small muted" style="margin-top:10px;">ব্যাকআপ নেওয়ার সময় প্রতিটি অংশ (সদস্য/মাসিক/বার্ষিক/ব্যয় ইত্যাদি) আলাদাভাবে, নোটিফিকেশনের মতো একে একে আপলোড হয়। পরে রিস্টোর করার সময় শুধু প্রয়োজনীয় অংশ বেছে আনতে পারবেন — তাই বর্তমান ডেটা হারানোর ভয় থাকবে না।</div>
             </div>
           </div>
+          <div class="backup-grid" style="margin-top:16px;grid-template-columns:repeat(auto-fit,minmax(min(100%,300px),1fr));">
+            <div class="backup-card" style="min-width:0;overflow-wrap:anywhere;">
+              <h4>🗄️ Drive-এ ব্যাকআপ (.json)</h4>
+              <p class="sub">ব্যাকআপ-ফাইল সরাসরি Google Drive-এর "ব্যাকআপ" ফোল্ডারে জমা হবে (পাবলিক নয়, শুধু আপনার একাউন্টে)।</p>
+              <div class="btn-group">
+                <button class="btn btn-primary" id="btn-drive-backup-now">☁️ এখনকার ডেটা Drive-এ রাখুন</button>
+                <label class="btn btn-outline" style="cursor:pointer;display:inline-flex;">📤 .json ফাইল বেছে Drive-এ আপলোড<input type="file" id="drive-backup-file" accept=".json,application/json" style="display:none;"></label>
+                <button class="btn btn-outline" id="btn-drive-backup-list">📋 Drive-এর ব্যাকআপ তালিকা</button>
+              </div>
+              <div class="small muted" id="drive-backup-status" style="margin-top:10px;">ফাইলের নামের সাথে তারিখ-সময় যোগ হয়, তাই পুরনো ব্যাকআপ কখনো ঢাকা পড়ে না।</div>
+            </div>
+            <div class="backup-card" style="min-width:0;overflow-wrap:anywhere;">
+              <h4>🖼️ অন্যান্য ছবি আপলোড (Drive)</h4>
+              <p class="sub">যেকোনো ছবি (একসাথে একাধিক) Drive-এর "অন্যান্য" ফোল্ডারে জমা হবে; লিংক কপি করে যেকোনো জায়গায় ব্যবহার করুন।</p>
+              <div class="btn-group">
+                <label class="btn btn-primary" style="cursor:pointer;display:inline-flex;">🖼️ ছবি বাছুন<input type="file" id="drive-other-input" accept="image/*" multiple style="display:none;"></label>
+              </div>
+              <div id="drive-other-list" style="margin-top:10px;display:flex;flex-direction:column;gap:8px;"></div>
+            </div>
+          </div>
+            </div>
           <div class="card no-print" style="margin-top:20px;">
             <div class="flex-between" style="margin-bottom:6px;">
               <strong style="font-family:var(--font-display);color:var(--emerald-900);">🩺 ডেটা স্বাস্থ্য পরীক্ষা</strong>
@@ -20739,7 +20880,80 @@ body.dark-mode .btn-outline{border-color:var(--gold-300)!important;color:var(--g
             reader.readAsText(file);
         };
 
+        // 🆕 [v16.5.65] Drive আপলোড (শুধু এডমিন) — ব্যাকআপ .json ও "অন্যান্য ছবি"। Apps Script v16.5.29 লাগবে।
+        const driveCall = async (payload) => {
+            if (!IMAGE_UPLOAD_SCRIPT_URL || IMAGE_UPLOAD_SCRIPT_URL.indexOf('PASTE_YOUR') === 0) throw new Error('Apps Script URL সেট করা নেই');
+            const res = await fetch(IMAGE_UPLOAD_SCRIPT_URL, { method: 'POST', headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+                body: JSON.stringify(Object.assign({ idToken: (window.mfGetIdToken ? await window.mfGetIdToken() : '') }, payload)) });
+            let j; try { j = JSON.parse(await res.text()); } catch (e) { throw new Error('সার্ভার থেকে সঠিক উত্তর আসেনি — নতুন স্ক্রিপ্ট (v16.5.29) ডিপ্লয় করে "New version" দিয়েছেন তো?'); }
+            if (!j.success) throw new Error(j.error || 'ব্যর্থ হয়েছে');
+            return j;
+        };
+        const driveBackupUpload = async (jsonText, fileName) => {
+            const st = document.getElementById('drive-backup-status');
+            if (jsonText.length > 7 * 1024 * 1024) { toast('❌ ব্যাকআপ অতিরিক্ত বড় (সর্বোচ্চ ~৭ MB)'); return; }
+            if (st) st.textContent = '⏳ Drive-এ আপলোড হচ্ছে...';
+            try {
+                const r = await driveCall({ action: 'backup_upload', jsonText, fileName });
+                if (st) st.innerHTML = '✅ জমা হয়েছে: <b>' + escapeHtml(r.name) + '</b> (' + Math.round((r.size || 0) / 1024) + ' KB) — <a href="' + escapeHtml(r.url) + '" target="_blank" rel="noopener">Drive-এ খুলুন</a>';
+                addActivityLog('add', 'backup', '', 'Drive-এ ব্যাকআপ আপলোড: ' + r.name);
+                toast('✅ ব্যাকআপ Drive-এ জমা হয়েছে');
+            } catch (e) { if (st) st.textContent = '❌ ' + e.message; toast('❌ ' + e.message); }
+        };
+        const driveBackupList = async () => {
+            try {
+                toast('⏳ তালিকা আনা হচ্ছে...');
+                const r = await driveCall({ action: 'backup_list' });
+                const rows = (r.files || []).map(f => '<tr><td>' + escapeHtml(f.name) + '</td><td>' + new Date(f.t).toLocaleString('bn-BD') + '</td><td>' + Math.round((f.size || 0) / 1024) + ' KB</td><td><a href="' + escapeHtml(f.url) + '" target="_blank" rel="noopener">খুলুন</a></td></tr>').join('');
+                openModal('<h3>🗄️ Drive-এর ব্যাকআপ (সর্বশেষ ' + (r.files || []).length + '/' + (r.total || 0) + ')</h3>' + (rows ? '<div class="table-wrap"><table><thead><tr><th>ফাইল</th><th>সময়</th><th>সাইজ</th><th></th></tr></thead><tbody>' + rows + '</tbody></table></div>' : '<p class="muted">কোনো ব্যাকআপ নেই।</p>') + '<div class="modal-actions"><button class="btn btn-outline" id="dbl-close">বন্ধ</button></div>', () => { document.getElementById('dbl-close').onclick = closeModal; });
+            } catch (e) { toast('❌ ' + e.message); }
+        };
+        const driveOtherUpload = async (files) => {
+            const box = document.getElementById('drive-other-list'); if (!box) return;
+            for (const file of files) {
+                const row = document.createElement('div');
+                row.style.cssText = 'border:1px solid var(--line,#e1dac6);border-radius:10px;padding:8px 10px;font-size:13px;';
+                row.innerHTML = '<div><b>' + escapeHtml(file.name) + '</b> <span class="muted small">⏳ আপলোড হচ্ছে...</span></div>';
+                box.prepend(row);
+                try {
+                    const url = await uploadImageToDrive(file, 'other', '', '', null, '', 'others');
+                    row.innerHTML = '<div style="display:flex;gap:10px;align-items:center;"><img src="' + escapeHtml(url) + '" alt="" style="width:46px;height:46px;object-fit:cover;border-radius:8px;"><div style="flex:1;min-width:0;"><div><b>' + escapeHtml(file.name) + '</b> ✅</div><div class="muted small" style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">' + escapeHtml(url) + '</div></div><button type="button" class="btn btn-outline btn-sm" data-copy-url="' + escapeHtml(url) + '">📋 কপি</button></div>';
+                    addActivityLog('add', 'backup', '', 'Drive "অন্যান্য" ফোল্ডারে ছবি: ' + file.name);
+                    row.insertAdjacentHTML('beforeend', '<div class="muted small" style="margin-top:4px;">📁 ' + escapeHtml(window.__mfUploadFolder || 'ফোল্ডারের নাম আসেনি — স্ক্রিপ্ট v16.5.30 ডিপ্লয় হয়নি?') + '</div>');
+                } catch (e) { row.innerHTML = '<div><b>' + escapeHtml(file.name) + '</b> <span style="color:#b3261e;">❌ ' + escapeHtml(e.message) + '</span></div>'; }
+            }
+            if (window.__mfUploadNote) toast('⚠️ ' + window.__mfUploadNote);
+        };
+        const wireDriveUploads = () => {
+            const b = document.getElementById('btn-drive-backup-now');
+            if (b) b.addEventListener('click', () => { b.disabled = true; driveBackupUpload(JSON.stringify(state), 'mahfil_backup').finally(() => { b.disabled = false; }); });
+            const fi = document.getElementById('drive-backup-file');
+            if (fi) fi.addEventListener('change', function () {
+                const f = this.files && this.files[0]; this.value = ''; if (!f) return;
+                const rd = new FileReader();
+                rd.onload = (e) => {
+                    const t = String(e.target.result || '');
+                    let o; try { o = JSON.parse(t); } catch (er) { toast('❌ ফাইলটি সঠিক JSON নয়'); return; }
+                    if (!o || typeof o !== 'object') { toast('❌ ফাইলটি সঠিক JSON নয়'); return; }
+                    const ok = () => driveBackupUpload(t, f.name);
+                    if (!o.members || !o.monthly) confirmDelete('এটি সাধারণ ব্যাকআপের মতো দেখাচ্ছে না (সদস্য/মাসিক নেই)। তবুও Drive-এ রাখবেন?', ok); else ok();
+                };
+                rd.readAsText(f);
+            });
+            const l = document.getElementById('btn-drive-backup-list');
+            if (l) l.addEventListener('click', driveBackupList);
+            const oi = document.getElementById('drive-other-input');
+            if (oi) oi.addEventListener('change', function () { const fs = Array.from(this.files || []); this.value = ''; if (fs.length) driveOtherUpload(fs); });
+            const ol = document.getElementById('drive-other-list');
+            if (ol) ol.addEventListener('click', async (ev) => {
+                const cb = ev.target.closest('[data-copy-url]'); if (!cb) return;
+                let ok = false; try { await navigator.clipboard.writeText(cb.dataset.copyUrl); ok = true; } catch (e) { try { ok = typeof mfMsgCopy === 'function' ? await mfMsgCopy(cb.dataset.copyUrl) : false; } catch (e2) { } }
+                toast(ok ? '✅ লিংক কপি হয়েছে' : '⚠️ কপি করা যায়নি');
+            });
+        };
+
         const afterBackupRender = () => {
+            wireDriveUploads();   // 🆕 [v16.5.65]
             const btnLocalBackup = document.getElementById('btn-local-backup');
             if (btnLocalBackup) btnLocalBackup.addEventListener('click', downloadLocalBackup);
             const fi = document.getElementById('local-restore-input');
@@ -22484,6 +22698,7 @@ body.dark-mode .btn-outline{border-color:var(--gold-300)!important;color:var(--g
         .cd-empty{text-align:center;padding:40px 10px;opacity:.7;font-size:14px}
         .cd-inp{display:flex;gap:8px;align-items:flex-end;padding:8px 10px calc(8px + env(safe-area-inset-bottom,0px));border-top:1px solid var(--line,#e1dac6);background:var(--paper-raised,#fff);flex-shrink:0}
         .cd-inp textarea{flex:1;resize:none;border-radius:20px;padding:9px 14px;font:inherit;font-size:14.5px;max-height:110px;min-height:40px;box-sizing:border-box}
+        .cd-chip,.cd-pick button{font-family:"Apple Color Emoji","Segoe UI Emoji","Noto Color Emoji",sans-serif}
         .cd-att{width:42px;height:42px;border-radius:50%;border:1px solid var(--line,#e1dac6);background:var(--paper-raised,#fff);color:var(--emerald-700,#17513c);cursor:pointer;flex-shrink:0;display:flex;align-items:center;justify-content:center}
         body.dark-mode .cd-att{color:var(--gold-300)}
         .cd-send{width:42px;height:42px;border-radius:50%;border:0;background:var(--emerald-700,#17513c);color:#fff;cursor:pointer;flex-shrink:0;display:flex;align-items:center;justify-content:center}
@@ -23884,6 +24099,8 @@ body.dark-mode .btn-outline{border-color:var(--gold-300)!important;color:var(--g
 
                 log('সার্ভিস ওয়ার্কার রেজিস্টার করা হচ্ছে (/firebase-messaging-sw.js)...');
                 const registration = await navigator.serviceWorker.register('./firebase-messaging-sw.js');
+                // 🔧 [v16.5.68] নোটিফিকেশন-ক্লিকে 404 ঠিক করতে: এই পেজের আসল ঠিকানা SW-কে জানিয়ে রাখা (অ্যাপ বন্ধ থাকলে ক্লিকে ঠিক এই পেজই খুলবে)
+                try { const _c = await caches.open('mf-app'); await _c.put('pagePath', new Response(location.origin + location.pathname)); } catch (e) { }
                 log('✅ সার্ভিস ওয়ার্কার রেজিস্টার সফল।');
 
                 let permission = Notification.permission;
@@ -28408,7 +28625,7 @@ html body table tbody td.mf-frz,html body table tbody td.mf-s1{z-index:3}
 var MAP={"✅": "circle-check", "❌": "circle-x", "⚠": "alert-triangle", "🔒": "lock", "🗑": "trash", "⚙": "settings", "★": "star", "⏳": "hourglass", "✓": "check", "🔧": "tool", "✉": "mail", "📅": "calendar", "📋": "clipboard-list", "✎": "pencil", "💾": "device-floppy", "👤": "user", "📐": "ruler-2", "👥": "users", "💬": "message-circle", "💰": "cash", "⛔": "ban", "✨": "sparkles", "✕": "x", "➕": "plus", "🖨": "printer", "🧾": "receipt", "🔓": "lock-open", "🔍": "search", "📨": "mail-forward", "👁": "eye", "🩹": "bandage", "✏": "pencil", "🔑": "key", "☪": "moon-stars", "📤": "upload", "📢": "speakerphone", "🖼": "photo", "📊": "chart-bar", "📥": "download", "🌐": "world", "📷": "camera", "🔎": "search", "🔄": "refresh", "✔": "check", "⬇": "arrow-down", "📝": "notes", "🎤": "microphone", "📁": "folder", "🔗": "link", "🛠": "tools", "🚫": "ban", "🧹": "brush", "✗": "x", "☁": "cloud", "📎": "paperclip", "👑": "crown", "📦": "package", "📆": "calendar", "🏠": "home", "📭": "mailbox", "🩺": "stethoscope", "☰": "menu-2", "🚪": "logout", "🔔": "bell", "🔤": "abc", "📌": "pin", "🎁": "gift", "✍": "writing", "🧩": "puzzle", "🎯": "target", "❄": "snowflake", "🙈": "eye-off", "✖": "x", "🗓": "calendar-event", "🙋": "hand-stop", "🔐": "lock", "🏢": "building", "💸": "cash-banknote", "🏷": "tag", "📞": "phone", "📈": "chart-line", "🕘": "clock", "🕒": "clock", "🕐": "clock", "🏛": "building-bank", "📂": "folder-open", "🎨": "palette", "🧵": "needle-thread", "📗": "notebook", "📄": "file-text", "🙏": "heart-handshake", "🧪": "flask", "☑": "checkbox", "📱": "device-mobile", "🎉": "confetti", "💳": "credit-card", "📚": "books", "🕌": "building-mosque", "🏅": "medal", "📍": "map-pin", "☎": "phone", "🛡": "shield", "☀": "sun", "🌙": "moon", "📘": "notebook", "💜": "heart", "🧡": "heart", "👉": "hand-finger", "🔌": "plug", "😕": "mood-sad", "📑": "files", "⬆": "arrow-up", "📏": "ruler", "🖥": "device-desktop", "💚": "heart", "🔖": "bookmark", "🔬": "microscope", "☐": "square", "📬": "mailbox", "📣": "speakerphone", "🔁": "repeat", "🗂": "folders", "🧑": "user", "💼": "briefcase", "🗺": "map", "💡": "bulb", "📧": "mail", "🚀": "rocket", "📒": "notebook", "🧰": "briefcase", "🧮": "calculator", "🧠": "brain", "🪪": "id", "🎭": "masks-theater", "⚖": "scale", "♾": "infinity", "🔽": "chevron-down", "🔼": "chevron-up", "⏩": "player-track-next", "⏪": "player-track-prev", "⏹": "player-stop", "🧱": "wall", "🤖": "message-chatbot", "➡": "arrow-right", "⬅": "arrow-left", "↩": "arrow-back-up", "↪": "arrow-forward-up", "↗": "arrow-up-right"},DOTS={"🟢": "#2c8562", "🔴": "#c0392b", "⚪": "#9aa5a0"};
 var keys=Object.keys(MAP).concat(Object.keys(DOTS)).sort(function(a,b){return b.length-a.length});
 var re=new RegExp('('+keys.join('|')+')[\\uFE0E\\uFE0F]?','g');
-var SKIP='script,style,textarea,option,select,title,input,[contenteditable],.mfi,.msg-text,[data-mf-noicon]';
+var SKIP='script,style,textarea,option,select,title,input,[contenteditable],.mfi,.msg-text,[data-mf-noicon],#cd-panel,.cd-tab-msgs,#dm-messages,#cd-msgs,.cd-pinbar,.cd-replybar,#dmx-pinbar,#dmx-replybar,.chat-messages';   // 🆕 [v16.5.65] চ্যাটে সবখানে আসল ইমোজি (আইকন-রূপান্তর নয়) — অ্যাডমিন/পার্সোনাল একই
 function conv(tn){
  var p=tn.parentElement; if(!p||p.closest(SKIP))return;
  var s=tn.nodeValue; if(!s||!re.test(s)){re.lastIndex=0;return} re.lastIndex=0;
