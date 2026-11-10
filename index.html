@@ -2,6 +2,23 @@
 <html lang="bn">
 <head>
     <meta charset="UTF-8" />
+    <!-- 🔧 [v16.5.85] একাধিক মাসের গ্রুপ ডাউনলোডে (রেজিস্টার JPG/PDF ও মাসিক-মেনু JPG) জিজ্ঞেস করে: মাসভিত্তিক বিবরণসহ / বিবরণ ছাড়া। -->
+    <!-- 🔧 [v16.5.84] রিসিপ্ট রেজিস্টার: ডাউনলোডে (JPG/PDF) একাধিক মাসের গ্রুপে যৌথ রিসিপ্ট (সব মাস + মোট); তালিকা নতুন→পুরনো (একই তারিখে সর্বশেষ নম্বর আগে)। -->
+    <!-- 🔧 [v16.5.83] একাধিক মাস একসাথে দিলে একই রিসিপ্ট নম্বর (settings.receiptNoMap.grp-এ গ্রুপ), টেবিলে "১/৪" চিহ্ন, রেজিস্টারে এক লাইনে মোট। আগের নম্বর অপরিবর্তিত। -->
+    <!-- 🔧 [v16.5.82] ধরন: "সাধারণ রিসিপ্ট" (মাসভিত্তিক বিবরণ-টেবিল ছাড়া) ও "সাধারণ রিসিপ্ট (এক পৃষ্ঠা)" (বিবরণ-টেবিলসহ)। -->
+    <!-- 🔧 [v16.5.81] রিসিপ্টের সাজ বাছাই (মানি-ফর্ম/ক্লাসিক + কী কী দেখাবে, পছন্দ মনে থাকে); একাধিক মাসে মাসভিত্তিক বিবরণ-টেবিল; বিবরণীতে মাসের নাম বাংলায় ঠিক। -->
+    <!-- 🔧 [v16.5.80] একাধিক মাসের ফান্ড একসাথে হলে একটি যৌথ "অনুদানের রিসিপ্ট" (মোট টাকা, বাবদে সব মাস); ডিফল্ট ধরন = সাধারণ রিসিপ্ট। -->
+    <!-- 🔧 [v16.5.79] পাঠানোর অবস্থা: মাসিক/বার্ষিক টেবিল ও রিসিপ্ট রেজিস্টারে "পাঠানো হয়েছে" + মাধ্যম (ইমেইল/হোয়াটসঅ্যাপ/মেসেঞ্জার/শেয়ার), নইলে "পাঠানো হয়নি"। -->
+    <!-- 🔧 [v16.5.78] শেয়ার প্যানেলে রিসিপ্টের ধরন (সাধারণ/বিস্তারিত/মাসভিত্তিক/হিসাব-বিবরণী) ও ফরম্যাট (JPG/PDF) বাছাই; বার্তা এডিটযোগ্য। -->
+    <!-- 🔧 [v16.5.77] ফান্ড কনফার্মের পর শেয়ার প্যানেল: ইমেইল · হোয়াটসঅ্যাপ · মেসেঞ্জার · শেয়ার, রিসিপ্ট ছবিসহ, পাঠানো হলে ✓ টিক। -->
+    <!-- 🔧 [v16.5.76] নিচের বার: হোম · ➕ যোগ করুন · সংগ্রহ · চ্যাট · মেনু (ইউজার বাটন বাদ — হেডারের 👥 আছে; ভাসমান ➕ বাদ)। -->
+    <!-- 🔧 [v16.5.75] লেবেল "কলাম সেটিংস" → "টেবিল সেটিংস" (শুধু নাম) -->
+    <!-- 🔧 [v16.5.75] নিচের বার ফিরেছে: হোম · ইউজার · সংগ্রহ · চ্যাট · মেনু (যোগ করুন/সার্চ বাদ — ➕ ভাসমান বাটন ও হেডারের সার্চে আছে)। -->
+    <!-- 🆕 [v16.5.74] মোবাইল UI: ইউজার প্যানেলের মতো কমপ্যাক্ট হেডার (একটিভ · নোটিফিকেশন · সার্চ · ⋮), স্ক্রলে মিনি-বার, নিচের ফুটার বাদ, নিচে ডানে ➕ বাটন; সিঙ্ক/JPG/প্রিন্ট ⋮ মেনুতে। -->
+    <!-- 🆕 [v16.5.73] AI ট্যাবে প্রতিটি প্রদানকারীর 'key তৈরি করুন' লিংক ও ফ্রি/পেইড তথ্য (key-ঘরের ঠিক ওপরে)। -->
+    <!-- 🔧 [v16.5.72] স্ক্রিপ্ট-URL পেজ আবার সামনে এলে নতুন করে পড়া (ইউজারকে রিলোড লাগে না)। -->
+    <!-- 🔧 [v16.5.71] সেটিংসে আগে থেকে সংরক্ষিত স্ক্রিপ্ট-URL (script_url, না থাকলে AI-প্রক্সির URL) থেকেই সব প্যানেল URL নেয়; HTML-এ আলাদা করে লিখতে হয় না। -->
+    <!-- 🆕 [v16.5.69] সেটিংসে '🔗 Apps Script URL' (v70: 🩺 বাটনে ডাকা URL-এর শেষ অংশ দেখায়) (ছবি/ইমেইল/অডিট/AI একই URL, HTML বদলাতে হয় না); সংরক্ষণের আগে URL যাচাই। -->
     <!-- 🔧 [v16.5.68] নোটিফিকেশন-ক্লিকে 404 ঠিক (SW v2 + পেজ-ঠিকানা জমা); সেটিংসে 🩺 'স্ক্রিপ্ট ও ফোল্ডার যাচাই' বাটন (স্ক্রিপ্ট v16.5.33) — কোন ভার্সন চলছে ও কোন মেনু কোন ফোল্ডারে যাবে তা দেখায়। -->
     <!-- 🆕 [v16.5.67] সেটিংসে মেনু-ভিত্তিক Drive ফোল্ডার লিংক (আপলোড + 📁 বাটন একই ফোল্ডারে; সার্ভার যাচাই করে) — স্ক্রিপ্ট v16.5.31 লাগবে। -->
     <!-- 🆕 [v16.5.66] "📁 ড্রাইভ ফোল্ডার" বাটন মেনু-ভিত্তিক ফোল্ডার খোলে; আপলোডের পর কোন ফোল্ডারে গেল তা দেখায় (স্ক্রিপ্ট v16.5.30)। -->
@@ -4801,8 +4818,8 @@ body.dark-mode .btn-outline{border-color:var(--gold-300)!important;color:var(--g
  .section-title{font-size:20px}
  .stat-card .value{font-size:24px}
  .mobile-bottom-nav{padding:6px 6px calc(6px + env(safe-area-inset-bottom,0px));align-items:flex-end}
- #mbn-add,#mbn-search{display:none!important}
- #mbn-home{order:1}#mbn-users{order:2}#mbn-collect{order:3}#mbn-chat{order:4}#mbn-menu{order:5}
+ #mbn-search,#mbn-users{display:none!important}
+ #mbn-home{order:1}#mbn-add{order:2}#mbn-collect{order:3}#mbn-chat{order:4}#mbn-menu{order:5}
  .mbn-btn{min-height:52px;gap:2px;border-radius:12px;opacity:.9}
  .mbn-ic{font-size:24px;line-height:1;display:flex;align-items:center;justify-content:center}
  .mbn-label{font-size:12px;font-weight:500}
@@ -5608,8 +5625,38 @@ body.dark-mode .btn-outline{border-color:var(--gold-300)!important;color:var(--g
         // ============================================================
         // 👉 নিচের URL-টি আপনার ডিপ্লয় করা Apps Script Web App-এর URL দিয়ে বদলে দিন।
         // (দেখুন: Code.gs ফাইল ও তার সাথে দেওয়া "পাবলিশ করার নির্দেশনা")
-        const IMAGE_UPLOAD_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxK5kpYK9eYjt0J6LTfsS4iSx-G0Ya25Us0vluEYYTtn2uNPZY1r3PITiL3Z8tozX2S/exec';
-        window.mfScriptUrl = IMAGE_UPLOAD_SCRIPT_URL;   // [v16.5.19] সার্ভার-লেজারে (Apps Script) ঝুঁকিপূর্ণ-কাজের দ্বিতীয় কপি পাঠাতে
+        // 🆕 [v16.5.69] Apps Script Web App URL এখন সেটিংসে বদলানো যায় (Firestore app_settings/script_url — লেখা শুধু এডমিন, পড়া সাইন-ইন সবাই)। এডমিন বদলালে সব প্যানেল/ইউজার নতুন URL ধরে; HTML বদলাতে হয় না। ছবি-আপলোড, ইমেইল, অডিট ও (সেট থাকলে) AI একই URL ব্যবহার করে।
+        const DEFAULT_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxK5kpYK9eYjt0J6LTfsS4iSx-G0Ya25Us0vluEYYTtn2uNPZY1r3PITiL3Z8tozX2S/exec';
+        const SCRIPT_URL_KEY = 'mahfil_script_url_v1';
+        const isScriptUrl = (v) => /^https:\/\/script\.google\.com\/macros\/s\/[A-Za-z0-9_\-]+\/exec$/.test(String(v || ''));
+        let IMAGE_UPLOAD_SCRIPT_URL = (() => { try { const v = localStorage.getItem(SCRIPT_URL_KEY); if (isScriptUrl(v)) { window.mfScriptUrlCustom = true; return v; } } catch (e) { } return DEFAULT_SCRIPT_URL; })();
+        window.mfScriptUrl = IMAGE_UPLOAD_SCRIPT_URL;
+        const mfApplyScriptUrl = (u, persist) => {
+            if (!isScriptUrl(u)) return false;
+            IMAGE_UPLOAD_SCRIPT_URL = u; window.mfScriptUrl = u; window.mfScriptUrlCustom = true;
+            try { GAS_EMAIL_ENDPOINT_URL = u; } catch (e) { }
+            if (persist) { try { localStorage.setItem(SCRIPT_URL_KEY, u); } catch (e) { } }
+            return true;
+        };
+        let _suAt = 0;
+        const mfLoadScriptUrl = async () => {
+            _suAt = Date.now();
+            try {
+                const { doc, getDoc } = window._firestore;
+                const sn = await getDoc(doc(window._firestoreDb, 'app_settings', 'script_url'));
+                if (sn.exists() && isScriptUrl(sn.data().url)) { mfApplyScriptUrl(sn.data().url, true); return; }
+                // 🆕 [v16.5.71] আলাদা URL সংরক্ষণ না থাকলে — সেটিংসে আগে থেকে সংরক্ষিত AI-প্রক্সির URL (app_settings/ai_public.url, একই Code_combined স্ক্রিপ্ট) থেকেই নেওয়া; HTML-এর পুরনো ডিফল্ট শেষ ভরসা
+                try {
+                    const ai = await getDoc(doc(window._firestoreDb, 'app_settings', 'ai_public'));
+                    if (ai.exists() && isScriptUrl(ai.data().url)) { mfApplyScriptUrl(ai.data().url, true); return; }
+                } catch (e) { }
+                try { localStorage.removeItem(SCRIPT_URL_KEY); } catch (e) { }
+            } catch (e) { console.warn('[Script URL] পড়া যায়নি:', e && e.code || e); }
+        };
+        // 🔧 [v16.5.64/72] পেজ আবার সামনে এলে (ফোন ফিরে খুললে) ১ মিনিটের বেশি পুরনো হলে URL আবার পড়া — এডমিন URL বদলালে ইউজার রিলোড ছাড়াই ধরে
+        document.addEventListener('visibilitychange', () => { if (!document.hidden && window._firestore && window._firestoreDb && window.currentUser && Date.now() - _suAt > 60000) mfLoadScriptUrl(); });
+        (() => { let n = 0; const t = setInterval(() => { n++; if (window._firestore && window._firestoreDb && window.currentUser) { clearInterval(t); mfLoadScriptUrl(); } else if (n > 600) clearInterval(t); }, 1000); })();
+        // (mfScriptUrl এখন ওপরে সেট হয়) [v16.5.19] সার্ভার-লেজারে (Apps Script) ঝুঁকিপূর্ণ-কাজের দ্বিতীয় কপি পাঠাতে
         // 🆕 [নোটিশ-ছবি] নোটিশে আপলোড করা ছবিগুলোর Drive ফোল্ডার — "📁 ড্রাইভ ফোল্ডার" বাটনে এই লিংকটাই ব্যবহৃত হবে
         const NOTICE_DRIVE_FOLDER_URL = 'https://drive.google.com/drive/folders/1tu907iQJ5gS57OtwTLP4JyB3vjEV25aS?usp=sharing';
         // 🆕 [ফোল্ডার-রাউটিং] সদস্য/ইউজার/লোগোর ছবির (নোটিশ ছাড়া বাকি সব) ডিফল্ট Drive ফোল্ডার —
@@ -7591,13 +7638,13 @@ body.dark-mode .btn-outline{border-color:var(--gold-300)!important;color:var(--g
             };
             document.getElementById('drv-save').onclick = save;
             document.getElementById('drv-diag').onclick = async () => {
-                const out = document.getElementById('drv-diag-out'); out.textContent = '⏳ যাচাই হচ্ছে...';
+                const out = document.getElementById('drv-diag-out'); const _tail = '\n🔗 অ্যাপ এখন যে URL ডাকছে: …' + String(IMAGE_UPLOAD_SCRIPT_URL).slice(-22); out.textContent = '⏳ যাচাই হচ্ছে...';
                 try {
                     const res = await fetch(IMAGE_UPLOAD_SCRIPT_URL, { method: 'POST', headers: { 'Content-Type': 'text/plain;charset=utf-8' },
                         body: JSON.stringify({ action: 'diag_folders', idToken: (window.mfGetIdToken ? await window.mfGetIdToken() : '') }) });
                     let j; try { j = JSON.parse(await res.text()); } catch (e) { out.textContent = '❌ সার্ভার থেকে সঠিক উত্তর আসেনি — Apps Script-এ Web App ডিপ্লয়/অ্যাক্সেস "Anyone" ঠিক আছে কিনা দেখুন।'; return; }
-                    if (!j.success) { out.textContent = '❌ ' + (j.error || 'ব্যর্থ') + (/অজানা অনুরোধ/.test(j.error || '') ? '\n→ ডিপ্লয়-করা স্ক্রিপ্ট পুরনো! Code_combined_v16_5_33.gs পেস্ট করে Deploy → Manage deployments → ✏️ Edit → Version: "New version" → Deploy করুন।' : ''); return; }
-                    out.textContent = '✅ চলমান স্ক্রিপ্ট: ' + j.version + '\n' + (j.items || []).map(i => (i.ok === false ? '❌ ' : '✅ ') + i.label + ' → ' + (i.name ? '📁 ' + i.name : (i.error || 'অটো সাব-ফোল্ডার')) + ' [' + i.source + ']').join('\n');
+                    if (!j.success) { out.textContent = '❌ ' + (j.error || 'ব্যর্থ') + (/অজানা অনুরোধ/.test(j.error || '') ? '\n→ এই URL-এর স্ক্রিপ্ট পুরনো (অথবা অ্যাপ এখনো পুরনো URL ডাকছে)। উপরের "🔗 Apps Script Web App URL" ঘরে নতুন deployment-এর /exec URL বসিয়ে সংরক্ষণ করুন।' : '') + _tail; return; }
+                    out.textContent = '✅ চলমান স্ক্রিপ্ট: ' + j.version + _tail + '\n' + (j.items || []).map(i => (i.ok === false ? '❌ ' : '✅ ') + i.label + ' → ' + (i.name ? '📁 ' + i.name : (i.error || 'অটো সাব-ফোল্ডার')) + ' [' + i.source + ']').join('\n');
                 } catch (e) { out.textContent = '❌ ' + (e.message || e); }
             };
             document.getElementById('drv-reset').onclick = () => confirmDelete('সব মেনুর ফোল্ডার ডিফল্টে ফিরবে?', async () => {
@@ -7609,6 +7656,42 @@ body.dark-mode .btn-outline{border-color:var(--gold-300)!important;color:var(--g
                 } catch (e) { toast('❌ ' + (e && e.code || e.message)); }
             });
         };
+        // 🆕 [v16.5.69] সেটিংসে Apps Script URL — যাচাই (GET ভার্সন) করে Firestore app_settings/script_url-এ সংরক্ষণ
+        const wireScriptUrlSettings = () => {
+            const inp = document.getElementById('s-script-url'); if (!inp) return;
+            const st = document.getElementById('script-url-st');
+            inp.value = IMAGE_UPLOAD_SCRIPT_URL;
+            mfLoadScriptUrl().then(() => { inp.value = IMAGE_UPLOAD_SCRIPT_URL; });
+            const persistRemote = async (url) => {
+                const { doc, setDoc } = window._firestore;
+                await setDoc(doc(window._firestoreDb, 'app_settings', 'script_url'), { url, updatedAt: new Date().toISOString(), updatedBy: (window.currentUser && window.currentUser.email) || '' });
+            };
+            document.getElementById('script-url-save').onclick = async () => {
+                const v = (inp.value || '').trim();
+                if (!isScriptUrl(v)) { st.textContent = '❌ URL ঠিক নয় (https://script.google.com/macros/s/…/exec)'; return; }
+                st.textContent = '⏳ যাচাই হচ্ছে...';
+                let ver = '';
+                try { const r = await fetch(v, { method: 'GET' }); const j = JSON.parse(await r.text()); ver = j.version || ''; } catch (e) { }
+                const doSave = async () => {
+                    try {
+                        await persistRemote(v); mfApplyScriptUrl(v, true);
+                        addActivityLog('add', 'settings', '', 'Apps Script URL হালনাগাদ');
+                        st.textContent = '✅ সংরক্ষিত' + (ver ? ' — স্ক্রিপ্ট ' + ver : ''); toast('✅ Apps Script URL সংরক্ষিত');
+                    } catch (e) { st.textContent = '❌ ' + (e && e.code || e.message); }
+                };
+                if (!ver) { st.textContent = '⚠️ এই URL থেকে স্ক্রিপ্টের সাড়া আসেনি'; confirmDelete('এই URL থেকে স্ক্রিপ্টের ভার্সন পাওয়া যায়নি (ডিপ্লয়/অ্যাক্সেস "Anyone" ঠিক আছে কিনা দেখুন)। তবুও সংরক্ষণ করবেন?', doSave); }
+                else await doSave();
+            };
+            document.getElementById('script-url-reset').onclick = () => confirmDelete('সেটিংসের URL মুছে HTML-এর ডিফল্ট URL-এ ফিরবেন?', async () => {
+                try {
+                    const { doc, setDoc } = window._firestore;
+                    await setDoc(doc(window._firestoreDb, 'app_settings', 'script_url'), { url: '', updatedAt: new Date().toISOString() });
+                    try { localStorage.removeItem(SCRIPT_URL_KEY); } catch (e) { }
+                    IMAGE_UPLOAD_SCRIPT_URL = DEFAULT_SCRIPT_URL; window.mfScriptUrl = DEFAULT_SCRIPT_URL; window.mfScriptUrlCustom = false; try { GAS_EMAIL_ENDPOINT_URL = DEFAULT_SCRIPT_URL; } catch (e) { }
+                    inp.value = DEFAULT_SCRIPT_URL; st.textContent = '↺ ডিফল্টে ফিরেছে';
+                } catch (e) { st.textContent = '❌ ' + (e && e.code || e.message); }
+            });
+        };
         const settingsFormHtml = () => {
             const s = state.settings;
             const mn = s.monthNames || CONFIG.DEFAULT_SETTINGS.monthNames;
@@ -7618,6 +7701,16 @@ body.dark-mode .btn-outline{border-color:var(--gold-300)!important;color:var(--g
             <div style="border-bottom:1px dashed var(--line);padding-bottom:12px;margin-bottom:12px;">
               <div class="field"><label>লোগো (ইমোজি বা অক্ষর)</label><input type="text" id="s-logo" value="${escapeHtml(s.logo)}" maxlength="4"></div>
               ${imageUploadFieldHtml('s-logo-url', s.logoUrl || '', 'লোগো ছবি')}
+              <div class="field" id="script-url-box" style="border:1px solid var(--line);border-radius:10px;padding:10px 12px;">
+                <label for="s-script-url">🔗 Apps Script Web App URL (ছবি আপলোড · ইমেইল · অডিট · AI)</label>
+                <input type="text" id="s-script-url" value="" inputmode="url" autocomplete="off" placeholder="https://script.google.com/macros/s/…/exec">
+                <div class="small muted" style="margin:4px 0 6px;">নতুন deployment করলে এখানে নতুন /exec URL বসিয়ে সংরক্ষণ করুন — সব প্যানেল (এডমিন, ইউজার, AI) এটি ধরবে; HTML বদলাতে হবে না। (নোটিফিকেশনের আলাদা স্ক্রিপ্ট নিচের ঘরে।)</div>
+                <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center;">
+                  <button type="button" class="btn btn-outline btn-sm" id="script-url-save">💾 URL যাচাই ও সংরক্ষণ</button>
+                  <button type="button" class="btn btn-outline btn-sm" id="script-url-reset">↺ ডিফল্ট</button>
+                  <span id="script-url-st" class="small"></span>
+                </div>
+              </div>
               <div class="field" id="notify-box" style="border:1px solid var(--line);border-radius:10px;padding:10px 12px;">
                 <label for="s-notify-url">🔔 নোটিফিকেশন — Apps Script Web App URL</label>
                 <input type="text" id="s-notify-url" value="${escapeHtml(s.notifyUrl || '')}" placeholder="https://script.google.com/macros/s/…/exec" inputmode="url" autocomplete="off">
@@ -8028,6 +8121,7 @@ body.dark-mode .btn-outline{border-color:var(--gold-300)!important;color:var(--g
                 document.getElementById('f-save').onclick = saveSettings;
                 wireImageUploadField('s-logo-url', () => ({ name: 'logo', mobile: '' }), DEFAULT_DRIVE_FOLDER_ID);
                 wireDriveFolderSettings();
+                wireScriptUrlSettings();
                 // 🆕 [v16.5.53] নোটিফিকেশন Web App URL: পরীক্ষা / এখনই চালান (URL-টি সেটিংস "সংরক্ষণ"-এ সেভ হয়)
                 (() => {
                     const inp = document.getElementById('s-notify-url'), st = document.getElementById('notify-st'); if (!inp) return;
@@ -9647,7 +9741,7 @@ body.dark-mode .btn-outline{border-color:var(--gold-300)!important;color:var(--g
         // 🆕 STEP 9 — বকেয়া/পরিশোধিত তালিকার ডিফল্ট কলাম-সংজ্ঞা
         // 🆕 [ধাপ ৬] এখন ছবি/আইডি নং/ইমেইল-ও যোগ করা হলো (ডিফল্টভাবে লুকানো — visible:false
         // দিয়ে দিচ্ছি না কারণ getColumnConfig() নতুন কলামের জন্য এমনিতেই visible:true
-        // ডিফল্ট ধরে, তাই এডমিন "⚙️ কলাম সেটিংস" থেকে যা দরকার নেই তা লুকিয়ে নেবেন)
+        // ডিফল্ট ধরে, তাই এডমিন "⚙️ টেবিল সেটিংস" থেকে যা দরকার নেই তা লুকিয়ে নেবেন)
         window.YEARLY_UNPAID_DEFAULT_COLUMNS = [
             { key: 'no', label: 'নং' }, { key: 'image', label: 'ছবি' }, { key: 'idNumber', label: 'আইডি নং' },
             { key: 'name', label: 'নাম' }, { key: 'father', label: 'পিতা/স্বামী' },
@@ -9709,7 +9803,7 @@ body.dark-mode .btn-outline{border-color:var(--gold-300)!important;color:var(--g
             closeModal();
             if (typeof onSaved === 'function') onSaved();
             else if (typeof window.renderMain === 'function') window.renderMain();
-            toast('✅ কলাম সেটিংস সংরক্ষণ করা হয়েছে');
+            toast('✅ টেবিল সেটিংস সংরক্ষণ করা হয়েছে');
         };
         window.saveColumnSettingsFromModal = saveColumnSettingsFromModal;
         // পুরনো নাম (STEP 3-এ ব্যবহৃত) এখনো কল হতে পারে এমন কোথাও থাকলে ভেঙে না যায়,
@@ -10098,7 +10192,7 @@ body.dark-mode .btn-outline{border-color:var(--gold-300)!important;color:var(--g
             })() : ''}
             <div style="margin-bottom:8px;">
               <div style="font-weight:700;margin-bottom:8px;">📏 কলামের প্রস্থ (এক্সপোর্টে)</div>
-              <p class="small muted" style="margin:0 0 8px;">কোন কলাম দেখাবেন তা "⚙️ কলাম সেটিংস" থেকে ঠিক করুন — এখানে শুধু বর্তমানে দৃশ্যমান কলামগুলোর এক্সপোর্ট-প্রস্থ সেট করা যাবে।</p>
+              <p class="small muted" style="margin:0 0 8px;">কোন কলাম দেখাবেন তা "⚙️ টেবিল সেটিংস" থেকে ঠিক করুন — এখানে শুধু বর্তমানে দৃশ্যমান কলামগুলোর এক্সপোর্ট-প্রস্থ সেট করা যাবে।</p>
               <div style="display:flex;flex-direction:column;gap:8px;max-height:34vh;overflow-y:auto;padding-right:4px;">
                 ${visibleCols.length ? visibleCols.map(c => _exportColumnWidthRowHtml(c.key, c.label, prefs.columnWidths[c.key])).join('') : '<div class="small muted">কোনো দৃশ্যমান কলাম নেই।</div>'}
               </div>
@@ -13291,7 +13385,7 @@ body.dark-mode .btn-outline{border-color:var(--gold-300)!important;color:var(--g
         // ======================================================================
         // ⚠️ নিচের URL-টা আপনার নিজের ডিপ্লয় করা Google Apps Script Web App-এর URL দিয়ে
         // প্রতিস্থাপন করুন (script.google.com > Deploy > New deployment > Web app)
-        const GAS_EMAIL_ENDPOINT_URL = 'https://script.google.com/macros/s/AKfycbxK5kpYK9eYjt0J6LTfsS4iSx-G0Ya25Us0vluEYYTtn2uNPZY1r3PITiL3Z8tozX2S/exec';
+        let GAS_EMAIL_ENDPOINT_URL = window.mfScriptUrl || 'https://script.google.com/macros/s/AKfycbxK5kpYK9eYjt0J6LTfsS4iSx-G0Ya25Us0vluEYYTtn2uNPZY1r3PITiL3Z8tozX2S/exec';
 
         let _jsPdfPromise = null;
         const ensureJsPDF = () => {
@@ -13641,7 +13735,7 @@ body.dark-mode .btn-outline{border-color:var(--gold-300)!important;color:var(--g
                         <input type="text" class="tk-label" maxlength="30" value="${escapeHtml(x.label)}" placeholder="${escapeHtml(x.h)}">
                         <input type="number" class="tk-w" min="0" max="90" value="${x.w || ''}" placeholder="অটো">
                         <span style="display:flex;gap:2px;"><button type="button" class="btn btn-outline btn-sm" data-mv="-1" style="padding:2px 8px;">↑</button><button type="button" class="btn btn-outline btn-sm" data-mv="1" style="padding:2px 8px;">↓</button></span></div>`).join('');
-                    const box = openMod(window.mfIc('cols', 20) + ' কলাম সেটিংস — ' + escapeHtml(titleOf(tb)), `
+                    const box = openMod(window.mfIc('cols', 20) + ' টেবিল সেটিংস — ' + escapeHtml(titleOf(tb)), `
                       <div class="small muted" style="margin-bottom:8px;">কলাম দেখাও/লুকাও, নাম বদলাও, প্রস্থ (% — ফাঁকা = অটো) ও ক্রম ঠিক করুন। শুধু এডমিন বদলাতে পারেন।</div>
                       <div class="small muted" style="display:grid;grid-template-columns:34px 1fr 1fr 70px 60px;gap:6px;"><span>দেখাও</span><span>মূল নাম</span><span>নতুন নাম</span><span>প্রস্থ %</span><span>ক্রম</span></div>
                       <div id="tk-list">${rowsHtml()}</div>
@@ -13682,7 +13776,7 @@ body.dark-mode .btn-outline{border-color:var(--gold-300)!important;color:var(--g
                         const tb = tableOfBar(bar); if (!tb || skipTable(tb)) return;
                         bar.setAttribute('data-mf-tk-done', '1');
                         let html = '';
-                        if (!keyedTable(tb)) html += barBtn('mf-tk-cols', 'cols', 'কলাম সেটিংস', 'এই টেবিলের কলাম দেখাও/লুকাও, নাম, প্রস্থ ও ক্রম');
+                        if (!keyedTable(tb)) html += barBtn('mf-tk-cols', 'cols', 'টেবিল সেটিংস', 'এই টেবিলের কলাম দেখাও/লুকাও, নাম, প্রস্থ ও ক্রম');
                         html += barBtn('mf-tk-box', 'tsize', 'টেবিল সেটিংস', 'পুরো টেবিলের প্রস্থ ও উচ্চতা (কম্পিউটার/মোবাইল আলাদা)');
                         bar.insertAdjacentHTML('afterbegin', html);
                     });
@@ -13732,7 +13826,7 @@ body.dark-mode .btn-outline{border-color:var(--gold-300)!important;color:var(--g
             const cellStyle = 'white-space:normal !important;max-width:none !important;overflow:visible !important;text-overflow:clip !important;word-break:break-word;';
             const fs = cfg.fontSize;
             const stRows = [
-                ...monthlyRows.map(r => ({ c: { item: 'মাসিক — ' + escapeHtml(r.month || ''), date: fmtDate(r.date), amount: fmtMoney(r.amount) } })),
+                ...monthlyRows.map(r => ({ c: { item: 'মাসিক — ' + escapeHtml((typeof txnMonthLabel === 'function' ? txnMonthLabel(r.month) : r.month) || r.month || ''), date: fmtDate(r.date), amount: fmtMoney(r.amount) } })),
                 ...yearlyRows.map(r => ({ c: { item: 'বার্ষিক', date: fmtDate(r.date), amount: fmtMoney(r.amount) } }))
             ];
             const stTable = window.rcRenderTable(cfg, 'statement', stRows, { fs, mb: 16 });
@@ -13876,9 +13970,9 @@ body.dark-mode .btn-outline{border-color:var(--gold-300)!important;color:var(--g
             const th = (v, x) => `<th style="text-align:left;border-bottom:1px solid #ccc;padding:6px 8px;${cell}${x || ''}">${v}</th>`;
             const kv = (label, val) => (val === undefined || val === null || val === '') ? '' : `<tr>${td(escapeHtml(label), 'color:#6b6350;width:' + cfg.tableStyle.kvWidth + '%;')}${td('<strong>' + escapeHtml(val) + '</strong>')}</tr>`;
             const tbl = (inner) => `<table style="width:100%;border-collapse:collapse;margin-bottom:14px;table-layout:auto;font-size:${fs}px !important;">${inner}</table>`;
-            const monthLabel = isMonthly ? txnMonthLabel(e.month) : '';
+            const monthLabel = isMonthly ? (e.__monthsLabel || txnMonthLabel(e.month)) : '';
             const kindLabel = isMonthly ? 'মাসিক অনুদান' + (monthLabel ? ' — ' + monthLabel : '') : 'বার্ষিক/এককালীন অনুদান';
-            const same = (x) => x === e || (x && e && x.id && x.id === e.id);
+            const same = (x) => x === e || (x && e && x.id && (x.id === e.id || (e.__ids && e.__ids.indexOf(x.id) >= 0)));
             const hl = 'background:rgba(0,0,0,0.06);font-weight:700;';
             const sec = (title) => `<div style="font-weight:700;margin:14px 0 6px;font-size:${fs}px;">${escapeHtml(title)}</div>`;
 
@@ -13891,6 +13985,12 @@ body.dark-mode .btn-outline{border-color:var(--gold-300)!important;color:var(--g
             body += `<div class="pill active" style="font-size:${fs + 2}px;padding:10px 18px;display:inline-block;margin:4px 0 12px;">${escapeHtml(cfg.labelAmount)}: ${fmtMoney(e.amount)}</div>`;
 
             let extras = '';
+            // 🆕 [v16.5.81] একাধিক মাস একসাথে দিলে: মাসভিত্তিক বিবরণ-টেবিল (মাস | টাকা) + মোট — পেশাদার যৌথ রিসিপ্ট
+            if (e.__breakdown && e.__breakdown.length > 1 && show.breakdown !== false) {
+                extras += sec('মাসভিত্তিক বিবরণ') + tbl(
+                    e.__breakdown.map(b => kv(b.label, fmtMoney(b.amount))).join('') +
+                    `<tr>${td('<strong>মোট</strong>', 'color:#222;')}${td('<strong>' + escapeHtml(fmtMoney(e.amount)) + '</strong>')}</tr>`);
+            }
             if (type === 'detailed') {
                 const mSum = state.monthly.filter(r => r.memberId === m.id).reduce((a, r) => a + (Number(r.amount) || 0), 0);
                 const ySum = state.yearly.filter(r => r.memberId === m.id).reduce((a, r) => a + (Number(r.amount) || 0), 0);
@@ -14546,10 +14646,16 @@ body.dark-mode .btn-outline{border-color:var(--gold-300)!important;color:var(--g
         // প্রকৃত জারি — সফল ইমেইল-পাঠানো/রেজিস্টারের "নম্বর দিন" থেকে; একবার দিলে স্থায়ী
         const issueRnoCore = (t, when, noSave) => {
             const cfg = getRnoCfg(), d = when || new Date(), m = rnoMapW(), key = rnoSeriesKey(cfg, d);
+            // 🆕 [v16.5.83] একই গ্রুপের (একাধিক মাস একসাথে) এন্ট্রি হলে আগের নম্বরই ব্যবহার — নতুন ক্রম খরচ হয় না
+            { const G = window.mfRnoGroup, gi = m.grp && m.grp[t.entry.id]; let reuse = '';
+              if (G && G.no) reuse = G.no;
+              else if (gi) { const peer = Object.keys(m.grp).find(k => k !== t.entry.id && m.grp[k] && m.grp[k].g === gi.g && m.assigned[k]); if (peer) reuse = m.assigned[peer]; }
+              if (reuse) { m.assigned[t.entry.id] = reuse; if (G) G.ids.push(t.entry.id); if (!noSave) { try { saveState(); } catch (e) { } } return reuse; } }
             const used = new Set(Object.keys(m.assigned).map(k => m.assigned[k]));
             let n = (m.seq[key] === undefined || m.seq[key] === null) ? cfg.start : Number(m.seq[key]) + 1, no = rnoFormat(n, cfg, d), guard = 0;
             while (used.has(no) && guard++ < 100000) { n++; no = rnoFormat(n, cfg, d); }
             m.seq[key] = n; m.assigned[t.entry.id] = no;
+            if (window.mfRnoGroup && !window.mfRnoGroup.no) { window.mfRnoGroup.no = no; window.mfRnoGroup.ids = [t.entry.id]; }
             if (!noSave) { try { saveState(); } catch (e) { } }
             return no;
         };
@@ -14588,7 +14694,8 @@ body.dark-mode .btn-outline{border-color:var(--gold-300)!important;color:var(--g
         try { rnoInit(); } catch (e) { }
         setInterval(() => { try { if (state && state.settings && !(state.settings.receiptNoMap && Array.isArray(state.settings.receiptNoMap.base))) rnoInit(); } catch (e) { } }, 300);   // ক্লাউড থেকে ডেটা এলে স্ন্যাপশট মিলিয়ে নেয়
         // ---------- "জানানো হয়েছে?" অবস্থা (ইমেইল বা অন্য মাধ্যমে) ----------
-        const NOTIFY_VIAS = ['ইমেইল', 'এসএমএস', 'ফোন', 'হোয়াটসঅ্যাপ', 'সরাসরি', 'অন্যান্য'];
+        const NOTIFY_VIAS = ['ইমেইল', 'হোয়াটসঅ্যাপ', 'মেসেঞ্জার', 'শেয়ার', 'এসএমএস', 'ফোন', 'সরাসরি', 'অন্যান্য'];
+        const viasOf = (nt) => (nt && Array.isArray(nt.vias) && nt.vias.length) ? nt.vias : String((nt && nt.via) || '').split(/\s*,\s*/).filter(Boolean);
         const notifyOf = (t) => {
             const e = t && t.entry; if (!e) return null;
             const mp = (state.settings && state.settings.receiptNoMap && state.settings.receiptNoMap.notified) || {};
@@ -14597,8 +14704,54 @@ body.dark-mode .btn-outline{border-color:var(--gold-300)!important;color:var(--g
             const l = no ? (state.activityLog || []).find(x => x && x.action === 'email' && x.extra && x.extra.ref === no) : null;
             return l ? { via: 'ইমেইল', at: l.timestamp, auto: true } : null;
         };
-        const notifySet = (entryId, via, at) => { const m = rnoMapW(); if (!m.notified || typeof m.notified !== 'object') m.notified = {}; m.notified[entryId] = { via: via || 'ইমেইল', at: at || new Date().toISOString() }; try { saveState(); } catch (e) { } };
+        const notifySet = (entryId, via, at) => { const m = rnoMapW(); if (!m.notified || typeof m.notified !== 'object') m.notified = {}; const vs = Array.isArray(via) ? via.filter(Boolean) : [via || 'ইমেইল']; m.notified[entryId] = { via: vs.join(', '), vias: vs, at: at || new Date().toISOString() }; try { saveState(); } catch (e) { } };
+        // 🆕 [v16.5.79] একাধিক মাধ্যম জমা হয় (ইমেইল + হোয়াটসঅ্যাপ…) — আগেরগুলো মুছে না
+        const notifyAdd = (entryId, via, at) => { const m = rnoMapW(); if (!m.notified || typeof m.notified !== 'object') m.notified = {}; const old = viasOf(m.notified[entryId]); const vs = old.indexOf(via) >= 0 ? old : old.concat([via]); m.notified[entryId] = { via: vs.join(', '), vias: vs, at: at || new Date().toISOString() }; try { saveState(); } catch (e) { } };
+        window.mfNotifyAdd = (ids, via) => { (Array.isArray(ids) ? ids : [ids]).forEach(id => { if (id) notifyAdd(id, via); }); try { renderMain(); } catch (e) { } };
         const notifyClear = (entryId) => { const m = rnoMapW(); if (m.notified) delete m.notified[entryId]; try { saveState(); } catch (e) { } };
+        window.mfRnoGroupBegin = () => { window.mfRnoGroup = { no: null, ids: [] }; return window.mfRnoGroup; };
+        window.mfRnoGroupEnd = (G) => {
+            const cur = window.mfRnoGroup; window.mfRnoGroup = null;
+            if (!G || !cur || !Array.isArray(cur.ids) || cur.ids.length < 2) return;
+            const m = rnoMapW(); if (!m.grp || typeof m.grp !== 'object') m.grp = {};
+            cur.ids.forEach((id, i) => { m.grp[id] = { g: cur.ids[0], i: i + 1, n: cur.ids.length }; });
+            try { saveState(); } catch (e) { }
+        };
+        // 🆕 [v16.5.83] "১/৪" চিহ্ন — একাধিক মাসের একসাথে-দেওয়া টাকার একই রিসিপ্ট নম্বরের অংশ
+        window.mfGrpTag = (id) => { const g = id && state.settings && state.settings.receiptNoMap && state.settings.receiptNoMap.grp && state.settings.receiptNoMap.grp[id]; return (g && g.n > 1) ? (toBengaliNum(g.i) + '/' + toBengaliNum(g.n)) : ''; };
+        // 🆕 [v16.5.84] একসাথে-দেওয়া একাধিক মাসের গ্রুপ হলে — পুরো গ্রুপের যৌথ লেনদেন (মোট টাকা + মাসভিত্তিক বিবরণ); নইলে যেমন ছিল তেমনই
+        const groupTxnOf = (t) => {
+            try {
+                const e = t && t.entry, mp = state.settings && state.settings.receiptNoMap, g = e && mp && mp.grp && mp.grp[e.id];
+                if (!e || t.kind !== 'monthly' || !g || !(g.n > 1)) return t;
+                const mem = state.monthly.filter(x => mp.grp[x.id] && mp.grp[x.id].g === g.g && Number(x.amount) > 0).sort((a, b) => mp.grp[a.id].i - mp.grp[b.id].i);
+                if (mem.length < 2) return t;
+                const labs = mem.map(x => txnMonthLabel(x.month));
+                const lbl = labs.length > 3 ? (labs[0] + ' থেকে ' + labs[labs.length - 1] + ' (' + toBengaliNum(labs.length) + ' মাস)') : labs.join(', ');
+                const sum = mem.reduce((a, x) => a + (Number(x.amount) || 0), 0);
+                return { kind: 'monthly', entry: Object.assign({}, mem[0], { amount: sum, __monthsLabel: lbl, __ids: mem.map(x => x.id), __breakdown: mem.map((x, i) => ({ label: labs[i], amount: Number(x.amount) || 0 })) }) };
+            } catch (e) { return t; }
+        };
+        window.mfGroupTxn = groupTxnOf;
+        // 🆕 [v16.5.85] ডাউনলোডের সময় বাছাই: মাসভিত্তিক বিবরণসহ / বিবরণ ছাড়া (শুধু একাধিক-মাসের গ্রুপে জিজ্ঞেস করে; একক মাসে সরাসরি)
+        const groupTxnForDownload = (t0) => new Promise(res => {
+            const g = groupTxnOf(t0);
+            if (g === t0 || !g.entry || !g.entry.__breakdown) { res(t0); return; }
+            let done = false; const fin = (v) => { if (done) return; done = true; try { closeModal(); } catch (e) { } res(v); };
+            openModal(`
+              <h3>কোন রিসিপ্ট ডাউনলোড করবেন?</h3>
+              <div class="small muted" style="margin-bottom:10px;">একসাথে দেওয়া ${escapeHtml(toBengaliNum(g.entry.__ids.length))} মাসের টাকা — একই রিসিপ্ট নম্বর, মোট ${escapeHtml(fmtMoney(g.entry.amount))}।</div>
+              <div class="modal-actions" style="flex-direction:column;align-items:stretch;gap:8px;">
+                <button type="button" class="btn btn-primary" id="gv-with">📋 মাসভিত্তিক বিবরণসহ</button>
+                <button type="button" class="btn btn-outline" id="gv-without">📄 বিবরণ ছাড়া (শুধু মোট ও মাসের নাম)</button>
+                <button type="button" class="btn btn-outline" id="gv-cancel">বাতিল</button>
+              </div>`, (back) => {
+                if (back && back.style) back.style.zIndex = '10200';   // ইমেইল-সেন্টারের (রেজিস্টার) উপরে দেখাতে
+                document.getElementById('gv-with').onclick = () => fin(g);
+                document.getElementById('gv-without').onclick = () => { const e2 = Object.assign({}, g.entry); delete e2.__breakdown; fin({ kind: 'monthly', entry: e2 }); };
+                document.getElementById('gv-cancel').onclick = () => fin(null);
+            });
+        });
         const rnoKindOf = (e) => (state.yearly || []).some(y => y.id === e.id) ? 'yearly' : 'monthly';
         // টেবিলের "রিসিপ্ট নং" সেল (মেথডের পরের কলাম) — নম্বর + জানানোর অবস্থা
         const rnoCellHtml = (e, kind) => {
@@ -14606,19 +14759,20 @@ body.dark-mode .btn-outline{border-color:var(--gold-300)!important;color:var(--g
             kind = kind || rnoKindOf(e);
             const t = { kind, entry: e }, a = rnoAssignedOf(e.id), nt = notifyOf(t);
             const noText = a || (rnoPending(t) ? '' : txnReceiptNo(t));
-            const noHtml = noText ? `<b class="rno-no">${escapeHtml(noText)}</b>` : '<span class="muted" title="ক্রমিক নম্বর এখনো জারি হয়নি — ইমেইল পাঠালে বা রিসিপ্ট রেজিস্টার থেকে জারি হবে">অজারি</span>';
-            const via = nt ? (nt.via || 'জানানো') : '';
+            const noHtml = noText ? `<b class="rno-no">${escapeHtml(noText)}</b>${window.mfGrpTag(e.id) ? ' <span class="small muted" title="একসাথে দেওয়া একাধিক মাসের টাকা — একই রিসিপ্ট নম্বর">' + window.mfGrpTag(e.id) + '</span>' : ''}` : '<span class="muted" title="ক্রমিক নম্বর এখনো জারি হয়নি — ইমেইল পাঠালে বা রিসিপ্ট রেজিস্টার থেকে জারি হবে">অজারি</span>';
+            const via = nt ? (viasOf(nt).join(', ') || 'জানানো') : '';
             const btn = nt
-                ? `<button type="button" class="rno-nt on" data-rno-nt="${escapeHtml(e.id)}" data-kind="${kind}" title="${escapeHtml('জানানো হয়েছে — ' + via + (nt.at ? ' · ' + String(nt.at).slice(0, 10) : '') + ' (বদলাতে ক্লিক)')}">${window.mfIc('check', 12)} ${escapeHtml(via)}</button>`
-                : `<button type="button" class="rno-nt off" data-rno-nt="${escapeHtml(e.id)}" data-kind="${kind}" title="সদস্যকে এখনো জানানো হয়নি — ক্লিক করে ইমেইল পাঠান বা অন্য মাধ্যমে জানানো চিহ্নিত করুন">${window.mfIc('circle', 12)} জানানো হয়নি</button>`;
+                ? `<button type="button" class="rno-nt on" data-rno-nt="${escapeHtml(e.id)}" data-kind="${kind}" title="${escapeHtml('পাঠানো হয়েছে — ' + via + (nt.at ? ' · ' + String(nt.at).slice(0, 10) : '') + ' (বদলাতে ক্লিক)')}">${window.mfIc('check', 12)} পাঠানো হয়েছে<span style="display:block;font-weight:400;font-size:11px;">${escapeHtml(via)}</span></button>`
+                : `<button type="button" class="rno-nt off" data-rno-nt="${escapeHtml(e.id)}" data-kind="${kind}" title="সদস্যকে এখনো পাঠানো হয়নি — ক্লিক করে ইমেইল পাঠান বা মাধ্যম চিহ্নিত করুন">${window.mfIc('circle', 12)} পাঠানো হয়নি</button>`;
             const jpg = `<button type="button" class="rno-nt rno-jpg" data-rno-jpg="${escapeHtml(e.id)}" data-kind="${kind}" title="এই রিসিপ্ট JPG ছবি হিসেবে ডাউনলোড">${window.mfIc ? window.mfIc('download', 12) : ''} JPG</button>`;
             return `<td class="small rno-td"><div class="rno-cell">${noHtml}<div style="display:flex;gap:4px;flex-wrap:wrap;">${btn}${jpg}</div></div></td>`;
         };
-        document.addEventListener('click', (ev) => {
+        document.addEventListener('click', async (ev) => {
             const jb = ev.target.closest && ev.target.closest('[data-rno-jpg]'); if (!jb) return;
             ev.preventDefault(); ev.stopPropagation();
             const id = jb.dataset.rnoJpg, kind = jb.dataset.kind, e = (kind === 'yearly' ? state.yearly : state.monthly).find(x => x.id === id); if (!e) return;
-            window.mfReceiptJpg({ kind, entry: e }, memberById(e.memberId), jb);
+            const _gt = await groupTxnForDownload({ kind, entry: e }); if (!_gt) return;
+            window.mfReceiptJpg(_gt, memberById(e.memberId), jb);
         }, true);
         document.addEventListener('click', (ev) => {
             const b = ev.target.closest && ev.target.closest('[data-rno-nt]'); if (!b) return;
@@ -14630,7 +14784,7 @@ body.dark-mode .btn-outline{border-color:var(--gold-300)!important;color:var(--g
               <h3>রিসিপ্ট ${escapeHtml(no || '—')} — জানানোর অবস্থা</h3>
               <div class="small muted" style="margin-bottom:8px;">${escapeHtml(mem ? mem.name : '')} · ${escapeHtml(fmtMoney(e.amount))} · ${escapeHtml(fmtDate(e.date) || '')}</div>
               <div style="margin-bottom:10px;">${nt ? `<span class="pill active">জানানো হয়েছে — ${escapeHtml(nt.via || '')}${nt.at ? ' · ' + escapeHtml(fmtDate(String(nt.at).slice(0, 10))) : ''}</span>` : '<span class="pill muted">এখনো জানানো হয়নি</span>'}</div>
-              <div class="field"><label class="small muted">কোন মাধ্যমে জানানো হয়েছে</label><select id="rno-via">${NOTIFY_VIAS.map(v => `<option ${nt && nt.via === v ? 'selected' : ''}>${v}</option>`).join('')}</select></div>
+              <div class="field"><label class="small muted">কোন মাধ্যমে পাঠানো হয়েছে (একাধিক বাছাই যায়)</label><div id="rno-via" style="display:flex;flex-wrap:wrap;gap:6px 14px;">${NOTIFY_VIAS.map(v => `<label style="display:flex;gap:4px;align-items:center;"><input type="checkbox" value="${v}" ${nt && viasOf(nt).indexOf(v) >= 0 ? 'checked' : ''}> ${v}</label>`).join('')}</div></div>
               <div class="modal-actions" style="flex-wrap:wrap;">
                 <button type="button" class="btn btn-outline" id="rno-cancel">বন্ধ করুন</button>
                 ${nt && !nt.auto ? '<button type="button" class="btn btn-outline" id="rno-clear">চিহ্ন সরান</button>' : ''}
@@ -14639,7 +14793,7 @@ body.dark-mode .btn-outline{border-color:var(--gold-300)!important;color:var(--g
               </div>`, () => {
                 const q = (x) => document.getElementById(x);
                 q('rno-cancel').onclick = closeModal;
-                q('rno-mark').onclick = () => { notifySet(id, q('rno-via').value); closeModal(); try { renderMain(); } catch (e2) { } toast('জানানোর অবস্থা সংরক্ষিত'); };
+                q('rno-mark').onclick = () => { const vs = Array.prototype.map.call(q('rno-via').querySelectorAll('input:checked'), x => x.value); if (!vs.length) { toast('অন্তত একটি মাধ্যম বাছাই করুন'); return; } notifySet(id, vs); closeModal(); try { renderMain(); } catch (e2) { } toast('জানানোর অবস্থা সংরক্ষিত'); };
                 if (q('rno-clear')) q('rno-clear').onclick = () => { notifyClear(id); closeModal(); try { renderMain(); } catch (e2) { } toast('চিহ্ন সরানো হয়েছে'); };
                 if (q('rno-mail')) q('rno-mail').onclick = () => { closeModal(); openEmailModal(mem.id, kind === 'monthly' ? 'monthly' : undefined, kind === 'monthly' ? e.month : undefined); };
             });
@@ -15678,9 +15832,22 @@ body.dark-mode .btn-outline{border-color:var(--gold-300)!important;color:var(--g
             const REG_PER = 40;
             const regRows = () => {
                 const rows = [];
-                const mk = (kind, e) => { if (!(Number(e.amount) > 0)) return; const m = memberById(e.memberId); rows.push({ kind, entry: e, m }); };
+                const gp = (state.settings && state.settings.receiptNoMap && state.settings.receiptNoMap.grp) || {};
+                const mk = (kind, e) => {
+                    if (!(Number(e.amount) > 0)) return; const m = memberById(e.memberId);
+                    const g = kind === 'monthly' ? gp[e.id] : null;
+                    if (g && g.n > 1) {
+                        const first = state.monthly.find(x => x.id === g.g && Number(x.amount) > 0);
+                        if (first && g.i > 1) return;     // মূল সারিতে একত্রে দেখানো হয়
+                        if (first && g.i === 1) { const mem = state.monthly.filter(x => gp[x.id] && gp[x.id].g === g.g && Number(x.amount) > 0); rows.push({ kind, entry: e, m, gAmt: mem.reduce((a, x) => a + (Number(x.amount) || 0), 0), gN: mem.length }); return; }
+                    }
+                    rows.push({ kind, entry: e, m });
+                };
                 state.monthly.forEach(e => mk('monthly', e)); state.yearly.forEach(e => mk('yearly', e));
-                rows.sort((a, b) => txnTime(b) - txnTime(a));
+                // 🔧 [v16.5.84] নতুন আগে: তারিখ (নতুন→পুরনো); একই তারিখে হলে সর্বশেষ রিসিপ্ট নম্বর/সর্বশেষ যোগ হওয়া আগে
+                const seqOf = (r) => { const no = String(rnoAssignedOf(r.entry.id) || '').replace(/[০-৯]/g, c => '০১২৩৪৫৬৭৮৯'.indexOf(c)); const mm = no.match(/(\d+)\s*$/); return mm ? parseInt(mm[1], 10) : 0; };
+                rows.forEach((r, i) => { r._i = i; r._s = seqOf(r); r._t = Math.max(txnTime(r), ...(r.gN > 1 ? state.monthly.filter(x => gp[x.id] && gp[x.id].g === (gp[r.entry.id] || {}).g).map(x => Date.parse(x.date || '') || 0) : [0])); });
+                rows.sort((a, b) => (b._t - a._t) || (b._s - a._s) || (b._i - a._i));
                 return rows;
             };
             const sentMapOf = () => { const mp = {}; (state.activityLog || []).forEach(l => { if (l && l.action === 'email' && l.extra && l.extra.ref) { const k = l.extra.ref; if (!mp[k] || String(l.timestamp) > String(mp[k])) mp[k] = l.timestamp; } }); return mp; };
@@ -15698,7 +15865,7 @@ body.dark-mode .btn-outline{border-color:var(--gold-300)!important;color:var(--g
                       <div class="hub-card" style="display:flex;gap:8px;flex-wrap:wrap;align-items:center;">
                         <input type="text" id="rg-q" placeholder="নম্বর / নাম / মোবাইল দিয়ে খুঁজুন" style="flex:2 1 200px;min-width:160px;">
                         <select id="rg-kind"><option value="">সব ধরন</option><option value="monthly">মাসিক</option><option value="yearly">বার্ষিক/এককালীন</option></select>
-                        <select id="rg-st"><option value="">সব অবস্থা</option><option value="issued">নম্বর জারি হয়েছে</option><option value="pending">নম্বর অজারি (ক্রমিক)</option><option value="legacy">পুরনো ধরনের নম্বর</option><option value="sent">ইমেইল পাঠানো</option><option value="unsent">ইমেইল পাঠানো হয়নি</option></select>
+                        <select id="rg-st"><option value="">সব অবস্থা</option><option value="issued">নম্বর জারি হয়েছে</option><option value="pending">নম্বর অজারি (ক্রমিক)</option><option value="legacy">পুরনো ধরনের নম্বর</option><option value="sent">পাঠানো হয়েছে</option><option value="unsent">পাঠানো হয়নি</option></select>
                         <input type="date" id="rg-from" title="এই তারিখ থেকে"><input type="date" id="rg-to" title="এই তারিখ পর্যন্ত">
                         <button type="button" class="btn btn-outline btn-sm" id="rg-csv">${ic('download')}CSV</button>
                       </div>
@@ -15708,7 +15875,7 @@ body.dark-mode .btn-outline{border-color:var(--gold-300)!important;color:var(--g
                     R.reg.querySelector('#rg-csv').onclick = () => {
                         const rows = filteredReg(), q2 = (v) => '"' + String(v == null ? '' : v).replace(/"/g, '""') + '"';
                         const sm = sentMapOf();
-                        const lines = [['রিসিপ্ট নং', 'সদস্য', 'মোবাইল', 'ধরন', 'তারিখ', 'পরিমাণ', 'মাধ্যম', 'সংগ্রাহক', 'ইমেইল পাঠানো'].map(q2).join(',')].concat(rows.map(r => { const no = regNoOf(r); return [no.text, r.m ? r.m.name : '', r.m ? r.m.mobile : '', r.kind === 'monthly' ? 'মাসিক' : 'বার্ষিক/এককালীন', r.entry.date || '', r.entry.amount, r.entry.method || '', r.entry.collector || '', sm[no.text] ? String(sm[no.text]).slice(0, 10) : ''].map(q2).join(','); }));
+                        const lines = [['রিসিপ্ট নং', 'সদস্য', 'মোবাইল', 'ধরন', 'তারিখ', 'পরিমাণ', 'মাধ্যম', 'সংগ্রাহক', 'পাঠানো'].map(q2).join(',')].concat(rows.map(r => { const no = regNoOf(r); return [no.text, r.m ? r.m.name : '', r.m ? r.m.mobile : '', r.kind === 'monthly' ? 'মাসিক' : 'বার্ষিক/এককালীন', r.entry.date || '', (r.gAmt != null ? r.gAmt : r.entry.amount), r.entry.method || '', r.entry.collector || '', (() => { const n = notifyOf({ kind: r.kind, entry: r.entry }); return n ? 'পাঠানো হয়েছে: ' + viasOf(n).join(' + ') : 'পাঠানো হয়নি'; })()].map(q2).join(','); }));
                         const blob = new Blob(['﻿' + lines.join('\n')], { type: 'text/csv;charset=utf-8' }), url = URL.createObjectURL(blob), a = document.createElement('a');
                         a.href = url; a.download = 'receipt-register.csv'; document.body.appendChild(a); a.click(); a.remove(); setTimeout(() => URL.revokeObjectURL(url), 4000);
                     };
@@ -15716,11 +15883,13 @@ body.dark-mode .btn-outline{border-color:var(--gold-300)!important;color:var(--g
                         const b = ev.target.closest('[data-rg]'); if (!b) return;
                         if (b.dataset.rg === 'page') { regPage = parseInt(b.dataset.p, 10) || 1; drawReg(); return; }
                         const row = regRows().find(r => r.entry.id === b.dataset.id); if (!row) return;
-                        const t = { kind: row.kind, entry: row.entry };
+                        const t0 = { kind: row.kind, entry: row.entry };
+                        let t = t0;
                         if (b.dataset.rg === 'issue') { const no = issueRno(t); toast('নম্বর জারি: ' + no); drawReg(); return; }
-                        if (b.dataset.rg === 'jpg') { await window.mfReceiptJpg(t, row.m, b); drawReg(); return; }
+                        if (b.dataset.rg === 'jpg') { t = await groupTxnForDownload(t0); if (!t) return; await window.mfReceiptJpg(t, row.m, b); drawReg(); return; }
                         if (b.dataset.rg === 'pdf') {
                             if (!row.m) { toast('এই লেনদেনের সদস্য পাওয়া যায়নি'); return; }
+                            t = await groupTxnForDownload(t0); if (!t) return;
                             if (rnoPending(t) && !window.confirm('এই রিসিপ্টের নম্বর এখনই জারি হবে (' + txnReceiptNo(t) + ') এবং স্থায়ী হবে। চালিয়ে যাবেন?')) return;
                             const orig = b.innerHTML; b.disabled = true; b.textContent = '...';
                             try {
@@ -15748,7 +15917,7 @@ body.dark-mode .btn-outline{border-color:var(--gold-300)!important;color:var(--g
                     const d = String(r.entry.date || '').slice(0, 10); if (f && d < f) return false; if (to && d > to) return false;
                     const no = regNoOf(r);
                     if (st === 'issued' || st === 'pending' || st === 'legacy') { if (no.st !== st) return false; }
-                    if (st === 'sent' && !sm[no.text]) return false; if (st === 'unsent' && sm[no.text]) return false;
+                    const _nt = notifyOf({ kind: r.kind, entry: r.entry }); if (st === 'sent' && !_nt) return false; if (st === 'unsent' && _nt) return false;
                     if (q) { const hay = bnToEnDigits([no.text, r.m ? r.m.name : '', r.m ? r.m.mobile : '', r.m ? r.m.idNumber : ''].join(' ')).toLowerCase(); if (hay.indexOf(q) === -1) return false; }
                     return true;
                 });
@@ -15762,13 +15931,13 @@ body.dark-mode .btn-outline{border-color:var(--gold-300)!important;color:var(--g
                 R.reg.querySelector('#rg-out').innerHTML = `
                   <div class="small muted" style="margin:4px 0;">মোট ${toBengaliNum(rows.length)}টি রিসিপ্ট${cfg.enabled ? '' : ' · ক্রমিক নম্বর বন্ধ (আগের ধরন)'}</div>
                   <div style="overflow-x:auto;"><table style="width:100%;border-collapse:collapse;min-width:820px;font-size:13px;">
-                    <thead><tr style="background:#164e43;color:#fff;"><th style="${th}">রিসিপ্ট নং</th><th style="${th}">সদস্য</th><th style="${th}">ধরন</th><th style="${th}">তারিখ</th><th style="${th}">পরিমাণ</th><th style="${th}">মাধ্যম</th><th style="${th}">ইমেইল পাঠানো</th><th style="${th}">কার্যক্রম</th></tr></thead>
+                    <thead><tr style="background:#164e43;color:#fff;"><th style="${th}">রিসিপ্ট নং</th><th style="${th}">সদস্য</th><th style="${th}">ধরন</th><th style="${th}">তারিখ</th><th style="${th}">পরিমাণ</th><th style="${th}">মাধ্যম</th><th style="${th}">পাঠানো</th><th style="${th}">কার্যক্রম</th></tr></thead>
                     <tbody>${slice.map(r => {
-                    const no = regNoOf(r), sent = sm[no.text];
+                    const no = regNoOf(r), sent = notifyOf({ kind: r.kind, entry: r.entry });
                     return `<tr><td style="${td}white-space:nowrap;"><b>${escapeHtml(no.text)}</b>${no.st === 'pending' ? ' <span class="pill muted" title="ইমেইল পাঠালে বা নম্বর দিলে জারি হবে">অজারি</span>' : (no.st === 'legacy' ? ' <span class="pill muted">পুরনো ধরন</span>' : '')}</td>
-                      <td style="${td}">${escapeHtml(r.m ? r.m.name : '(সদস্য নেই)')}</td><td style="${td}">${r.kind === 'monthly' ? 'মাসিক' : 'বার্ষিক/এককালীন'}</td><td style="${td}white-space:nowrap;">${escapeHtml(fmtDate(r.entry.date) || '')}</td>
-                      <td style="${td}">${escapeHtml(fmtMoney(r.entry.amount))}</td><td style="${td}">${escapeHtml(r.entry.method || '—')}</td>
-                      <td style="${td}">${sent ? `<span class="pill active">${ic('check', 12)}${escapeHtml(fmtDate(String(sent).slice(0, 10)) || 'পাঠানো')}</span>` : '<span class="pill muted">পাঠানো হয়নি</span>'}</td>
+                      <td style="${td}">${escapeHtml(r.m ? r.m.name : '(সদস্য নেই)')}</td><td style="${td}">${r.kind === 'monthly' ? 'মাসিক' + (r.gN > 1 ? ' (' + toBengaliNum(r.gN) + ' মাস একত্রে)' : '') : 'বার্ষিক/এককালীন'}</td><td style="${td}white-space:nowrap;">${escapeHtml(fmtDate(r.entry.date) || '')}</td>
+                      <td style="${td}">${escapeHtml(fmtMoney(r.gAmt != null ? r.gAmt : r.entry.amount))}</td><td style="${td}">${escapeHtml(r.entry.method || '—')}</td>
+                      <td style="${td}">${sent ? `<span class="pill active">${ic('check', 12)}পাঠানো হয়েছে</span><div class="small muted">${escapeHtml(viasOf(sent).join(', '))}${sent.at ? ' · ' + escapeHtml(fmtDate(String(sent.at).slice(0, 10)) || '') : ''}</div>` : '<span class="pill muted">পাঠানো হয়নি</span>'}</td>
                       <td style="${td}white-space:nowrap;">${no.st === 'pending' ? `<button type="button" class="btn btn-outline btn-sm" data-rg="issue" data-id="${escapeHtml(r.entry.id)}" title="এখনই নম্বর জারি">${ic('hash')}নম্বর দিন</button> ` : ''}<button type="button" class="btn btn-outline btn-sm" data-rg="pdf" data-id="${escapeHtml(r.entry.id)}" title="PDF ডাউনলোড">${ic('download')}PDF</button> <button type="button" class="btn btn-outline btn-sm" data-rg="jpg" data-id="${escapeHtml(r.entry.id)}" title="JPG ছবি ডাউনলোড">${ic('download')}JPG</button></td></tr>`;
                 }).join('') || `<tr><td colspan="8" class="small muted" style="padding:14px;text-align:center;">কোনো রিসিপ্ট মেলেনি</td></tr>`}</tbody></table></div>
                   ${pages > 1 ? `<div style="display:flex;gap:6px;justify-content:center;margin-top:8px;flex-wrap:wrap;">${Array.from({ length: pages }, (_, i) => `<button type="button" class="btn ${i + 1 === regPage ? 'btn-primary' : 'btn-outline'} btn-sm" data-rg="page" data-p="${i + 1}">${toBengaliNum(i + 1)}</button>`).join('')}</div>` : ''}`;
@@ -16066,7 +16235,7 @@ body.dark-mode .btn-outline{border-color:var(--gold-300)!important;color:var(--g
                         // ✅ সার্ভার success:true দিলেই কেবল "পাঠানো হয়েছে" হিসেবে চিহ্নিত
                         const nowIso = new Date().toISOString();
                         emailSentRecord(s.key, { at: nowIso, tpl: s.meta.auditId, att: s.type });
-                        try { if (s.txn && s.txn.entry && s.txn.entry.id) notifySet(s.txn.entry.id, 'ইমেইল', nowIso); } catch (e3) { }
+                        try { if (s.txn && s.txn.entry && s.txn.entry.id) notifyAdd(s.txn.entry.id, 'ইমেইল', nowIso); } catch (e3) { }
                         addActivityLog('email', 'member', m.id,
                             `"${m.name}" কে ইমেইল পাঠানো হয়েছে (${s.meta.name}${s.type !== 'none' ? ' · ' + PDF_TYPES[s.type] : ''})`,
                             { sendKey: s.key, tpl: s.meta.auditId, att: s.type, ref: refNo, to: maskEmailClient(toAddr) });
@@ -18864,21 +19033,196 @@ body.dark-mode .btn-outline{border-color:var(--gold-300)!important;color:var(--g
         };
         window.openMonthlyThanksEmailModal = openMonthlyThanksEmailModal;
 
-        // কনফার্ম-সফল হওয়ার পর যে ছোট মডালটা আসে — এখানেই "✉️ ইমেইল" বাটন
+        // 🔧 [মাসিক সংগ্রহ কনফার্মের পর — শেয়ার প্যানেল] ইমেইল · হোয়াটসঅ্যাপ · মেসেঞ্জার · শেয়ার — বার্তা + (ঐচ্ছিক) রিসিপ্ট ছবিসহ।
+        // প্রতিটি মাধ্যমে পাঠানো/খোলা সফল হলে বাটনে ✓ টিক ওঠে। (ইমেইল/WhatsApp লিংক খোলা মানেই "পাঠানো" নিশ্চিত নয় — ব্রাউজার থেকে যাচাই করা যায় না; শেয়ার-শিটে বাতিল করলে টিক ওঠে না।)
+        // ছবি সংযুক্ত করতে ডিভাইসের শেয়ার-শিট (navigator.share + files) ব্যবহার হয়; সাপোর্ট না থাকলে ছবি ডাউনলোড + বার্তা কপি হয়।
         const openMonthlyConfirmedModal = (info) => {
             const m = memberById(info.memberId);
+            const tpl = buildMonthlyThanksEmail(info);
+            const sent = {};
+            let imgFile = null, imgState = 'idle', imgPromise = null;
+            const $q = id => document.getElementById(id);
+            const waNum = (() => {
+                let d = String((m && m.mobile) || '').replace(/[০-৯]/g, c => '০১২৩৪৫৬৭৮৯'.indexOf(c)).replace(/\D/g, '');
+                if (!d) return '';
+                if (d.indexOf('00') === 0) d = d.slice(2);
+                if (d.indexOf('880') === 0) return d;
+                if (d.charAt(0) === '0') return '88' + d;
+                if (d.length === 10) return '880' + d;
+                return d;
+            })();
+            const dataUrlToFile = (url, name) => {
+                const parts = String(url).split(','), bin = atob(parts[1]), u8 = new Uint8Array(bin.length);
+                for (let i = 0; i < bin.length; i++) u8[i] = bin.charCodeAt(i);
+                return new File([u8], name, { type: 'image/jpeg' });
+            };
+            const selType = () => { const e = $q('mc-type'); return e ? e.value : 'simple'; };
+            const selFmt = () => { const e = $q('mc-fmt'); return e ? e.value : (_pref.fmt || 'jpg'); };
+            const PREF_KEY = 'mf_share_rcpt_v1';
+            const loadPref = () => { try { return JSON.parse(localStorage.getItem(PREF_KEY) || '{}') || {}; } catch (e) { return {}; } };
+            const savePref = () => { try { localStorage.setItem(PREF_KEY, JSON.stringify({ style: selStyle(), fmt: selFmt(), show: selShow() })); } catch (e) { } };
+            const _pref = loadPref();
+            const SHOW_KEYS = [['method', 'পরিশোধের মাধ্যম'], ['collector', 'সংগ্রাহক'], ['thanks', 'ধন্যবাদ-বাক্য'], ['contact', 'যোগাযোগ/ঠিকানা'], ['breakdown', 'মাসভিত্তিক বিবরণ (একাধিক মাসে)'], ['history', 'সাম্প্রতিক লেনদেন (বিস্তারিতে)'], ['total', 'সর্বমোট (বিস্তারিতে)']];
+            const selStyle = () => { const e = $q('mc-style'); return e ? e.value : (_pref.style || 'money'); };
+            const selShow = () => { const o = {}; SHOW_KEYS.forEach(k => { const c = $q('mc-sh-' + k[0]); o[k[0]] = c ? c.checked : (_pref.show && _pref.show[k[0]] !== undefined ? !!_pref.show[k[0]] : true); }); return o; };
+            const TYPE_LABEL = { simple: 'রিসিপ্ট', simple1: 'রিসিপ্ট', detailed: 'বিস্তারিত-রিসিপ্ট', monthly: 'মাসিক-রিসিপ্ট', statement: 'হিসাব-বিবরণী' };
+            const buildImg = async () => {
+                const rawType = selType(), fmt = selFmt(), type = rawType === 'simple1' ? 'simple' : rawType;
+                const _show = selShow(); if (rawType === 'simple') _show.breakdown = false; else if (rawType === 'simple1') _show.breakdown = true;
+                const all = [];
+                info.months.forEach(x => {
+                    const r = (state.monthly || []).find(y => y.memberId === info.memberId && y.month === x.key && Number(y.amount) > 0);
+                    if (r) all.push(r);
+                });
+                if (type !== 'statement' && !all.length) throw new Error('এই সংগ্রহের লেনদেন পাওয়া যায়নি');
+                // একাধিক মাস একসাথে দিলে: একটাই যৌথ রিসিপ্ট — মোট টাকা, বাবদে সব মাসের নাম। (নম্বর প্রথম মাসের লেনদেনের নম্বর)
+                const base0 = { kind: 'monthly', entry: all[0] || null };
+                let t = base0;
+                if (all.length > 1) {
+                    const sum = info.months.reduce((a, x) => a + (Number(x.amount) || 0), 0) || all.reduce((a, r) => a + (Number(r.amount) || 0), 0);
+                                        const labs = info.months.map(x => (typeof txnMonthLabel === 'function' ? txnMonthLabel(x.key) : '') || x.label);
+                    const lblShort = labs.length > 3 ? (labs[0] + ' থেকে ' + labs[labs.length - 1] + ' (' + toBengaliNum(labs.length) + ' মাস)') : labs.join(', ');
+                    t = { kind: 'monthly', entry: Object.assign({}, all[0], { amount: sum, __monthsLabel: lblShort, __ids: all.map(r => r.id), __breakdown: info.months.map((x, i) => ({ label: labs[i], amount: Number(x.amount) || 0 })) }) };
+                }
+                const sigWrap = (typeof withPdfSig === 'function' && typeof resolveSig === 'function') ? (fn => withPdfSig(resolveSig('', undefined), fn)) : (fn => fn());
+                if (type !== 'statement') { try { if (typeof issueRno === 'function') issueRno(base0); } catch (e) { } }
+                const base = sanitizeFileName((TYPE_LABEL[type] || 'রিসিপ্ট') + '-' + (m ? m.name : 'donor'));
+                if (fmt === 'pdf') {
+                    const b64 = await sigWrap(() => generatePdfForType(type, m, t, _show, selStyle()));
+                    const bin = atob(b64), u8 = new Uint8Array(bin.length);
+                    for (let i = 0; i < bin.length; i++) u8[i] = bin.charCodeAt(i);
+                    return new File([u8], base + '.pdf', { type: 'application/pdf' });
+                }
+                const url = await sigWrap(() => generateJpgForType(type, m, t, _show, selStyle()));
+                return dataUrlToFile(url, base + '.jpg');
+            };
+            let imgTok = 0;
+            const startImg = () => {
+                if (imgState !== 'idle' && imgState !== 'error') return;
+                imgState = 'loading'; imgFile = null; setImgSt();
+                const tok = ++imgTok;
+                imgPromise = buildImg().then(f => { if (tok === imgTok) { imgFile = f; imgState = 'ready'; setImgSt(); } return f; })
+                    .catch(e => { console.error(e); if (tok === imgTok) { imgState = 'error'; setImgSt(); } return null; });
+            };
+            const setImgSt = () => {
+                const el = $q('mc-img-st'); if (!el) return;
+                const on = $q('mc-img') && $q('mc-img').checked;
+                el.textContent = !on ? '' : imgState === 'loading' ? '⏳ রিসিপ্ট তৈরি হচ্ছে…' : imgState === 'ready' ? '✅ রিসিপ্ট তৈরি' : imgState === 'error' ? '⚠️ রিসিপ্ট তৈরি হয়নি — শুধু বার্তা যাবে' : '';
+            };
+            const download = f => { const u = URL.createObjectURL(f), a = document.createElement('a'); a.href = u; a.download = f.name; document.body.appendChild(a); a.click(); a.remove(); setTimeout(() => URL.revokeObjectURL(u), 4000); };
+            const copyText = async (s) => { try { await navigator.clipboard.writeText(s); return true; } catch (e) { const ta = $q('mc-msg'); try { ta.focus(); ta.select(); return document.execCommand('copy'); } catch (e2) { return false; } } };
+            const openUrl = u => { const w = window.open(u, '_blank', 'noopener'); if (!w) window.location.href = u; };
+            const mark = (ch, label) => {
+                sent[ch] = (sent[ch] || 0) + 1;
+                const b = document.querySelector('[data-mc-ch="' + ch + '"]');
+                if (b) { b.style.background = '#e7f6ec'; b.style.borderColor = '#2e7d32'; b.style.color = '#1b5e20'; const t = b.querySelector('.mc-tick'); if (t) t.textContent = ' ✓ পাঠানো হয়েছে'; }
+                toast('✓ ' + label + ' — পাঠানো হয়েছে');
+                try { const ids = info.months.map(x => ((state.monthly || []).find(r => r.memberId === info.memberId && r.month === x.key && Number(r.amount) > 0) || {}).id).filter(Boolean); if (window.mfNotifyAdd) window.mfNotifyAdd(ids, ({ email: 'ইমেইল', whatsapp: 'হোয়াটসঅ্যাপ', messenger: 'মেসেঞ্জার', share: 'শেয়ার' })[ch] || label); } catch (e) { }
+                try { addActivityLog('email', 'monthly', info.memberId, label + '-এ ধন্যবাদ-বার্তা পাঠানো হয়েছে' + ((imgFile && $q('mc-img').checked) ? ' (রিসিপ্টসহ)' : ''), { channel: ch }); } catch (e) { }
+            };
+            // শেয়ার-শিট: true = পাঠানো হয়েছে, false = ব্যবহারকারী বাতিল করেছেন, null = ডিভাইসে সাপোর্ট নেই
+            const nativeShare = async (withImg) => {
+                const data = { text: $q('mc-msg').value, title: tpl.subject };
+                if (withImg && imgFile) {
+                    if (!(navigator.canShare && navigator.canShare({ files: [imgFile] }))) return null;
+                    data.files = [imgFile];
+                }
+                if (!navigator.share) return null;
+                try { await navigator.share(data); return true; }
+                catch (e) { if (e && e.name === 'AbortError') return false; return null; }
+            };
+            const fallbackCopy = async (withImg) => {
+                const ok = await copyText($q('mc-msg').value);
+                if (withImg && imgFile) download(imgFile);
+                toast((ok ? '📋 বার্তা কপি হয়েছে' : 'বার্তা বক্স থেকে কপি করুন') + (withImg && imgFile ? '; ফাইল ডাউনলোড হয়েছে — চ্যাটে জুড়ে দিন' : ''));
+            };
+            const handlers = {
+                email: async () => {
+                    if (!tpl.to) { toast('এই সদস্যের ইমেইল ঠিকানা যোগ করা নেই'); return; }
+                    const url = 'mailto:' + encodeURIComponent(tpl.to) + '?subject=' + encodeURIComponent(tpl.subject) + '&body=' + encodeURIComponent($q('mc-msg').value);
+                    window.location.href = url;
+                    if (imgFile && $q('mc-img').checked) toast('ইমেইলে রিসিপ্ট জুড়তে "⬇️ ফাইল ডাউনলোড" চেপে সংযুক্ত করুন');
+                    mark('email', 'ইমেইল');
+                },
+                whatsapp: async () => {
+                    const withImg = $q('mc-img').checked && !!imgFile;
+                    if (withImg) {
+                        const r = await nativeShare(true);
+                        if (r === true) { mark('whatsapp', 'হোয়াটসঅ্যাপ'); return; }
+                        if (r === false) return;
+                        await fallbackCopy(true);
+                    }
+                    openUrl('https://wa.me/' + waNum + '?text=' + encodeURIComponent($q('mc-msg').value));
+                    mark('whatsapp', 'হোয়াটসঅ্যাপ');
+                },
+                messenger: async () => {
+                    const withImg = $q('mc-img').checked && !!imgFile;
+                    const r = await nativeShare(withImg);
+                    if (r === true) { mark('messenger', 'মেসেঞ্জার'); return; }
+                    if (r === false) return;
+                    await fallbackCopy(withImg);
+                    openUrl('https://www.messenger.com/');
+                    mark('messenger', 'মেসেঞ্জার');
+                },
+                share: async () => {
+                    const withImg = $q('mc-img').checked && !!imgFile;
+                    const r = await nativeShare(withImg);
+                    if (r === true) { mark('share', 'শেয়ার'); return; }
+                    if (r === false) return;
+                    await fallbackCopy(withImg);
+                    mark('share', 'শেয়ার');
+                }
+            };
+            const chBtn = (ch, ic, label, extra) => `<button type="button" class="btn btn-outline" data-mc-ch="${ch}" style="justify-content:flex-start;gap:6px;text-align:left;"${extra || ''}>${ic} ${label}<span class="mc-tick small" style="margin-left:auto;font-weight:600;"></span></button>`;
             openModal(`
                 <h3>✅ মাসিক চাঁদা সংরক্ষণ হয়েছে</h3>
                 <p style="margin:8px 0 4px;"><strong>${escapeHtml(m ? m.name : '')}</strong> — ${escapeHtml(info.months.map(x => x.label).join(', '))}</p>
-                <p style="margin:0 0 12px;">মোট গৃহীত: <strong>${fmtMoney(info.received)}</strong></p>
-                <p class="small muted" style="margin:0 0 6px;">চাইলে দাতাকে ধন্যবাদ জানিয়ে একটি ইমেইল পাঠাতে পারেন।</p>
-                <div class="modal-actions" style="flex-wrap:wrap;gap:8px;">
+                <p style="margin:0 0 10px;">মোট গৃহীত: <strong>${fmtMoney(info.received)}</strong></p>
+                <div class="field"><label class="small muted">ধন্যবাদ-বার্তা (চাইলে এডিট করুন)</label><textarea id="mc-msg" rows="8">${escapeHtml(tpl.body)}</textarea></div>
+                <label style="display:flex;gap:8px;align-items:center;margin:4px 0 6px;"><input type="checkbox" id="mc-img" checked> 🧾 রিসিপ্টসহ পাঠান <span id="mc-img-st" class="small muted"></span></label>
+                <div style="display:flex;gap:8px;margin-bottom:10px;">
+                  <select id="mc-type" style="flex:2;min-width:0;">
+                    <option value="simple" selected>সাধারণ রিসিপ্ট</option>
+                    <option value="simple1">সাধারণ রিসিপ্ট (এক পৃষ্ঠা)</option>
+                    <option value="detailed">বিস্তারিত রিসিপ্ট</option>
+                    <option value="monthly">মাসভিত্তিক হিসাবসহ রিসিপ্ট</option>
+                    <option value="statement">হিসাব-বিবরণী (সব লেনদেন)</option>
+                  </select>
+                  <select id="mc-fmt" style="flex:1;min-width:0;"><option value="jpg"${_pref.fmt === 'pdf' ? '' : ' selected'}>🖼️ JPG</option><option value="pdf"${_pref.fmt === 'pdf' ? ' selected' : ''}>📄 PDF</option></select>
+                </div>
+                <details style="margin:-2px 0 10px;"><summary class="small" style="cursor:pointer;">⚙️ রিসিপ্টের সাজ ও কী কী দেখাবে</summary>
+                  <div style="margin-top:6px;">
+                    <select id="mc-style" style="width:100%;margin-bottom:6px;"><option value="money"${_pref.style === 'classic' ? '' : ' selected'}>মানি-রিসিপ্ট ফর্ম (দাতার কপি)</option><option value="classic"${_pref.style === 'classic' ? ' selected' : ''}>ক্লাসিক (সাদামাটা)</option></select>
+                    <div style="display:grid;grid-template-columns:1fr 1fr;gap:4px 10px;">${SHOW_KEYS.map(k => `<label class="small" style="display:flex;gap:4px;align-items:center;"><input type="checkbox" id="mc-sh-${k[0]}"${(_pref.show && _pref.show[k[0]] === false) ? '' : ' checked'}> ${k[1]}</label>`).join('')}</div>
+                  </div></details>
+                <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">
+                  ${chBtn('email', '✉️', 'ইমেইল', tpl.to ? '' : ' title="ইমেইল ঠিকানা নেই"')}
+                  ${chBtn('whatsapp', '💬', 'হোয়াটসঅ্যাপ')}
+                  ${chBtn('messenger', '📨', 'মেসেঞ্জার')}
+                  ${chBtn('share', '📤', 'শেয়ার')}
+                </div>
+                <div class="small muted" style="margin-top:8px;">${info.months.length > 1 ? 'একাধিক মাস একসাথে দেওয়ায় সব মাসের জন্য একটি যৌথ রিসিপ্ট (মোট টাকাসহ) যাবে। ' : ''}রিসিপ্টসহ পাঠাতে ফোনের শেয়ার-মেনু খুলবে — সেখান থেকে অ্যাপ বেছে নিন। পাঠানো হলে বাটনে ✓ উঠবে।</div>
+                <div class="modal-actions" style="flex-wrap:wrap;gap:8px;margin-top:10px;">
                   <button class="btn btn-outline" id="mc-close">বন্ধ করুন</button>
-                  <button class="btn btn-primary" id="mc-email">✉️ ইমেইল</button>
+                  <button class="btn btn-outline" id="mc-dl">⬇️ ফাইল ডাউনলোড</button>
                 </div>
             `, () => {
-                document.getElementById('mc-close').onclick = closeModal;
-                document.getElementById('mc-email').onclick = () => openMonthlyThanksEmailModal(info);
+                $q('mc-close').onclick = closeModal;
+                $q('mc-img').addEventListener('change', () => { if ($q('mc-img').checked) startImg(); setImgSt(); });
+                ['mc-type', 'mc-fmt', 'mc-style'].concat(SHOW_KEYS.map(k => 'mc-sh-' + k[0])).forEach(id => $q(id).addEventListener('change', () => { savePref(); imgState = 'idle'; if ($q('mc-img').checked) startImg(); else setImgSt(); }));
+                $q('mc-dl').onclick = async () => {
+                    if (imgState === 'idle' || imgState === 'error') startImg();
+                    const f = await imgPromise; if (f) download(f); else toast('রিসিপ্ট তৈরি করা যায়নি');
+                };
+                document.querySelectorAll('[data-mc-ch]').forEach(b => {
+                    b.onclick = async () => {
+                        const ch = b.getAttribute('data-mc-ch');
+                        if ($q('mc-img').checked && imgState === 'loading') { toast('⏳ রিসিপ্ট তৈরি হচ্ছে — একটু অপেক্ষা করে আবার চাপুন'); return; }
+                        if ($q('mc-img').checked && (imgState === 'idle' || imgState === 'error')) { startImg(); toast('⏳ রিসিপ্ট তৈরি হচ্ছে — একটু অপেক্ষা করে আবার চাপুন'); return; }
+                        try { await handlers[ch](); } catch (e) { console.error(e); toast('পাঠানো যায়নি: ' + ((e && e.message) || '')); }
+                    };
+                });
+                startImg();
             });
         };
 
@@ -18956,6 +19300,9 @@ body.dark-mode .btn-outline{border-color:var(--gold-300)!important;color:var(--g
                 const method = document.getElementById('smc-method').value;
                 const collector = document.getElementById('smc-collector').value;
                 const monthlyAmt = getMemberMonthlyAmount(m);
+                // 🆕 [v16.5.83] একাধিক মাস একসাথে দিলে — সবগুলো এন্ট্রি একই রিসিপ্ট নম্বর পাবে (মাসভিত্তিক টাকা আলাদা থাকে)
+                const _rg = window.mfRnoGroupBegin ? window.mfRnoGroupBegin() : null;
+                try {
                 result.perMonth.forEach(r => {
                     if (r.allocated <= 0 && r.already <= 0) return; // অপরিবর্তিত (বকেয়া, ০ টাকা) মাস touch করা হবে না
                     upsertMonthly(m.id, r.key, 'amount', r.newTotal);
@@ -18967,6 +19314,9 @@ body.dark-mode .btn-outline{border-color:var(--gold-300)!important;color:var(--g
                         upsertMonthly(m.id, r.key, 'status', r.status);
                     }
                 });
+                } finally {
+                    try { if (window.mfRnoGroupEnd) window.mfRnoGroupEnd(_rg, () => result.perMonth.filter(r => r.allocated > 0).map(r => (getMonthlyEntry(m.id, r.key) || {}).id).filter(Boolean)); } catch (e) { console.error(e); }
+                }
                 // 🆕 [Rule 3 — কোনো টাকা হারানো যাবে না] বিদ্যমান অগ্রিম এই লেনদেনে ব্যবহার করা হলে
                 // (useAdvance=true) সেটা effectiveReceived-এ যোগ হয়েই গণনা হয়েছে, তাই নতুন
                 // result.advance-ই সদস্যের নতুন সম্পূর্ণ ব্যালেন্স। কিন্তু ব্যবহার না করলে
@@ -20188,7 +20538,7 @@ body.dark-mode .btn-outline{border-color:var(--gold-300)!important;color:var(--g
                       </div>
                     </div>
                     <div class="notice-body">
-                      ${n.imageUrl ? `<div class="n-image"><img src="${escapeHtml(toDirectImageUrl(n.imageUrl))}" alt="নোটিশের ছবি" data-preview-image="${escapeHtml(n.imageUrl)}" style="cursor:zoom-in;max-width:100%;border-radius:8px;margin-bottom:10px;" title="বড় করে দেখতে ক্লিক করুন"><div class="no-print" style="margin:-4px 0 10px;"><button type="button" class="btn btn-outline btn-sm" data-dl-image="${escapeHtml(n.imageUrl)}" data-dl-name="${escapeHtml(n.title || 'ছবি')}" title="ছবিটি ডাউনলোড করুন">⬇️ ছবি ডাউনলোড</button></div></div>` : ''}
+                      ${n.imageUrl ? `<div class="n-image"><img src="${escapeHtml(toDirectImageUrl(n.imageUrl))}" alt="নোটিশের ছবি" data-preview-image="${escapeHtml(n.imageUrl)}" style="cursor:zoom-in;max-width:100%;border-radius:8px;margin-bottom:10px;" title="বড় করে দেখতে ক্লিক করুন"><div class="no-print" style="margin:-4px 0 10px;"><button type="button" class="btn btn-outline btn-sm" data-dl-image="${escapeHtml(n.imageUrl)}" data-dl-name="${escapeHtml(n.title || 'ছবি')}" title="ছবিটি ডাউনলোড করুন">⬇️ ফাইল ডাউনলোড</button></div></div>` : ''}
                       ${n.content ? `<div class="n-content">${escapeHtml(n.content)}</div>` : ''}
                       <div class="n-meta"><span>${dateStr ? '📅 ' + dateStr : ''}</span><span class="n-idx">#${idx + 1}</span></div>
                       ${addedByBadgeHtml(n)}
@@ -20380,7 +20730,7 @@ body.dark-mode .btn-outline{border-color:var(--gold-300)!important;color:var(--g
                       </div>
                     </div>
                     <div class="notice-body announcement-body">
-                      ${n.imageUrl ? `<div class="n-image"><img src="${escapeHtml(toDirectImageUrl(n.imageUrl))}" alt="ঘোষণার ছবি" data-preview-image="${escapeHtml(n.imageUrl)}" style="cursor:zoom-in;max-width:100%;border-radius:8px;margin-bottom:10px;" title="বড় করে দেখতে ক্লিক করুন"><div class="no-print" style="margin:-4px 0 10px;"><button type="button" class="btn btn-outline btn-sm" data-dl-image="${escapeHtml(n.imageUrl)}" data-dl-name="${escapeHtml(n.title || 'ছবি')}" title="ছবিটি ডাউনলোড করুন">⬇️ ছবি ডাউনলোড</button></div></div>` : ''}
+                      ${n.imageUrl ? `<div class="n-image"><img src="${escapeHtml(toDirectImageUrl(n.imageUrl))}" alt="ঘোষণার ছবি" data-preview-image="${escapeHtml(n.imageUrl)}" style="cursor:zoom-in;max-width:100%;border-radius:8px;margin-bottom:10px;" title="বড় করে দেখতে ক্লিক করুন"><div class="no-print" style="margin:-4px 0 10px;"><button type="button" class="btn btn-outline btn-sm" data-dl-image="${escapeHtml(n.imageUrl)}" data-dl-name="${escapeHtml(n.title || 'ছবি')}" title="ছবিটি ডাউনলোড করুন">⬇️ ফাইল ডাউনলোড</button></div></div>` : ''}
                       ${n.content ? `<div class="n-content">${escapeHtml(n.content)}</div>` : ''}
                       <div class="n-meta"><span>${dateStr ? '📅 ' + dateStr : ''}</span><span class="n-idx">#${idx + 1}</span></div>
                       ${addedByBadgeHtml(n)}
@@ -27740,7 +28090,7 @@ body.dark-mode .btn-outline{border-color:var(--gold-300)!important;color:var(--g
     var pub = null, pubAt = 0;
     function getPub(force) {
         if (!force && pub && Date.now() - pubAt < 60000) return Promise.resolve(pub);
-        return F().getDoc(F().doc(DB(), 'app_settings', 'ai_public')).then(function (s) { pub = s.exists() ? s.data() : {}; pubAt = Date.now(); return pub; });
+        return F().getDoc(F().doc(DB(), 'app_settings', 'ai_public')).then(function (s) { pub = s.exists() ? s.data() : {}; if (window.mfScriptUrlCustom && window.mfScriptUrl) pub.url = window.mfScriptUrl; pubAt = Date.now(); return pub; });
     }
     function call(action, extra) {
         return getPub().then(function (p) {
@@ -27772,6 +28122,17 @@ body.dark-mode .btn-outline{border-color:var(--gold-300)!important;color:var(--g
         return F().setDoc(F().doc(DB(), 'app_settings', 'ai_public'), Object.assign({ updatedAt: new Date().toISOString(), updatedBy: (window.currentUser && window.currentUser.email) || '' }, patch), { merge: true }).then(function () { pub = Object.assign({}, pub || {}, patch); pubAt = Date.now(); });
     }
     var KEYLINK = { gemini: 'https://aistudio.google.com/app/apikey', anthropic: 'https://console.anthropic.com/settings/keys', openai: 'https://platform.openai.com/api-keys', openrouter: 'https://openrouter.ai/keys', groq: 'https://console.groq.com/keys', deepseek: 'https://platform.deepseek.com/api_keys', mistral: 'https://console.mistral.ai/api-keys' };
+    // 🆕 [v16.5.73] প্রতিটি প্রদানকারীর key-পাতার লিংক ও বিনামূল্যে ব্যবহারের তথ্য (সীমা প্রায়ই বদলায় — লিংকে গিয়ে বর্তমান অবস্থা দেখুন)
+    var KEYINFO = {
+        gemini: '🟢 ফ্রি টিয়ার আছে (কার্ড লাগে না; দৈনিক/মিনিট-সীমা সহ)।',
+        groq: '🟢 ফ্রি টিয়ার আছে (কার্ড লাগে না), খুব দ্রুত। মডেল: llama-3.3-70b-versatile ইত্যাদি।',
+        openrouter: '🟢 বেশ কিছু ফ্রি মডেল আছে (মডেলের নামের শেষে ":free", যেমন একটি ফ্রি মডেল বেছে নাম বসান); দৈনিক অনুরোধ সীমিত।',
+        mistral: '🟡 ফ্রি "Experiment" টিয়ার আছে (শর্ত: ডেটা মডেল-প্রশিক্ষণে ব্যবহারে সম্মতি) — মেম্বারদের ব্যক্তিগত তথ্য পাঠাবেন না।',
+        deepseek: '🟡 স্থায়ী ফ্রি নয় — নতুন একাউন্টে ট্রায়াল ক্রেডিট থাকে; এরপর খুব সস্তা পে-অ্যাজ-ইউ-গো।',
+        anthropic: '🔴 API সাধারণত ফ্রি নয় (ক্রেডিট কিনতে হয়)। ফ্রি চাইলে Gemini/Groq/OpenRouter বেছে নিন।',
+        openai: '🔴 API সাধারণত ফ্রি নয় (ক্রেডিট কিনতে হয়)। ফ্রি চাইলে Gemini/Groq/OpenRouter বেছে নিন।',
+        custom: 'ℹ️ যেকোনো OpenAI-সামঞ্জস্যপূর্ণ সেবা (যেমন Cerebras, GitHub Models — ফ্রি টিয়ার আছে) এখানে URL ও মডেল-নাম দিয়ে যুক্ত করা যায়।'
+    };
     var KEYHINT = { gemini: 'AIza...', anthropic: 'sk-ant-...', openai: 'sk-...', openrouter: 'sk-or-...', groq: 'gsk_...', deepseek: 'sk-...', mistral: '', custom: '' };
     function provList(st) { return (st && st.providers) || [{ id: 'gemini', label: 'Google Gemini', model: 'gemini-3.5-flash-lite' }]; }
     function curSel(st) { var c = (st && st.config) || {}, l = provList(st), id = S.sel || c.provider || 'gemini'; return l.some(function (x) { return x.id === id; }) ? id : 'gemini'; }
@@ -27792,7 +28153,7 @@ body.dark-mode .btn-outline{border-color:var(--gold-300)!important;color:var(--g
             var actLab = (provs.filter(function (x) { return x.id === act; })[0] || { label: act }).label;
             var curl = S.curl != null ? S.curl : (c.customUrl || '');
             return '<div class=\"mfe-card\"><h4>১) প্রক্সি সংযোগ</h4><p class=\"muted\">key Google Apps Script-এ জমা থাকে; এখানে শুধু প্রক্সির URL বসে। (ডিপ্লয় করার গাইড: ai_proxy.gs-এর ওপরের মন্তব্য।)</p>' +
-                '<div class=\"mfe-f\"><label>Apps Script Web App URL (AI প্রক্সি)</label><input id=\"mai-url\" value=\"' + esc(p.url || 'https://script.google.com/macros/s/AKfycbxK5kpYK9eYjt0J6LTfsS4iSx-G0Ya25Us0vluEYYTtn2uNPZY1r3PITiL3Z8tozX2S/exec') + '\" placeholder=\"https://script.google.com/macros/s/.../exec\"></div>' +
+                '<div class=\"mfe-f\"><label>Apps Script Web App URL (AI প্রক্সি)</label><input id=\"mai-url\" value=\"' + esc(p.url || window.mfScriptUrl || '') + '\" placeholder=\"https://script.google.com/macros/s/.../exec\"></div>' +
                 '<div class=\"mfe-row\" style=\"margin-top:8px\"><button type=\"button\" class=\"mfe-btn\" id=\"mai-url-save\">💾 URL সেভ</button><button type=\"button\" class=\"mfe-btn alt\" id=\"mai-refresh\">🔄 অবস্থা দেখুন</button></div>' +
                 (S.busy ? '<div class=\"muted\">⏳ যোগাযোগ হচ্ছে…</div>' : '') + (st && st.err ? '<div class=\"mfe-warn\">' + esc(st.err) + '</div>' : '') + (S.msg ? '<div class=\"muted\">' + esc(S.msg) + '</div>' : '') + '</div>' +
                 '<div class=\"mfe-card\"><h4>২) AI প্রদানকারী, মডেল ও API key</h4>' +
@@ -27804,6 +28165,7 @@ body.dark-mode .btn-outline{border-color:var(--gold-300)!important;color:var(--g
                 '<div class=\"mfe-f\" style=\"margin-top:8px\"><label>মডেলের নাম (' + esc(cur.label) + ')</label><input id=\"mai-model\" autocomplete=\"off\" autocapitalize=\"off\" spellcheck=\"false\" value=\"' + esc(modelOf(st, sel)) + '\"></div>' +
                 (sel === 'custom' ? '<div class=\"mfe-f\" style=\"margin-top:8px\"><label>API URL (https; OpenAI-সামঞ্জস্যপূর্ণ /chat/completions)</label><input id=\"mai-curl\" autocomplete=\"off\" spellcheck=\"false\" value=\"' + esc(curl) + '\" placeholder=\"https://api.example.com/v1/chat/completions\"></div>' : '') +
                 '<div style=\"margin-top:8px\">' + esc(cur.label) + ' key-এর অবস্থা: <b>' + (keys[sel] ? '✅ key বসানো আছে' : '❌ key নেই') + '</b></div>' +
+                '<div class=\"mfe-card\" style=\"margin-top:8px\">' + (KEYLINK[sel] ? '🔑 <a href=\"' + esc(KEYLINK[sel]) + '\" target=\"_blank\" rel=\"noopener noreferrer\"><b>' + esc(cur.label) + '-এর key এখানে তৈরি করুন ↗</b></a><br>' : '') + esc(KEYINFO[sel] || '') + '</div>' +
                 '<div class=\"mfe-f\" style=\"margin-top:8px\"><label>নতুন key পেস্ট করুন (সেভের পর বক্স খালি হয়ে যায়, key আর দেখা যায় না)</label><input id=\"mai-key\" type=\"password\" autocomplete=\"off\" autocapitalize=\"off\" spellcheck=\"false\" placeholder=\"' + esc(KEYHINT[sel] || '') + '\"></div>' +
                 '<div class=\"mfe-row\" style=\"margin-top:8px\"><button type=\"button\" class=\"mfe-btn alt\" id=\"mai-eye\">👁️ দেখান/লুকান</button><button type=\"button\" class=\"mfe-btn\" id=\"mai-key-save\">💾 সেভ</button><button type=\"button\" class=\"mfe-btn alt\" id=\"mai-test\">🧪 টেস্ট কানেকশন</button><button type=\"button\" class=\"mfe-btn red\" id=\"mai-key-del\">🗑️ মুছে ফেলুন</button></div>' +
                 '<div class=\"mfe-row\" style=\"margin-top:8px\"><button type=\"button\" class=\"mfe-btn\" id=\"mai-activate\">' + (sel === act ? '✅ সক্রিয় আছে — মডেল সেভ করুন' : '✅ এটিকে সক্রিয় করুন') + '</button></div>' +
@@ -27882,7 +28244,7 @@ body.dark-mode .btn-outline{border-color:var(--gold-300)!important;color:var(--g
     function getPub(force) {
         if (!force && pub && Date.now() - pubAt < 60000) return Promise.resolve(pub);
         if (!F() || !DB()) return Promise.resolve(pub || {});
-        return F().getDoc(F().doc(DB(), 'app_settings', 'ai_public')).then(function (s) { pub = s.exists() ? s.data() : {}; pubAt = Date.now(); return pub; }).catch(function () { return pub || {}; });
+        return F().getDoc(F().doc(DB(), 'app_settings', 'ai_public')).then(function (s) { pub = s.exists() ? s.data() : {}; if (window.mfScriptUrlCustom && window.mfScriptUrl) pub.url = window.mfScriptUrl; pubAt = Date.now(); return pub; }).catch(function () { return pub || {}; });
     }
     function me() { return window.currentUser || null; }
     function isAdmin() {
@@ -28914,5 +29276,156 @@ document.addEventListener('click',function(e){
 })();
 </script>
 
+<style id="mf-v74-mobile">
+/* 🆕 [v16.5.74] এডমিন মোবাইল UI — ইউজার প্যানেলের মতো: ওপরে আইকন-সারি (একটিভ · নোটিফিকেশন · সার্চ · ⋮), তারপর ব্র্যান্ড, তারপর ঘড়ি; স্ক্রলে হেডার উঠে গেলে ছোট মিনি-বার; নিচের ফুটার/বটম-বার নেই; নিচে ডানে ➕ ভাসমান বাটন। */
+#mf-fab-add,#mf-minibar{display:none}
+@media (max-width:820px){
+  body .topbar{padding-top:6px !important}
+  body .topbar-inner{display:flex !important;flex-wrap:wrap;align-items:center;gap:0 !important;padding:0 0 10px !important}
+  body .topbar-actions{display:contents !important}
+  body .topbar-actions .dragres-wrap{display:contents !important}
+  body .topbar-inner::before{content:"";order:0;flex:1 1 auto;min-width:0;height:0}
+  /* শুধু এই ৪টি হেডারে থাকবে; বাকি টুল ⋮ মেনুতে (সিঙ্ক/JPG/প্রিন্ট/সেটিংস সেখানে) */
+  body .topbar-actions .header-icon-btn:not(#btn-active-users):not(#btn-notifications-shortcut),
+  body .topbar-actions #mf-top-add,body .topbar-actions .mobile-tab-counter{display:none !important}
+  body .topbar-actions #btn-active-users{order:1}
+  body .topbar-actions #btn-notifications-shortcut{order:2}
+  body .topbar-actions #mf-top-search{order:3}
+  body .topbar-inner .mobile-nav-toggle{order:4;position:relative !important;top:auto !important;right:auto !important;margin:0 !important}
+  body .topbar-inner .brand{order:5;flex:1 0 100%;margin-top:2px}
+  body .topbar-actions .clock{order:6;flex:0 0 auto;margin:8px auto 0 !important;max-width:100%;width:auto !important;grid-column:auto !important}
+  /* বর্ডারহীন আইকন বাটন (display অপরিবর্তিত — লগআউট অবস্থায় লুকানো থাকে) */
+  body .topbar-actions #btn-active-users,body .topbar-actions #btn-notifications-shortcut,body .topbar-actions #mf-top-search,body .topbar-inner .mobile-nav-toggle{
+    position:relative;width:42px !important;height:42px !important;min-width:42px;min-height:42px !important;padding:0 !important;margin:0 !important;
+    background:transparent !important;border:0 !important;box-shadow:none !important;filter:none !important;-webkit-backdrop-filter:none !important;backdrop-filter:none !important;
+    border-radius:12px !important;color:var(--gold-100,#fbf6e8) !important;overflow:visible !important;align-items:center;justify-content:center;font-size:22px}
+  body .topbar-actions #btn-active-users:not([style*="display:none"]):not([style*="display: none"]),
+  body .topbar-actions #btn-notifications-shortcut:not([style*="display:none"]):not([style*="display: none"]),
+  body .topbar-actions #mf-top-search,body .topbar-inner .mobile-nav-toggle{display:inline-flex !important}
+  body .topbar-actions #btn-active-users .icon-label,body .topbar-actions #btn-notifications-shortcut .icon-label{display:none !important}
+  body .topbar-actions #btn-active-users .active-users-badge-count{position:absolute;top:2px;right:0;z-index:6}
+
+  /* নিচের ফুটার/বটম-ন্যাভ নেই */
+  /* 🔧 [v16.5.75] নিচের বার ফিরেছে (হোম · ইউজার · সংগ্রহ · চ্যাট · মেনু); "যোগ করুন" ও "সার্চ" এখানে নেই — ➕ ভাসমান বাটনে ও হেডারের 🔍-এ */
+  body footer.no-print{display:none !important}
+  body .mobile-bottom-nav #mbn-search,body .mobile-bottom-nav #mbn-users{display:none !important}
+  #mf-fab-add{display:none !important}
+  body main{padding-bottom:96px !important}
+  html #mfai-fab{bottom:calc(92px + env(safe-area-inset-bottom,0px)) !important}
+
+  /* ভাসমান ➕ (নিচে ডানে) */
+  #mf-fab-add{position:fixed;right:14px;bottom:calc(84px + env(safe-area-inset-bottom,0px));z-index:80;width:54px;height:54px;border-radius:50%;padding:0;border:2px solid var(--gold-500,#c9a24a);
+    background:linear-gradient(145deg,var(--emerald-800,#10432f),var(--emerald-700,#14543d));color:var(--gold-100,#fbf6e8);align-items:center;justify-content:center;cursor:pointer;
+    box-shadow:0 6px 16px rgba(0,0,0,.28);-webkit-tap-highlight-color:transparent;transition:transform .15s}
+  #mf-fab-add.on{display:flex}
+  #mf-fab-add:active{transform:scale(.9)}
+  #mf-fab-add svg{width:26px;height:26px;stroke:currentColor;fill:none;stroke-width:2.2;stroke-linecap:round}
+  html.mf-kb #mf-fab-add,body:has(#cd-panel.on) #mf-fab-add{display:none !important}
+  html.mf-kb .mobile-bottom-nav{display:none !important}
+
+  /* স্ক্রলে ভেসে ওঠা মিনি-বার (ইউজার প্যানেলের মতো) */
+  #mf-minibar{display:flex;position:fixed;top:0;left:0;right:0;z-index:45;box-sizing:border-box;height:calc(55px + env(safe-area-inset-top,0px));padding:env(safe-area-inset-top,0px) 6px 0 10px;align-items:center;gap:8px;
+    background:linear-gradient(160deg,var(--emerald-900,#0e2b22),var(--emerald-700,#14543d) 65%,var(--emerald-800,#10432f));color:var(--gold-100,#fbf6e8);border-bottom:3px solid var(--gold-500,#c9a24a);
+    box-shadow:0 6px 16px rgba(0,0,0,.25);transform:translateY(-112%);opacity:0;pointer-events:none;transition:transform .3s ease,opacity .25s ease}
+  #mf-minibar.on{transform:none;opacity:1;pointer-events:auto}
+  #mf-minibar .mb-mark{width:34px;height:34px;border-radius:50%;flex:none;overflow:hidden;display:flex;align-items:center;justify-content:center;background:rgba(255,255,255,.12)}
+  #mf-minibar .mb-mark img{width:100%;height:100%;object-fit:cover}
+  #mf-minibar .mb-name{flex:1 1 auto;min-width:0;font-weight:700;line-height:1.15;font-size:14px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+  #mf-minibar .mb-btn{position:relative;flex:none;width:38px;height:38px;padding:0;border:0;background:transparent;color:inherit;display:flex;align-items:center;justify-content:center;border-radius:10px;cursor:pointer}
+  #mf-minibar .mb-btn[hidden]{display:none}
+  #mf-minibar .mb-btn:active{transform:scale(.9)}
+  #mf-minibar .mb-btn svg{width:24px;height:24px;stroke:currentColor;fill:none;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round}
+  #mf-minibar .mb-bd{position:absolute;top:1px;right:-1px;min-width:16px;height:16px;padding:0 4px;border-radius:8px;box-sizing:border-box;background:#d1432e;color:#fff;font-size:10px;font-weight:800;display:flex;align-items:center;justify-content:center}
+  #mf-minibar .mb-bd[hidden]{display:none}
+}
+@media (min-width:821px){#mf-minibar,#mf-fab-add{display:none !important}}
+@media print{#mf-minibar,#mf-fab-add{display:none !important}}
+/* ⋮ মেনুর দ্রুত-কাজ সারি */
+.mobile-sidebar .sidebar-item[data-mf74-q]{cursor:pointer}
+</style>
+<script id="mf-v74-js">
+(function () {
+  'use strict';
+  var mq = window.matchMedia ? window.matchMedia('(max-width: 820px)') : { matches: false };
+  var root = document.documentElement, $ = function (id) { return document.getElementById(id); };
+  var SV = {
+    plus: '<path d="M12 5v14M5 12h14"/>',
+    search: '<circle cx="11" cy="11" r="6.5"/><path d="m16 16 4.5 4.5"/>',
+    bell: '<path d="M6 16.5V11a6 6 0 0 1 12 0v5.5l1.5 1.5h-15z"/><path d="M10 20a2 2 0 0 0 4 0"/>',
+    users: '<circle cx="9" cy="8.5" r="3.2"/><path d="M3.5 19c0-3 2.5-5 5.5-5s5.5 2 5.5 5"/><circle cx="17" cy="9.5" r="2.4"/><path d="M16.5 14.2c2.6 0 4.5 1.7 4.5 4.3"/>',
+    dots: '<circle cx="12" cy="5.5" r="1.4"/><circle cx="12" cy="12" r="1.4"/><circle cx="12" cy="18.5" r="1.4"/>'
+  };
+  function svg(n) { return '<svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">' + SV[n] + '</svg>'; }
+
+  // ---- ➕ ভাসমান বাটন (নিচে ডানে) — আগের "যোগ করুন" বটম-বাটনের কাজই করে ----
+  function buildFab() {
+    if ($('mf-fab-add')) return;
+    var b = document.createElement('button');
+    b.type = 'button'; b.id = 'mf-fab-add'; b.className = 'no-print'; b.setAttribute('aria-label', 'নতুন যোগ করুন'); b.innerHTML = svg('plus');
+    b.addEventListener('click', function () { var t = $('mbn-add'); if (t) t.click(); });
+    document.body.appendChild(b);
+  }
+
+  // ---- মিনি-বার ----
+  var mb = null, mbName = null, mbMark = null, mbBtn = {};
+  function btn(act, ico, label) { return '<button type="button" class="mb-btn" data-act="' + act + '" aria-label="' + label + '">' + svg(ico) + '<span class="mb-bd" hidden></span></button>'; }
+  function buildMini() {
+    if (mb && document.body.contains(mb)) return;
+    mb = document.createElement('div'); mb.id = 'mf-minibar'; mb.className = 'no-print';
+    mb.innerHTML = '<span class="mb-mark"></span><span class="mb-name"></span>' + btn('active', 'users', 'সক্রিয় সদস্য') + btn('notify', 'bell', 'নোটিফিকেশন') + btn('search', 'search', 'সার্চ') + btn('menu', 'dots', 'মেনু');
+    document.body.appendChild(mb);
+    mbMark = mb.querySelector('.mb-mark'); mbName = mb.querySelector('.mb-name');
+    mb.querySelectorAll('.mb-btn').forEach(function (b) { mbBtn[b.getAttribute('data-act')] = b; });
+    mb.addEventListener('click', function (e) {
+      var b = e.target.closest ? e.target.closest('.mb-btn') : null; if (!b) return;
+      var a = b.getAttribute('data-act'), t = null;
+      if (a === 'active') t = $('btn-active-users'); else if (a === 'notify') t = $('btn-notifications-shortcut'); else if (a === 'menu') t = $('mobile-nav-toggle'); else t = $('mbn-search');
+      if (t) t.click();
+    });
+  }
+  function setBadge(b, n) { var d = b && b.querySelector('.mb-bd'); if (!d) return; if (n && n !== '0') { d.textContent = n; d.hidden = false; } else d.hidden = true; }
+  function syncMini() {
+    var nm = $('brand-name'), mk = $('brand-mark');
+    if (nm) { var t = nm.textContent.trim(); if (mbName.textContent !== t) mbName.textContent = t; }
+    if (mk) { var h = mk.innerHTML; if (mbMark._h !== h) { mbMark._h = h; mbMark.innerHTML = h; } }
+    var an = $('btn-active-users'); mbBtn.active.hidden = !an || an.style.display === 'none';
+    var ab = an && an.querySelector('.active-users-badge-count'); setBadge(mbBtn.active, ab ? ab.textContent : '');
+    var nb = $('btn-notifications-shortcut'); mbBtn.notify.hidden = !nb || nb.style.display === 'none';
+  }
+  var ticking = false;
+  function update() {
+    var hdr = document.querySelector('.topbar'), y = window.pageYOffset || 0, on = !!(mq.matches && window.currentUser);
+    var fab = $('mf-fab-add'); if (fab) fab.classList.toggle('on', on && !!$('mbn-add'));
+    if (!mq.matches || !hdr) { if (mb) mb.classList.remove('on'); return; }
+    buildMini();
+    var th = Math.max(70, hdr.offsetHeight - 55), cur = mb.classList.contains('on');
+    var show = cur ? y > th - 24 : y > th;
+    if (show) syncMini();
+    mb.classList.toggle('on', show);
+  }
+  function onScroll() { if (ticking) return; ticking = true; requestAnimationFrame(function () { ticking = false; update(); }); }
+  window.addEventListener('scroll', onScroll, { passive: true });
+  window.addEventListener('resize', onScroll);
+  if (mq.addEventListener) mq.addEventListener('change', onScroll);
+  setInterval(function () { buildFab(); update(); if (mb && mb.classList.contains('on')) syncMini(); }, 800);
+
+  // ---- ⋮ মেনুতে (সাইডবার) লুকানো টুলগুলোর দ্রুত-কাজ ----
+  var QUICK = [['btn-manual-sync', '🔄', 'সিঙ্ক'], ['btn-jpg', '🖼️', 'JPG সেভ'], ['btn-print', '🖨️', 'প্রিন্ট'], ['btn-login', '🔑', 'লগইন']];
+  function injectQuick() {
+    var sb = $('mobile-sidebar'); if (!sb || sb.querySelector('[data-mf74-q]') || !mq.matches) return;
+    var anchor = $('sidebar-settings'); if (!anchor) return;
+    var ref = (anchor.parentNode && anchor.parentNode.classList && anchor.parentNode.classList.contains('dragres-wrap')) ? anchor.parentNode : anchor;
+    QUICK.forEach(function (q) {
+      var src = $(q[0]); if (!src || src.style.display === 'none') return;
+      var d = document.createElement('div'); d.className = 'sidebar-item'; d.setAttribute('data-mf74-q', q[0]);
+      d.innerHTML = '<span class="icon">' + q[1] + '</span>' + q[2];
+      d.addEventListener('click', function () { var c = $('sidebar-close'); if (c) c.click(); setTimeout(function () { var t = $(q[0]); if (t) t.click(); }, 180); });
+      ref.parentNode.insertBefore(d, ref);
+    });
+  }
+  new MutationObserver(function () { injectQuick(); }).observe(document.body, { childList: true });
+  injectQuick(); buildFab(); update();
+})();
+</script>
 </body>
 </html>
