@@ -2,6 +2,7 @@
 <html lang="bn">
 <head>
     <meta charset="UTF-8" />
+    <!-- 🔧 [v16.5.88] এক্সেল ইমপোর্ট (সদস্য/মাসিক/বার্ষিক/ব্যয়): আগে যাচাই; ত্রুটি থাকলে সারি+কলামসহ তালিকা দেখিয়ে কিছুই সেভ করে না; ত্রুটি না থাকলে সারাংশ দেখিয়ে কনফার্ম চেয়ে সেভ। তারিখ DD/MM/YYYY ও বাংলা অঙ্কও পড়া হয়; ফাঁকা সারি আর "বাদ" গোনা হয় না। -->
     <!-- 🔧 [v16.5.87] আইডি নং না থাকলে রিসিপ্ট নম্বর জারি হয় না (সতর্কতা; আইডি দিলেই জারি); রেজিস্টারে ডুপ্লিকেট নম্বর লাল চিহ্ন + "নতুন নম্বর" বাটন। -->
     <!-- 🔧 [v16.5.86] রিসিপ্ট নম্বর সদস্যভিত্তিক: MF-{সদস্য নং}{সাল}-{ক্রম} (যেমন MF-৪৪২৬-০০১)। প্রতি সদস্যের নিজস্ব ক্রম, তাই দুই প্যানেলে একই সময়ে এন্ট্রি দিলেও নম্বর মেলে না। আগের নম্বর অপরিবর্তিত। -->
     <!-- 🔧 [v16.5.85] একাধিক মাসের গ্রুপ ডাউনলোডে (রেজিস্টার JPG/PDF ও মাসিক-মেনু JPG) জিজ্ঞেস করে: মাসভিত্তিক বিবরণসহ / বিবরণ ছাড়া। -->
@@ -16806,7 +16807,8 @@ body.dark-mode .btn-outline{border-color:var(--gold-300)!important;color:var(--g
         // আর এক্সেলের নিজস্ব ডেট-ফরম্যাটেড সেল হলে (SheetJS সিরিয়াল নাম্বার হিসেবে দেয়) সেটাও
         // চেনা যায় — দুই ক্ষেত্রেই YYYY-MM-DD ফরম্যাটে ফেরত আসে; পার্স করা না গেলে খালি স্ট্রিং
         const parseImportedDate = (raw) => {
-            const s = (raw || '').toString().trim();
+            const bn = '০১২৩৪৫৬৭৮৯';
+            const s = (raw || '').toString().trim().replace(/[০-৯]/g, c => String(bn.indexOf(c)));
             if (!s) return '';
             if (/^\d{4,6}$/.test(s)) { // এক্সেল সিরিয়াল ডেট নাম্বার
                 const n = Number(s);
@@ -16815,8 +16817,12 @@ body.dark-mode .btn-outline{border-color:var(--gold-300)!important;color:var(--g
                     if (!isNaN(d.getTime())) return d.toISOString().slice(0, 10);
                 }
             }
+            // 🆕 [v16.5.88] সরাসরি YYYY-MM-DD / YYYY/MM/DD / DD/MM/YYYY (DD-MM-YYYY, DD.MM.YYYY) — টাইমজোনে একদিন পিছিয়ে যাওয়া এড়াতে Date ছাড়াই
+            const ok = (y, m, d) => { y = +y; m = +m; d = +d; if (m < 1 || m > 12 || d < 1 || d > 31) return ''; const t = new Date(Date.UTC(y, m - 1, d)); if (t.getUTCMonth() !== m - 1) return ''; return y + '-' + String(m).padStart(2, '0') + '-' + String(d).padStart(2, '0'); };
+            let m = /^(\d{4})[\-\/.](\d{1,2})[\-\/.](\d{1,2})(?:[T\s].*)?$/.exec(s); if (m) return ok(m[1], m[2], m[3]);
+            m = /^(\d{1,2})[\-\/.](\d{1,2})[\-\/.](\d{4})$/.exec(s); if (m) return ok(m[3], m[2], m[1]);
             const d = new Date(s);
-            if (!isNaN(d.getTime())) return d.toISOString().slice(0, 10);
+            if (!isNaN(d.getTime())) return d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0');
             return '';
         };
 
@@ -16829,7 +16835,7 @@ body.dark-mode .btn-outline{border-color:var(--gold-300)!important;color:var(--g
         const importMembersFromRows = (rows) => {
             let added = 0, updated = 0, skipped = 0;
             rows.forEach(row => {
-                const name = pickRowField(row, ['নাম', 'Name', 'name']);
+                const name = pickRowField(row, ['নাম', 'সদস্যের নাম', 'Name', 'name']);
                 const father = pickRowField(row, ['পিতা বা স্বামীর নাম', 'পিতা/স্বামীর নাম', 'পিতা বা স্বামী', 'Father', 'father']);
                 const mobile = pickRowField(row, ['মোবাইল নাম্বার', 'মোবাইল', 'Mobile', 'mobile']);
                 const idNumber = pickRowField(row, ['আইডি নম্বর', 'আইডি নাম্বার', 'আইডি', 'আইডি নং', 'ID', 'Id', 'id', 'idNumber']);
@@ -16893,27 +16899,7 @@ body.dark-mode .btn-outline{border-color:var(--gold-300)!important;color:var(--g
             return { added, updated, skipped };
         };
 
-        const handleMemberExcelFile = (file) => {
-            const reader = new FileReader();
-            reader.onload = (e) => {
-                try {
-                    const data = new Uint8Array(e.target.result);
-                    const wb = XLSX.read(data, { type: 'array' });
-                    const sheet = wb.Sheets[wb.SheetNames[0]];
-                    const rows = XLSX.utils.sheet_to_json(sheet, { defval: '' });
-                    const { added, updated, skipped } = importMembersFromRows(rows);
-                    saveState();
-                    addActivityLog('add', 'member',
-                        'excel-import', `এক্সেল ইমপোর্ট: ${added} জন নতুন, ${updated} জন হালনাগাদ, ${skipped} সারি বাদ`);
-                    renderMain();
-                    toast(`ইমপোর্ট সম্পন্ন — নতুন: ${added} জন, হালনাগাদ: ${updated} জন${skipped ? `, বাদ: ${skipped} সারি (নাম নেই)` : ''}`);
-                } catch (err) {
-                    console.error(err);
-                    toast('এক্সেল ফাইল পড়তে সমস্যা হয়েছে — ফাইলটি সঠিক .xlsx ফরম্যাটে আছে কিনা দেখুন');
-                }
-            };
-            reader.readAsArrayBuffer(file);
-        };
+        const handleMemberExcelFile = (file) => mfImportFlow('members', file);   // 🆕 [v16.5.88] যাচাই → কনফার্ম → সেভ
 
         // 🆕 এক্সেল এক্সপোর্টগুলোকে (সদস্য তালিকা + নির্বাচিত সদস্যবৃন্দ + বার্ষিক অনুদান সারাংশ)
         // দেখতে "স্মার্ট"/প্রফেশনাল করার জন্য শেয়ার্ড স্টাইল-হেল্পার — উপরে প্রতিষ্ঠানের নাম ও
@@ -19836,7 +19822,7 @@ body.dark-mode .btn-outline{border-color:var(--gold-300)!important;color:var(--g
                 // (২) পাশাপাশি — প্রতিটি মাসের নামে আলাদা কলাম (যেমন July-2026), সারিতে সদস্য ১ জন; যেকোনো কয়েক মাস/১২ মাস একসাথে।
                 const items = [];
                 const mk = parseImportedMonthKey(pickRowField(row, NOT_MONTH_COL));
-                const amt1 = Number(pickRowField(row, ['পরিমাণ', 'Amount', 'amount'])) || 0;
+                const amt1 = impAmt(pickRowField(row, ['পরিমাণ', 'Amount', 'amount'])) || 0;
                 const hasMonthCell = pickRowField(row, NOT_MONTH_COL) !== '';
                 if (hasMonthCell || amt1) items.push({ monthKey: mk, amount: amt1 });
                 Object.keys(row).forEach(k => {
@@ -19896,29 +19882,7 @@ body.dark-mode .btn-outline{border-color:var(--gold-300)!important;color:var(--g
             toast('✅ টেমপ্লেট ডাউনলোড হচ্ছে — ' + toBengaliNum(members.length) + ' জন সদস্য × ' + toBengaliNum(months.length) + ' মাস');
         };
         window.mfMonthlyExcel = { parseMonthKey: parseImportedMonthKey, importRows: importMonthlyFromRows, exportXlsx: exportMonthlyToExcel, template: downloadMonthlyTemplate };
-        const handleMonthlyExcelFile = (file) => {
-            const reader = new FileReader();
-            reader.onload = (e) => {
-                try {
-                    const wb = XLSX.read(new Uint8Array(e.target.result), { type: 'array' });
-                    const isHead = (c) => { const t = String(c).trim(); return ['মাস', 'Month', 'month', 'সদস্যের নাম', 'আইডি নম্বর'].includes(t) || !!parseImportedMonthKey(t); };
-                    let rows = [];
-                    wb.SheetNames.forEach(sn => {
-                        const sh = wb.Sheets[sn]; const a = XLSX.utils.sheet_to_json(sh, { header: 1, defval: '' });
-                        const hi = a.findIndex(r => r.some(isHead)); if (hi < 0) return;   // নির্দেশনা শিট ইত্যাদি এড়ানো
-                        rows = rows.concat(XLSX.utils.sheet_to_json(sh, { defval: '', range: hi }));
-                    });
-                    const { added, updated, skipped, why } = importMonthlyFromRows(rows);
-                    if (added || updated) { saveState(); addActivityLog('add', 'monthly', '', `এক্সেল ইমপোর্ট (মাসিক): নতুন ${added} টি, হালনাগাদ ${updated} টি, বাদ ${skipped} সারি`); renderMain(); }
-                    const whyTxt = Object.keys(why).map(k => `${k}: ${why[k]}`).join(', ');
-                    toast(`ইমপোর্ট সম্পন্ন — নতুন ${added} · হালনাগাদ ${updated}${skipped ? ` · বাদ ${skipped} (${whyTxt})` : ''}`);
-                } catch (err) {
-                    console.error(err);
-                    toast('এক্সেল ফাইল পড়তে সমস্যা হয়েছে — .xlsx ফরম্যাট ও কলামের নাম (সদস্যের নাম, মাস, পরিমাণ…) দেখুন');
-                }
-            };
-            reader.readAsArrayBuffer(file);
-        };
+        const handleMonthlyExcelFile = (file) => mfImportFlow('monthly', file);   // 🆕 [v16.5.88] যাচাই → কনফার্ম → সেভ
 
         // 🆕 এক্সেল এক্সপোর্ট (বার্ষিক অনুদান)
         const exportYearlyToExcel = () => {
@@ -19966,7 +19930,7 @@ body.dark-mode .btn-outline{border-color:var(--gold-300)!important;color:var(--g
                 const name = pickRowField(row, ['সদস্যের নাম', 'নাম', 'Name', 'name']);
                 const mobile = pickRowField(row, ['মোবাইল নাম্বার', 'মোবাইল', 'Mobile', 'mobile']);
                 const dateRaw = pickRowField(row, ['তারিখ', 'Date', 'date']);
-                const amount = Number(pickRowField(row, ['পরিমাণ', 'Amount', 'amount'])) || 0;
+                const amount = impAmt(pickRowField(row, ['পরিমাণ', 'Amount', 'amount'])) || 0;
                 const method = pickRowField(row, ['মেথড', 'Method', 'method']);
                 const collector = pickRowField(row, ['সংগ্রাহক', 'Collector', 'collector']);
                 const remarks = pickRowField(row, ['মন্তব্য', 'Remarks', 'remarks']);
@@ -19992,26 +19956,7 @@ body.dark-mode .btn-outline{border-color:var(--gold-300)!important;color:var(--g
             return { added, skipped };
         };
 
-        const handleYearlyExcelFile = (file) => {
-            const reader = new FileReader();
-            reader.onload = (e) => {
-                try {
-                    const data = new Uint8Array(e.target.result);
-                    const wb = XLSX.read(data, { type: 'array' });
-                    const sheet = wb.Sheets[wb.SheetNames[0]];
-                    const rows = XLSX.utils.sheet_to_json(sheet, { defval: '' });
-                    const { added, skipped } = importYearlyFromRows(rows);
-                    saveState();
-                    addActivityLog('add', 'yearly', '', `এক্সেল ইমপোর্ট: ${added} টি নতুন এন্ট্রি, ${skipped} সারি বাদ`);
-                    renderMain();
-                    toast(`ইমপোর্ট সম্পন্ন — নতুন এন্ট্রি: ${added} টি${skipped ? `, বাদ: ${skipped} সারি (সদস্য শনাক্ত হয়নি বা পরিমাণ নেই)` : ''}`);
-                } catch (err) {
-                    console.error(err);
-                    toast('এক্সেল ফাইল পড়তে সমস্যা হয়েছে — ফাইলটি সঠিক .xlsx ফরম্যাটে আছে কিনা দেখুন');
-                }
-            };
-            reader.readAsArrayBuffer(file);
-        };
+        const handleYearlyExcelFile = (file) => mfImportFlow('yearly', file);   // 🆕 [v16.5.88] যাচাই → কনফার্ম → সেভ
 
         const yearlyFormHtml = (r) => `
           <h3>${r ? 'এন্ট্রি সম্পাদনা' : 'নতুন বার্ষিক / এককালীন অনুদান'}</h3>
@@ -20413,7 +20358,7 @@ body.dark-mode .btn-outline{border-color:var(--gold-300)!important;color:var(--g
             rows.forEach(row => {
                 const desc = pickRowField(row, ['বিবরণ', 'Description', 'desc']);
                 const catName = pickRowField(row, ['ক্যাটাগরি', 'Category', 'category']);
-                const amount = Number(pickRowField(row, ['পরিমাণ', 'Amount', 'amount'])) || 0;
+                const amount = impAmt(pickRowField(row, ['পরিমাণ', 'Amount', 'amount'])) || 0;
                 const dateRaw = pickRowField(row, ['তারিখ', 'Date', 'date']);
                 const remarks = pickRowField(row, ['মন্তব্য', 'Remarks', 'remarks']);
                 if (!desc || !amount) { skipped++; return; }
@@ -20428,26 +20373,253 @@ body.dark-mode .btn-outline{border-color:var(--gold-300)!important;color:var(--g
             return { added, skipped };
         };
 
-        const handleExpensesExcelFile = (file) => {
+        const handleExpensesExcelFile = (file) => mfImportFlow('expenses', file);   // 🆕 [v16.5.88] যাচাই → কনফার্ম → সেভ
+
+        // ======================================================================
+        // 🆕 [v16.5.88] এক্সেল ইমপোর্ট (সদস্য · মাসিক · বার্ষিক · ব্যয়) — যাচাই → কনফার্ম → সেভ
+        //  ১) ফাইল পড়ে হেডার-সারি খোঁজা (লেটারহেড/নির্দেশনা শিট এড়িয়ে) · ২) প্রতিটি সারি যাচাই
+        //  ৩) কোনো ত্রুটি থাকলে: সারি+কলামসহ তালিকা দেখায়, কিছুই সেভ হয় না (ডাটা আগের মতোই থাকে)
+        //  ৪) ত্রুটি না থাকলে: কয়টি নতুন/হালনাগাদ তার সারাংশ দেখিয়ে কনফার্ম চায় — "নিশ্চিত" চাপলেই সেভ
+        //  পূর্বরূপ (dry-run) করা হয় ডেটার ব্যাকআপ-কপি নিয়ে, তারপর হুবহু আগের অবস্থায় ফেরানো হয় — তাই কনফার্মের আগে অ্যাপের ডেটা বদলায় না।
+        // ======================================================================
+        const IA = {
+            id: ['আইডি নম্বর', 'আইডি নাম্বার', 'আইডি', 'আইডি নং', 'ID', 'Id', 'id', 'idNumber'],
+            name: ['সদস্যের নাম', 'নাম', 'Name', 'name'],
+            father: ['পিতা বা স্বামীর নাম', 'পিতা/স্বামীর নাম', 'পিতা বা স্বামী', 'Father', 'father'],
+            mobile: ['মোবাইল নাম্বার', 'মোবাইল', 'Mobile', 'mobile'],
+            email: ['ইমেইল', 'Email', 'email'],
+            join: ['জয়েন ডেট', 'জয়েনের তারিখ', 'Join Date', 'joinDate'],
+            remarks: ['মন্তব্য', 'Remarks', 'remarks'],
+            amount: ['পরিমাণ', 'Amount', 'amount'],
+            date: ['তারিখ', 'Date', 'date'],
+            method: ['মেথড', 'পদ্ধতি', 'Method', 'method'],
+            collector: ['সংগ্রাহক', 'Collector', 'collector'],
+            desc: ['বিবরণ', 'Description', 'desc'],
+            cat: ['ক্যাটাগরি', 'Category', 'category'],
+            month: ['মাস', 'Month', 'month'],
+            ignore: ['নং', 'রিসিপ্ট নং', 'SL', 'Sl', 'sl', 'ক্রমিক']
+        };
+        const impIn = (h, k) => IA[k].indexOf(String(h).trim()) >= 0;
+        const impAmt = (raw) => { const bn = '০১২৩৪৫৬৭৮৯'; const t = String(raw == null ? '' : raw).replace(/[০-৯]/g, c => String(bn.indexOf(c))).replace(/[,\s৳]/g, ''); if (t === '') return 0; const n = Number(t); return isFinite(n) ? n : NaN; };
+        const IMP_EMAIL_RE = /^[^@\s]+@[^@\s]+\.[^@\s]+$/;
+        const impPick = (data, k) => pickRowField(data, IA[k]);
+        // মেথড/সংগ্রাহক তালিকায় না থাকলে সতর্কতা (সেভ আটকায় না, লেখাটা যেমন আছে তেমনই বসে)
+        const impListWarn = (W, rowNo, label, val, list) => { const v = String(val || '').trim(); if (v && Array.isArray(list) && list.length && list.indexOf(v) < 0) W.push({ row: rowNo, msg: label + ' "' + v + '" তালিকায় নেই (আছে: ' + list.slice(0, 5).join(', ') + ') — যেমন লেখা আছে তেমনই বসবে' }); };
+        const IMP_META = {
+            members: { label: 'সদস্য তালিকা', where: 'সদস্যবৃন্দ পেজ → "📥 এক্সেল ইমপোর্ট"', need: '"নাম" (সাথে আইডি নং, পিতা বা স্বামীর নাম, মোবাইল নাম্বার, ইমেইল, জয়েন ডেট, মন্তব্য)', anchor: (hs) => hs.some(h => impIn(h, 'name')) && !hs.some(h => impIn(h, 'amount')) && !hs.some(h => impIn(h, 'desc')) && !hs.some(h => impMonthCol(h)) },
+            monthly: { label: 'মাসিক অনুদান', where: 'মাসিক অনুদান পেজ → "ইমপোর্ট"', need: 'আইডি নম্বর/সদস্যের নাম + মাসের কলাম (যেমন July-2026) অথবা "মাস" ও "পরিমাণ" কলাম', anchor: (hs) => hs.some(h => impMonthCol(h) || impIn(h, 'month')) },
+            yearly: { label: 'বার্ষিক/এককালীন অনুদান', where: 'বার্ষিক অনুদান পেজ → "ইমপোর্ট"', need: '"সদস্যের নাম" বা "আইডি নম্বর" + "পরিমাণ" (সাথে তারিখ, মেথড, সংগ্রাহক, মন্তব্য)', anchor: (hs) => hs.some(h => impIn(h, 'amount')) && (hs.some(h => impIn(h, 'name')) || hs.some(h => impIn(h, 'id'))) && !hs.some(h => impIn(h, 'desc')) && !hs.some(h => impIn(h, 'month')) },
+            expenses: { label: 'ব্যয় (খরচ)', where: 'ব্যয় পেজ → "ইমপোর্ট"', need: '"বিবরণ" ও "পরিমাণ" (সাথে তারিখ, ক্যাটাগরি, মন্তব্য)', anchor: (hs) => hs.some(h => impIn(h, 'desc')) && hs.some(h => impIn(h, 'amount')) }
+        };
+        // "July-2026" / "জুলাই ২০২৬" ধরনের মাসের-কলাম; "July-2026 মেথড"/"… রিসিভ তারিখ" সাব-কলামও চেনা হয়
+        const impMonthCol = (h) => !!parseImportedMonthKey(String(h).trim());
+        const impMonthSub = (h) => { const t = String(h).trim(); const m = /^(.+?)\s+(মেথড|পদ্ধতি|রিসিভ তারিখ|রিসিভ ডেট|তারিখ)$/.exec(t); return (m && parseImportedMonthKey(m[1])) ? m[1] : ''; };
+        const impBlank = (arr) => arr.every(c => String(c == null ? '' : c).trim() === '');
+        const impParse = (type, wb) => {
+            const meta = IMP_META[type], found = [], seen = [];
+            for (const sn of wb.SheetNames) {
+                if (/^(উদাহরণ|নির্দেশনা|ক্যাটাগরি তালিকা)/.test(sn)) continue;   // শুধু দেখার/নির্দেশনার শিট ইমপোর্ট হয় না
+                const aoa = XLSX.utils.sheet_to_json(wb.Sheets[sn], { header: 1, defval: '' });
+                if (!seen.length) { const fr = aoa.find(r => !impBlank(r)); if (fr) seen.push({ sheet: sn, headers: fr.map(c => String(c).trim()).filter(Boolean) }); }
+                let hi = -1;
+                for (let i = 0; i < Math.min(aoa.length, 25); i++) { const hs = aoa[i].map(c => String(c == null ? '' : c).trim()); if (hs.some(Boolean) && meta.anchor(hs)) { hi = i; break; } }
+                if (hi < 0) continue;
+                const headers = aoa[hi].map(c => String(c == null ? '' : c).trim());
+                const rows = [];
+                for (let i = hi + 1; i < aoa.length; i++) {
+                    if (impBlank(aoa[i])) continue;
+                    const data = {}; headers.forEach((h, j) => { if (h && !(h in data)) data[h] = aoa[i][j] == null ? '' : aoa[i][j]; });
+                    rows.push({ rowNo: i + 1, data });
+                }
+                found.push({ sheet: sn, headerRow: hi + 1, headers, rows });
+                if (type !== 'monthly') break;
+            }
+            if (!found.length) {
+                let hint = '';
+                const other = Object.keys(IMP_META).find(k => k !== type && seen.length && IMP_META[k].anchor(seen[0].headers));
+                if (other) hint = ' — এই ফাইলের কলাম দেখে মনে হচ্ছে এটি "' + IMP_META[other].label + '" ইমপোর্টের ফাইল (' + IMP_META[other].where + ')।';
+                return { fatal: 'এই ফাইলে "' + meta.label + '" ইমপোর্টের কলাম পাওয়া যায়নি। প্রয়োজন: ' + meta.need + '। ফাইলের প্রথম শিটের কলাম: ' + (seen.length ? seen[0].headers.join(' | ') : '(ফাঁকা)') + hint };
+            }
+            const headers = []; found.forEach(f => f.headers.forEach(h => { if (h && headers.indexOf(h) < 0) headers.push(h); }));
+            return { sheets: found, headers, headerRow: found[0].headerRow, rows: found.reduce((a, f) => a.concat(f.rows.map(r => Object.assign({ sheet: f.sheet }, r))), []) };
+        };
+        const impDigits = (v) => parseInt(String(v || '').replace(/[০-৯]/g, c => '০১২৩৪৫৬৭৮৯'.indexOf(c)).replace(/\D/g, ''), 10);
+        const impMemberFind = (id, name, mobile, father) => {
+            const nId = String(id || '').trim(), nName = normalizeNameForMatch(name), nMob = normalizeMobileForMatch(mobile);
+            if (nId) { const m = state.members.find(x => String(x.idNumber || '').trim() === nId); if (m) return { m }; }
+            if (father && name) { const m = state.members.find(x => normalizeNameForMatch(x.name) === nName && normalizeNameForMatch(x.father) === normalizeNameForMatch(father)); if (m) return { m }; }
+            if (name && mobile) { const m = state.members.find(x => normalizeNameForMatch(x.name) === nName && normalizeMobileForMatch(x.mobile) === nMob); if (m) return { m }; }
+            if (name) { const L = state.members.filter(x => normalizeNameForMatch(x.name) === nName); if (L.length === 1) return { m: L[0] }; if (L.length > 1) return { amb: L.length }; }
+            return {};
+        };
+        const IMP_VALID = {
+            members(P) {
+                const E = [], W = [], seenId = {}, digs = {};
+                P.headers.forEach(h => { if (!(['id', 'name', 'father', 'mobile', 'email', 'join', 'remarks', 'ignore'].some(k => impIn(h, k)))) W.push({ row: P.headerRow, msg: 'কলাম "' + h + '" চেনা যায়নি — এই কলামের তথ্য বাদ যাবে' }); });
+                state.members.forEach(m => { const d = impDigits(m.idNumber); if (isFinite(d) && d > 0) { (digs[d] = digs[d] || []).push(String(m.idNumber).trim()); } });
+                P.rows.forEach(({ rowNo, data }) => {
+                    const name = impPick(data, 'name'), id = impPick(data, 'id'), mob = impPick(data, 'mobile'), em = impPick(data, 'email'), jr = impPick(data, 'join');
+                    if (!name) E.push({ row: rowNo, col: 'নাম', msg: 'নাম ফাঁকা — অথচ এই সারিতে অন্য তথ্য আছে' });
+                    if (em && !IMP_EMAIL_RE.test(em)) E.push({ row: rowNo, col: 'ইমেইল', msg: '"' + em + '" সঠিক ইমেইল নয়' });
+                    if (jr && !parseImportedDate(jr)) E.push({ row: rowNo, col: 'জয়েন ডেট', msg: '"' + jr + '" তারিখ বোঝা যায়নি (YYYY-MM-DD লিখুন, যেমন 2024-01-15)' });
+                    const md = normalizeMobileForMatch(mob); if (mob && (md.length < 10 || md.length > 15)) E.push({ row: rowNo, col: 'মোবাইল নাম্বার', msg: '"' + mob + '" — সংখ্যা ' + md.length + 'টি (১০–১৫টি হতে হবে)' });
+                    if (id) {
+                        if (seenId[id]) E.push({ row: rowNo, col: 'আইডি নং', msg: '"' + id + '" ফাইলের ' + toBengaliNum(seenId[id]) + ' নং সারিতেও আছে — আইডি অদ্বিতীয় হতে হবে' }); else seenId[id] = rowNo;
+                        const d = impDigits(id);
+                        if (!isFinite(d) || d <= 0) W.push({ row: rowNo, msg: 'আইডি "' + id + '"-এ কোনো সংখ্যা নেই — এই সদস্যের রিসিপ্ট নম্বর জারি হবে না' });
+                        else if ((digs[d] || []).some(x => x !== id)) W.push({ row: rowNo, msg: 'আইডি "' + id + '"-এর সংখ্যা (' + d + ') আরেক সদস্যের আইডি "' + digs[d].find(x => x !== id) + '"-এর সাথে মেলে — রিসিপ্ট নম্বরে সংঘর্ষ হবে' });
+                        (digs[d] = digs[d] || []).push(id);
+                        const ex = state.members.find(x => String(x.idNumber || '').trim() === id);
+                        if (ex && name && ex.name !== name) W.push({ row: rowNo, msg: 'আইডি "' + id + '" আগে থেকেই "' + ex.name + '"-এর — নাম বদলে "' + name + '" হবে' });
+                    } else if (name) W.push({ row: rowNo, msg: '"' + name + '" — আইডি নং নেই (রিসিপ্ট নম্বর জারি করতে পরে আইডি দিতে হবে)' });
+                });
+                return { E, W };
+            },
+            monthly(P) {
+                const E = [], W = [];
+                P.headers.forEach(h => { if (!(['id', 'name', 'father', 'mobile', 'month', 'amount', 'date', 'method', 'collector', 'ignore'].some(k => impIn(h, k)) || impIn(h, 'method') || impMonthCol(h) || impMonthSub(h) || /^ডিফল্ট /.test(h) || h === 'রিসিভ তারিখ' || h === 'রিসিপ্ট নং')) W.push({ row: P.headerRow, msg: 'কলাম "' + h + '" চেনা যায়নি — বাদ যাবে' }); });
+                if (!P.headers.some(h => impIn(h, 'id') || impIn(h, 'name') || impIn(h, 'mobile'))) E.push({ row: P.headerRow, col: 'শনাক্তকরণ', msg: 'সদস্য শনাক্তের কলাম নেই — "আইডি নম্বর" বা "সদস্যের নাম" কলাম দরকার' });
+                const monthCols = P.headers.filter(h => impMonthCol(h)), longForm = P.headers.some(h => impIn(h, 'month')) && P.headers.some(h => impIn(h, 'amount'));
+                if (!monthCols.length && !longForm) E.push({ row: P.headerRow, col: 'মাস', msg: 'কোনো মাসের কলাম (যেমন July-2026) নেই, আবার "মাস"+"পরিমাণ" কলামও নেই' });
+                P.rows.forEach(({ rowNo, data }) => {
+                    const id = impPick(data, 'id'), name = impPick(data, 'name'), mob = impPick(data, 'mobile');
+                    let n = 0;
+                    const chkDate = (raw, col) => { const s = String(raw == null ? '' : raw).trim(); if (s && !parseImportedDate(s)) E.push({ row: rowNo, col, msg: '"' + s + '" তারিখ বোঝা যায়নি (2026-07-15 বা 15/07/2026 লিখুন)' }); };
+                    const mcell = pickRowField(data, IA.month);
+                    if (longForm && (mcell !== '' || String(data[IA.amount.find(a => a in data)] || '').trim() !== '')) {
+                        n++;
+                        if (!parseImportedMonthKey(mcell)) E.push({ row: rowNo, col: 'মাস', msg: '"' + mcell + '" মাস বোঝা যায়নি (June-2026 / জুন ২০২৬ / 2026-06)' });
+                        const a = impAmt(impPick(data, 'amount')); if (!(a > 0)) E.push({ row: rowNo, col: 'পরিমাণ', msg: 'পরিমাণ সংখ্যা নয় বা ০' });
+                        chkDate(impPick(data, 'date'), 'তারিখ');
+                    }
+                    monthCols.forEach(k => {
+                        const raw = data[k]; if (raw === '' || raw === null || raw === undefined || String(raw).trim() === '') return;
+                        n++;
+                        const a = impAmt(raw); if (!(a > 0)) E.push({ row: rowNo, col: k, msg: '"' + raw + '" — পরিমাণ সংখ্যা হতে হবে (০-এর বেশি)' });
+                        chkDate(data[k + ' রিসিভ তারিখ'], k + ' রিসিভ তারিখ'); chkDate(data[k + ' রিসিভ ডেট'], k + ' রিসিভ ডেট');
+                    });
+                    chkDate(impPick(data, 'date'), 'রিসিভ তারিখ');
+                    impListWarn(W, rowNo, 'মেথড', impPick(data, 'method'), state.methods); impListWarn(W, rowNo, 'সংগ্রাহক', impPick(data, 'collector'), state.collectors);
+                    monthCols.forEach(k => { impListWarn(W, rowNo, k + ' মেথড', data[k + ' মেথড'], state.methods); });
+                    if (!n) { if (name || id) W.push({ row: rowNo, msg: '"' + (name || id) + '" — কোনো মাসে টাকা নেই, এই সারি বাদ যাবে' }); return; }
+                    const f = impMemberFind(id, name, mob, '');
+                    if (f.amb) E.push({ row: rowNo, col: 'সদস্য', msg: '"' + name + '" নামে ' + f.amb + ' জন সদস্য আছে — "আইডি নম্বর" দিয়ে শনাক্ত করুন' });
+                    else if (!f.m) E.push({ row: rowNo, col: 'সদস্য', msg: 'সদস্য পাওয়া যায়নি (আইডি: ' + (id || '—') + ', নাম: ' + (name || '—') + ') — আগে সদস্য তালিকায় যোগ করুন' });
+                });
+                return { E, W };
+            },
+            yearly(P) {
+                const E = [], W = [];
+                P.headers.forEach(h => { if (!(['id', 'name', 'father', 'mobile', 'amount', 'date', 'method', 'collector', 'remarks', 'ignore'].some(k => impIn(h, k)))) W.push({ row: P.headerRow, msg: 'কলাম "' + h + '" চেনা যায়নি — বাদ যাবে' }); });
+                if (!P.headers.some(h => impIn(h, 'amount'))) E.push({ row: P.headerRow, col: 'পরিমাণ', msg: '"পরিমাণ" কলাম নেই' });
+                let dup = 0;
+                P.rows.forEach(({ rowNo, data }) => {
+                    const id = impPick(data, 'id'), name = impPick(data, 'name'), mob = impPick(data, 'mobile'), dr = impPick(data, 'date');
+                    const a = impAmt(impPick(data, 'amount')); if (!(a > 0)) E.push({ row: rowNo, col: 'পরিমাণ', msg: 'পরিমাণ ফাঁকা/সংখ্যা নয়/০ ("' + impPick(data, 'amount') + '")' });
+                    if (dr && !parseImportedDate(dr)) E.push({ row: rowNo, col: 'তারিখ', msg: '"' + dr + '" তারিখ বোঝা যায়নি' });
+                    if (!dr) W.push({ row: rowNo, msg: 'তারিখ নেই — আজকের তারিখ বসবে' });
+                    impListWarn(W, rowNo, 'মেথড', impPick(data, 'method'), state.methods); impListWarn(W, rowNo, 'সংগ্রাহক', impPick(data, 'collector'), state.collectors);
+                    const f = impMemberFind(id, name, mob, '');
+                    if (f.amb) E.push({ row: rowNo, col: 'সদস্য', msg: '"' + name + '" নামে ' + f.amb + ' জন সদস্য আছে — "আইডি নম্বর" দিন' });
+                    else if (!f.m) E.push({ row: rowNo, col: 'সদস্য', msg: 'সদস্য পাওয়া যায়নি (আইডি: ' + (id || '—') + ', নাম: ' + (name || '—') + ')' });
+                    else if (a > 0 && dr && state.yearly.some(y => y.memberId === f.m.id && Number(y.amount) === a && String(y.date || '').slice(0, 10) === parseImportedDate(dr))) dup++;
+                });
+                if (dup) W.push({ row: '—', msg: dup + 'টি সারির মতো (একই সদস্য+তারিখ+পরিমাণ) এন্ট্রি আগে থেকেই আছে — ইমপোর্টে ডুপ্লিকেট হবে। আগে ইমপোর্ট করা ফাইল আবার দিচ্ছেন না তো?' });
+                return { E, W };
+            },
+            expenses(P) {
+                const E = [], W = [];
+                P.headers.forEach(h => { if (!(['date', 'desc', 'cat', 'amount', 'remarks', 'ignore'].some(k => impIn(h, k)))) W.push({ row: P.headerRow, msg: 'কলাম "' + h + '" চেনা যায়নি — বাদ যাবে' }); });
+                P.rows.forEach(({ rowNo, data }) => {
+                    const desc = impPick(data, 'desc'), cn = impPick(data, 'cat'), dr = impPick(data, 'date');
+                    if (!desc) E.push({ row: rowNo, col: 'বিবরণ', msg: 'বিবরণ ফাঁকা' });
+                    const a = impAmt(impPick(data, 'amount')); if (!(a > 0)) E.push({ row: rowNo, col: 'পরিমাণ', msg: 'পরিমাণ ফাঁকা/সংখ্যা নয়/০ ("' + impPick(data, 'amount') + '")' });
+                    if (dr && !parseImportedDate(dr)) E.push({ row: rowNo, col: 'তারিখ', msg: '"' + dr + '" তারিখ বোঝা যায়নি' });
+                    if (!dr) W.push({ row: rowNo, msg: 'তারিখ নেই — আজকের তারিখ বসবে' });
+                    if (!cn) E.push({ row: rowNo, col: 'ক্যাটাগরি', msg: 'ক্যাটাগরি ফাঁকা — তালিকার একটি ক্যাটাগরির নাম দিন' });
+                    else if (!state.categories.some(c => normalizeNameForMatch(c.name) === normalizeNameForMatch(cn))) E.push({ row: rowNo, col: 'ক্যাটাগরি', msg: '"' + cn + '" নামে ক্যাটাগরি নেই — আগে সেটিংসে যোগ করুন বা এক্সেলে নাম ঠিক করুন (আছে: ' + state.categories.slice(0, 6).map(c => c.name).join(', ') + (state.categories.length > 6 ? '…' : '') + ')' });
+                });
+                return { E, W };
+            }
+        };
+        const IMP_RUN = {
+            members: (rows) => importMembersFromRows(rows), monthly: (rows) => importMonthlyFromRows(rows),
+            yearly: (rows) => importYearlyFromRows(rows), expenses: (rows) => importExpensesFromRows(rows)
+        };
+        // dry-run: ডেটার কপি রেখে ইমপোর্ট চালিয়ে সংখ্যা নেওয়া, তারপর হুবহু আগের অবস্থায় ফেরানো
+        const impDry = (type, rows) => {
+            const snap = JSON.stringify({ members: state.members, monthly: state.monthly, yearly: state.yearly, expenses: state.expenses });
+            try { return IMP_RUN[type](rows); }
+            finally { const o = JSON.parse(snap); state.members = o.members; state.monthly = o.monthly; state.yearly = o.yearly; state.expenses = o.expenses; }
+        };
+        const impEsc = (s) => escapeHtml(String(s == null ? '' : s));
+        const impCopyText = (type, fname, E, W) => 'ইমপোর্ট ত্রুটি — ' + IMP_META[type].label + ' — ফাইল: ' + fname + '\n' + E.map(x => 'সারি ' + x.row + (x.col ? ' · ' + x.col : '') + ': ' + x.msg).join('\n') + (W.length ? '\n\nসতর্কতা:\n' + W.map(x => 'সারি ' + x.row + ': ' + x.msg).join('\n') : '');
+        const impShowErrors = (type, fname, E, W) => {
+            const LIM = 60, cut = E.length > LIM;
+            openModal(`
+              <h3 style="color:#b71c1c;">❌ ইমপোর্ট বন্ধ — ${toBengaliNum(E.length)}টি সমস্যা পাওয়া গেছে</h3>
+              <div class="small" style="background:#fdecea;border:1px solid #e57373;border-radius:8px;padding:8px 10px;margin-bottom:8px;"><b>কিছুই সেভ হয়নি</b> — আপনার ডাটা আগের মতোই আছে। নিচের জায়গাগুলো ঠিক করে ফাইলটি আবার ইমপোর্ট করুন।<div class="muted" style="margin-top:2px;">ধরন: ${impEsc(IMP_META[type].label)} · ফাইল: ${impEsc(fname)}</div></div>
+              <div style="overflow:auto;max-height:46vh;border:1px solid var(--line);border-radius:8px;"><table style="width:100%;border-collapse:collapse;font-size:13px;min-width:420px;">
+                <thead><tr style="background:#164e43;color:#fff;"><th style="padding:6px 8px;text-align:left;white-space:nowrap;">সারি</th><th style="padding:6px 8px;text-align:left;">কলাম</th><th style="padding:6px 8px;text-align:left;">সমস্যা</th></tr></thead>
+                <tbody>${E.slice(0, LIM).map(x => `<tr><td style="padding:5px 8px;border-bottom:1px solid var(--line);white-space:nowrap;"><b>${impEsc(typeof x.row === 'number' ? toBengaliNum(x.row) : x.row)}</b></td><td style="padding:5px 8px;border-bottom:1px solid var(--line);">${impEsc(x.col || '')}</td><td style="padding:5px 8px;border-bottom:1px solid var(--line);">${impEsc(x.msg)}</td></tr>`).join('')}</tbody></table></div>
+              ${cut ? `<div class="small muted" style="margin-top:4px;">আরও ${toBengaliNum(E.length - LIM)}টি সমস্যা আছে — আগেরগুলো ঠিক করে আবার ইমপোর্ট করলে বাকিগুলো দেখাবে ("তালিকা কপি করুন" চাপলে সবগুলো কপি হবে)।</div>` : ''}
+              <div class="small muted" style="margin-top:6px;">সারি নম্বর = এক্সেলের বাঁ-পাশের সারি নম্বর।</div>
+              <div class="modal-actions"><button class="btn btn-outline" id="imp-copy">তালিকা কপি করুন</button><button class="btn btn-primary" id="imp-close">বন্ধ করুন</button></div>`, () => {
+                document.getElementById('imp-close').onclick = closeModal;
+                document.getElementById('imp-copy').onclick = () => { const t = impCopyText(type, fname, E, W); try { navigator.clipboard.writeText(t).then(() => toast('তালিকা কপি হয়েছে'), () => toast('কপি করা যায়নি')); } catch (e) { toast('কপি করা যায়নি'); } };
+            });
+        };
+        const impShowConfirm = (type, fname, P, V, dry) => {
+            const meta = IMP_META[type], W = V.W, rows = P.rows.map(r => r.data);
+            const counts = type === 'members' ? `<b>${toBengaliNum(dry.added)}</b> জন নতুন সদস্য যোগ · <b>${toBengaliNum(dry.updated)}</b> জনের তথ্য হালনাগাদ`
+                : type === 'monthly' ? `<b>${toBengaliNum(dry.added)}</b>টি নতুন মাসিক এন্ট্রি · <b>${toBengaliNum(dry.updated)}</b>টি হালনাগাদ`
+                : type === 'yearly' ? `<b>${toBengaliNum(dry.added)}</b>টি নতুন বার্ষিক/এককালীন এন্ট্রি যোগ` : `<b>${toBengaliNum(dry.added)}</b>টি নতুন খরচ যোগ`;
+            const sample = P.rows.slice(0, 5).map(r => { const d = r.data; return type === 'expenses' ? [impPick(d, 'desc'), impPick(d, 'cat'), impPick(d, 'amount')] : type === 'members' ? [impPick(d, 'id'), impPick(d, 'name'), impPick(d, 'mobile')] : [impPick(d, 'id'), impPick(d, 'name'), type === 'yearly' ? impPick(d, 'amount') : '']; });
+            openModal(`
+              <h3>✅ কোনো ত্রুটি নেই — ইমপোর্ট নিশ্চিত করবেন?</h3>
+              <div class="small muted" style="margin-bottom:8px;">ধরন: ${impEsc(meta.label)} · ফাইল: ${impEsc(fname)} · মোট ${toBengaliNum(P.rows.length)}টি সারি</div>
+              <div style="background:#e8f5e9;border:1px solid #81c784;border-radius:8px;padding:8px 10px;margin-bottom:8px;font-size:14px;">${counts}${dry.skipped ? ` · <span class="muted">বাদ ${toBengaliNum(dry.skipped)}টি</span>` : ''}</div>
+              <div class="small muted" style="margin-bottom:4px;">প্রথম কয়েকটি সারি:</div>
+              <div style="overflow:auto;border:1px solid var(--line);border-radius:8px;margin-bottom:8px;"><table style="width:100%;border-collapse:collapse;font-size:12.5px;">${sample.map(s => `<tr>${s.map(c => `<td style="padding:4px 8px;border-bottom:1px solid var(--line);">${impEsc(c)}</td>`).join('')}</tr>`).join('')}</table></div>
+              ${W.length ? `<div class="small" style="background:#fff8e1;border:1px solid #ffca28;border-radius:8px;padding:6px 10px;margin-bottom:8px;max-height:24vh;overflow:auto;"><b>⚠️ সতর্কতা (ইমপোর্ট আটকাবে না):</b>${W.slice(0, 15).map(x => `<div>• ${x.row !== '—' ? 'সারি ' + impEsc(toBengaliNum(x.row)) + ': ' : ''}${impEsc(x.msg)}</div>`).join('')}${W.length > 15 ? `<div class="muted">… আরও ${toBengaliNum(W.length - 15)}টি</div>` : ''}</div>` : ''}
+              <div class="small muted">"নিশ্চিত — সেভ করুন" চাপলে ডাটা সেভ হবে; "বাতিল" চাপলে কিছুই বদলাবে না।</div>
+              <div class="modal-actions"><button class="btn btn-outline" id="imp-cancel">বাতিল</button><button class="btn btn-primary" id="imp-ok">নিশ্চিত — সেভ করুন</button></div>`, () => {
+                document.getElementById('imp-cancel').onclick = () => { closeModal(); toast('ইমপোর্ট বাতিল — কিছুই বদলায়নি'); };
+                const ok = document.getElementById('imp-ok');
+                ok.onclick = () => {
+                    ok.disabled = true;
+                    let r;
+                    try { r = IMP_RUN[type](rows); saveState(); }
+                    catch (err) { console.error(err); closeModal(); toast('সেভ করতে সমস্যা হয়েছে: ' + (err && err.message || err)); return; }
+                    const lg = { members: ['add', 'member', 'excel-import', `এক্সেল ইমপোর্ট: ${r.added} জন নতুন, ${r.updated} জন হালনাগাদ`], monthly: ['add', 'monthly', '', `এক্সেল ইমপোর্ট (মাসিক): নতুন ${r.added} টি, হালনাগাদ ${r.updated} টি`], yearly: ['add', 'yearly', '', `এক্সেল ইমপোর্ট: ${r.added} টি নতুন এন্ট্রি`], expenses: ['add', 'expense', '', `এক্সেল ইমপোর্ট: ${r.added} টি নতুন খরচ`] }[type];
+                    try { addActivityLog(lg[0], lg[1], lg[2], lg[3]); } catch (e) { }
+                    closeModal(); try { renderMain(); } catch (e) { }
+                    toast('✅ ইমপোর্ট সম্পন্ন — ' + (type === 'members' ? `নতুন ${r.added} জন · হালনাগাদ ${r.updated} জন` : type === 'monthly' ? `নতুন ${r.added} · হালনাগাদ ${r.updated}` : `নতুন ${r.added}টি`));
+                };
+            });
+        };
+        const mfImportFlow = (type, file) => {
+            const fname = (file && file.name) || 'ফাইল';
             const reader = new FileReader();
             reader.onload = (e) => {
                 try {
-                    const data = new Uint8Array(e.target.result);
-                    const wb = XLSX.read(data, { type: 'array' });
-                    const sheet = wb.Sheets[wb.SheetNames[0]];
-                    const rows = XLSX.utils.sheet_to_json(sheet, { defval: '' });
-                    const { added, skipped } = importExpensesFromRows(rows);
-                    saveState();
-                    addActivityLog('add', 'expense', '', `এক্সেল ইমপোর্ট: ${added} টি নতুন খরচ, ${skipped} সারি বাদ`);
-                    renderMain();
-                    toast(`ইমপোর্ট সম্পন্ন — নতুন খরচ: ${added} টি${skipped ? `, বাদ: ${skipped} সারি (বিবরণ/পরিমাণ নেই)` : ''}`);
+                    const wb = XLSX.read(new Uint8Array(e.target.result), { type: 'array' });
+                    const P = impParse(type, wb);
+                    if (P.fatal) { impShowErrors(type, fname, [{ row: '—', col: 'ফাইল', msg: P.fatal }], []); return; }
+                    const V = IMP_VALID[type](P);
+                    if (V.E.length) { impShowErrors(type, fname, V.E, V.W); return; }
+                    if (!P.rows.length) { impShowErrors(type, fname, [{ row: '—', col: 'ফাইল', msg: 'কোনো ডাটা-সারি পাওয়া যায়নি (হেডারের নিচে সব ফাঁকা)' }], []); return; }
+                    const rows = P.rows.map(r => r.data), dry = impDry(type, rows);
+                    if (!dry.added && !dry.updated) { impShowErrors(type, fname, [{ row: '—', col: 'ফাইল', msg: 'ইমপোর্ট করার মতো নতুন বা বদলানো কিছু পাওয়া যায়নি (সব তথ্য আগে থেকেই আছে বা সব সারি বাদ পড়ছে)' }], V.W); return; }
+                    impShowConfirm(type, fname, P, V, dry);
                 } catch (err) {
                     console.error(err);
-                    toast('এক্সেল ফাইল পড়তে সমস্যা হয়েছে — ফাইলটি সঠিক .xlsx ফরম্যাটে আছে কিনা দেখুন');
+                    impShowErrors(type, fname, [{ row: '—', col: 'ফাইল', msg: 'ফাইল পড়া যায়নি — সঠিক .xlsx ফরম্যাট কিনা দেখুন (' + (err && err.message || err) + ')' }], []);
                 }
             };
             reader.readAsArrayBuffer(file);
         };
+        window.mfImportFlow = mfImportFlow;
 
         const expenseFormHtml = (r) => {
             const cat = r ? categoryById(r.categoryId) : null;
