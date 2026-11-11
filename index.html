@@ -2,6 +2,7 @@
 <html lang="bn">
 <head>
     <meta charset="UTF-8" />
+    <!-- 🔧 [v16.5.93] নোটিফিকেশন: "কার কার ডিভাইসে টোকেন আছে দেখুন" বোতাম (টোকেনসহ/টোকেনহীন ইউজার-তালিকা)। Rules অপরিবর্তিত। -->
     <!-- 🔧 [v16.5.92] নোটিফিকেশন: "সব ডিভাইসে অনুমতির অনুরোধ পাঠান" বোতাম (ডিভাইসে ব্যানার/চুপচাপ টোকেন সংগ্রহ); দ্রুত খোলার জন্য Firebase preconnect + modulepreload ও xlsx লাইব্রেরি defer। Firestore Rules অপরিবর্তিত। -->
     <!-- 🔧 [v16.5.91] (১) সেটিংসের অংশগুলো ক্লিকে খোলে/বন্ধ (অ্যাকর্ডিয়ন; একটি খুললে বাকিগুলো বন্ধ)। (২) নোটিফিকেশন: "টেস্ট নোটিফিকেশন পাঠান" ও "এই ডিভাইসে নোটিফিকেশন চালু করুন" বোতাম (ডিভাইসের অনুমতি/ইন-অ্যাপ-ব্রাউজার/আইফোন সমস্যা কারণসহ দেখায়); Notify_v5.gs-এর সাথে। -->
     <!-- 🔧 [v16.5.90] রিসিপ্ট নম্বরের আইডি এখন যিনি এন্ট্রি দিচ্ছেন (লগইন ইউজার) তাঁর — ইউজারের "গ্রুপ আইডি" বা তাঁর ইমেইলের সদস্য-রেকর্ডের "আইডি নং"; ক্রমও প্রতি এন্ট্রিকারীর নিজস্ব (দুই ইউজার একসাথে এন্ট্রি দিলেও নম্বর মেলে না)। -->
@@ -7746,6 +7747,7 @@ body.dark-mode .btn-outline{border-color:var(--gold-300)!important;color:var(--g
                   <button type="button" class="btn btn-outline btn-sm" id="notify-run">🔔 এখনই চালান</button>
                   <button type="button" class="btn btn-outline btn-sm" id="notify-testpush">📲 টেস্ট নোটিফিকেশন পাঠান</button>
                   <button type="button" class="btn btn-sm" id="notify-all">📣 সব ডিভাইসে নোটিফিকেশন-অনুমতির অনুরোধ পাঠান</button>
+                  <button type="button" class="btn btn-outline btn-sm" id="notify-list">📋 কার কার ডিভাইসে টোকেন আছে দেখুন</button>
                   <button type="button" class="btn btn-outline btn-sm" id="notify-dev">📱 এই ডিভাইসে নোটিফিকেশন চালু করুন</button>
                   <span id="notify-st" class="small"></span>
                 </div>
@@ -8203,6 +8205,25 @@ body.dark-mode .btn-outline{border-color:var(--gold-300)!important;color:var(--g
                         const u = get(); if (!u) return; st.textContent = '⏳...';
                         try { const g = await notifyCall(u); const s2 = await notifyCall(u, 'status'); st.style.whiteSpace = 'pre-line'; st.textContent = '✅ চালু (' + (g.version || '') + ') · টোকেনসহ ইউজার ' + s2.usersWithTokens + ' · টোকেন ' + s2.tokens + (s2.appUrlSet ? '' : ' · (APP_URL ঐচ্ছিক — শুধু ক্লিকে অ্যাপ খোলার লিংকের জন্য)') + notifyHealthText(s2); }
                         catch (e) { st.textContent = '❌ ' + (e.message || e); }
+                    };
+                    document.getElementById('notify-list').onclick = async () => {
+                        st.style.whiteSpace = 'pre-line'; st.textContent = '⏳ লোড হচ্ছে...';
+                        try {
+                            const { getDocs, collection } = window._firestore;
+                            const snap = await getDocs(collection(window._firestoreDb, 'users'));
+                            const L = []; snap.forEach(d => L.push(Object.assign({ uid: d.id }, d.data())));
+                            const e = (x) => String(x == null ? '' : x).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+                            const nm = (u) => u.displayName || u.name || u.fullName || '';
+                            const tk = (u) => Array.isArray(u.fcmTokens) ? u.fcmTokens.filter(Boolean) : [];
+                            const yes = L.filter(u => tk(u).length), no = L.filter(u => !tk(u).length);
+                            const devs = yes.reduce((a, u) => a + tk(u).length, 0);
+                            const row = (u, ok) => '<tr><td>' + e(nm(u) || '—') + '</td><td class="small">' + e(u.email || '') + '</td><td>' + (ok ? tk(u).length + ' টি <span class="small muted">(' + tk(u).map(t => '…' + e(t.slice(-6))).join(', ') + ')</span>' : '—') + '</td></tr>';
+                            st.textContent = '';
+                            openModal('<h3 style="margin:0 0 6px;">📋 নোটিফিকেশন ডিভাইস-তালিকা</h3><div class="small muted" style="margin-bottom:8px;">মোট ' + L.length + ' জন · টোকেনসহ ' + yes.length + ' জন (' + devs + ' ডিভাইস) · টোকেনহীন ' + no.length + ' জন।<br>টোকেন আছে মানে ওই ডিভাইসে কখনো অনুমতি দেওয়া হয়েছিল; ডিভাইস কোন ফোন তা এখান থেকে জানা যায় না, শুধু সংখ্যা ও টোকেনের শেষাংশ দেখায়। পুরনো/বন্ধ ডিভাইসের টোকেন পাঠানোর সময় নিজে মুছে যায়।</div>'
+                                + '<div style="font-weight:700;margin:8px 0 4px;">✅ টোকেন আছে (' + yes.length + ')</div><div style="overflow:auto;"><table class="table" style="width:100%;"><thead><tr><th>নাম</th><th>ইমেইল</th><th>ডিভাইস</th></tr></thead><tbody>' + (yes.map(u => row(u, true)).join('') || '<tr><td colspan="3" class="muted">কেউ নেই</td></tr>') + '</tbody></table></div>'
+                                + '<div style="font-weight:700;margin:12px 0 4px;">⚠️ টোকেন নেই (' + no.length + ') — এরা নোটিফিকেশন পাবে না</div><div style="overflow:auto;"><table class="table" style="width:100%;"><thead><tr><th>নাম</th><th>ইমেইল</th><th></th></tr></thead><tbody>' + (no.map(u => row(u, false)).join('') || '<tr><td colspan="3" class="muted">সবার আছে 🎉</td></tr>') + '</tbody></table></div>'
+                                + '<div style="text-align:right;margin-top:10px;"><button type="button" class="btn btn-outline" id="nl-close">বন্ধ করুন</button></div>', () => { const c = document.getElementById('nl-close'); if (c) c.onclick = () => closeModal(); });
+                        } catch (er) { st.textContent = '❌ ' + (er.message || er); }
                     };
                     document.getElementById('notify-all').onclick = async () => {
                         st.style.whiteSpace = 'pre-line';
