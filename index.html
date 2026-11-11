@@ -2,6 +2,8 @@
 <html lang="bn">
 <head>
     <meta charset="UTF-8" />
+    <!-- 🔧 [v16.5.92] নোটিফিকেশন: "সব ডিভাইসে অনুমতির অনুরোধ পাঠান" বোতাম (ডিভাইসে ব্যানার/চুপচাপ টোকেন সংগ্রহ); দ্রুত খোলার জন্য Firebase preconnect + modulepreload ও xlsx লাইব্রেরি defer। Firestore Rules অপরিবর্তিত। -->
+    <!-- 🔧 [v16.5.91] (১) সেটিংসের অংশগুলো ক্লিকে খোলে/বন্ধ (অ্যাকর্ডিয়ন; একটি খুললে বাকিগুলো বন্ধ)। (২) নোটিফিকেশন: "টেস্ট নোটিফিকেশন পাঠান" ও "এই ডিভাইসে নোটিফিকেশন চালু করুন" বোতাম (ডিভাইসের অনুমতি/ইন-অ্যাপ-ব্রাউজার/আইফোন সমস্যা কারণসহ দেখায়); Notify_v5.gs-এর সাথে। -->
     <!-- 🔧 [v16.5.90] রিসিপ্ট নম্বরের আইডি এখন যিনি এন্ট্রি দিচ্ছেন (লগইন ইউজার) তাঁর — ইউজারের "গ্রুপ আইডি" বা তাঁর ইমেইলের সদস্য-রেকর্ডের "আইডি নং"; ক্রমও প্রতি এন্ট্রিকারীর নিজস্ব (দুই ইউজার একসাথে এন্ট্রি দিলেও নম্বর মেলে না)। -->
     <!-- 🔧 [v16.5.89] সেটিংস → নোটিফিকেশন "সংযোগ ও স্ট্যাটাস": সর্বশেষ চেকের সময়, ট্রিগার আছে কিনা ও সর্বশেষ রানের হিসাব (Notify_v4.gs-এর সাথে)। -->
     <!-- 🔧 [v16.5.88] এক্সেল ইমপোর্ট (সদস্য/মাসিক/বার্ষিক/ব্যয়): আগে যাচাই; ত্রুটি থাকলে সারি+কলামসহ তালিকা দেখিয়ে কিছুই সেভ করে না; ত্রুটি না থাকলে সারাংশ দেখিয়ে কনফার্ম চেয়ে সেভ। তারিখ DD/MM/YYYY ও বাংলা অঙ্কও পড়া হয়; ফাঁকা সারি আর "বাদ" গোনা হয় না। -->
@@ -49,13 +51,19 @@
     <!-- 🆕 [v16.5.40] সদস্যের নতুন ফিল্ড whatsapp/fbUsername + 💬 বাটন (ইমেইল-বাটনের পাশে) → ফ্রি WhatsApp (wa.me) / Messenger (m.me) / শেয়ার-মেনু মেসেজ-মোডাল; টেমপ্লেট ইমেইলের মতোই। Rules/Apps Script অপরিবর্তিত। [v16.5.41] 🧾 "রিসিপ্ট ছবি সংযুক্ত" টিক (ইমেইলের একই রিসিপ্ট JPG হয়ে শেয়ার/ডাউনলোড) + সদস্য-তালিকায় WhatsApp/Facebook কলাম। [v16.5.42] WhatsApp/Messenger বাটন এখন সবসময় নিজ নিজ অ্যাপের চ্যাট খোলে (ছবি আগে ডাউনলোড); শেয়ার-মেনু আলাদা বাটনে। [v16.5.43] 💬 মোডালে টেমপ্লেটের নিচে "👁️ সব টেমপ্লেটের প্রিভিউ" ও "📚 টেমপ্লেট ম্যানেজার" লিংক + মেসেজ/ছবির লাইভ প্রিভিউ। -->
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, interactive-widget=resizes-content" />
     <title>সরদার হাট তাফসিরুল ওয়াজ মাহফিল — তহবিল ব্যবস্থাপনা</title>
+    <link rel="preconnect" href="https://www.gstatic.com" crossorigin />
+    <link rel="preconnect" href="https://firestore.googleapis.com" crossorigin />
+    <link rel="preconnect" href="https://identitytoolkit.googleapis.com" crossorigin />
+    <link rel="modulepreload" href="https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js" />
+    <link rel="modulepreload" href="https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js" />
+    <link rel="modulepreload" href="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <!-- 🆕 [v16.5.2 ধাপ ৮] ফন্ট: শুরুতে শুধু ডিফল্ট, নন-ব্লকিং; বাকিগুলো দরকারে স্ক্রিপ্ট লোড করে -->
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Baloo+Da+2:wght@500;600;700;800&family=Hind+Siliguri:wght@400;500;600;700&display=swap" media="print" onload="this.media='all'" />
     <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Baloo+Da+2:wght@500;600;700;800&family=Hind+Siliguri:wght@400;500;600;700&display=swap" /></noscript>
     <!-- 🆕 সদস্য তালিকা এক্সেল ইমপোর্ট/এক্সপোর্ট — SheetJS (ফ্রি, ওপেন-সোর্স) -->
-    <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
     <style>
         /* ===== রুট ভেরিয়েবল ===== */
         :root {
@@ -7736,6 +7744,9 @@ body.dark-mode .btn-outline{border-color:var(--gold-300)!important;color:var(--g
                 <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center;">
                   <button type="button" class="btn btn-outline btn-sm" id="notify-test">🔌 সংযোগ ও স্ট্যাটাস</button>
                   <button type="button" class="btn btn-outline btn-sm" id="notify-run">🔔 এখনই চালান</button>
+                  <button type="button" class="btn btn-outline btn-sm" id="notify-testpush">📲 টেস্ট নোটিফিকেশন পাঠান</button>
+                  <button type="button" class="btn btn-sm" id="notify-all">📣 সব ডিভাইসে নোটিফিকেশন-অনুমতির অনুরোধ পাঠান</button>
+                  <button type="button" class="btn btn-outline btn-sm" id="notify-dev">📱 এই ডিভাইসে নোটিফিকেশন চালু করুন</button>
                   <span id="notify-st" class="small"></span>
                 </div>
               </div>
@@ -7959,8 +7970,50 @@ body.dark-mode .btn-outline{border-color:var(--gold-300)!important;color:var(--g
           `;
         };
 
+        // 🆕 [v16.5.91] সেটিংস দীর্ঘ হয়ে যাওয়ায় প্রতিটি অংশ ক্লিকে খোলে/বন্ধ হয়; একটি খুললে আগেরটি আপনা-আপনি বন্ধ (সব অংশ DOM-এ থাকে, তাই সংরক্ষণে কোনো তথ্য বাদ যায় না)
+        const mfSettingsAccordion = () => {
+            const first = document.getElementById('s-logo'); if (!first) return;
+            const block1 = first.closest('div[style*="border-bottom:1px dashed"]'); if (!block1 || !block1.parentElement) return;
+            const host = block1.parentElement; if (host.querySelector('.mf-acc')) return;
+            if (!document.getElementById('mf-acc-css')) {
+                const st = document.createElement('style'); st.id = 'mf-acc-css';
+                st.textContent = '.mf-acc{border:1px solid var(--line);border-radius:12px;margin:0 0 10px;background:var(--paper-raised,transparent);}.mf-acc-h{width:100%;display:flex;justify-content:space-between;align-items:center;gap:8px;padding:12px 14px;min-height:46px;border:0;background:transparent;font:inherit;font-weight:700;color:inherit;cursor:pointer;text-align:left;}.mf-acc-ch{transition:transform .15s;opacity:.7}.mf-acc.open>.mf-acc-h .mf-acc-ch{transform:rotate(90deg)}.mf-acc.open>.mf-acc-h{border-bottom:1px solid var(--line)}.mf-acc-b{padding:10px 12px 8px;}.mf-acc-tools{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin:0 0 10px;}';
+                document.head.appendChild(st);
+            }
+            const items = [];
+            const titleOf = (el, fb) => { const l = el.querySelector('label'); const t = l ? l.textContent.replace(/\s+/g, ' ').trim() : ''; return (t || fb).slice(0, 70); };
+            const setOpen = (w, on) => { w.classList.toggle('open', on); w.querySelector('.mf-acc-b').style.display = on ? '' : 'none'; };
+            const toggle = (w) => { const on = !w.classList.contains('open'); items.forEach(x => setOpen(x, false)); setOpen(w, on); window.__mfAccOpen = on ? w.dataset.t : ''; window.__mfAccTs = Date.now(); if (on) { try { w.scrollIntoView({ block: 'nearest' }); } catch (e) { } } };
+            const mk = (title, nodes) => {
+                const w = document.createElement('div'); w.className = 'mf-acc'; w.dataset.t = title;
+                const h = document.createElement('button'); h.type = 'button'; h.className = 'mf-acc-h'; h.innerHTML = '<span></span><span class="mf-acc-ch">▸</span>'; h.firstChild.textContent = title;
+                const b = document.createElement('div'); b.className = 'mf-acc-b'; b.style.display = 'none';
+                nodes[0].parentNode.insertBefore(w, nodes[0]); w.appendChild(h); w.appendChild(b); nodes.forEach(n => b.appendChild(n));
+                h.onclick = () => toggle(w); items.push(w); return w;
+            };
+            const boxes = ['script-url-box', 'notify-box', 'img-ret-box', 'drv-folders-box'].map(id => document.getElementById(id)).filter(Boolean);
+            const rest = Array.from(block1.children).filter(c => boxes.indexOf(c) < 0);
+            const others = Array.from(host.children).filter(c => c !== block1 && c.tagName === 'DIV' && /border-bottom:1px dashed/.test(c.getAttribute('style') || '') && c.style.display !== 'none');
+            // ক্রম বজায় রেখে: প্রথমে "প্রতিষ্ঠান ও লোগো", তারপর চারটি বক্স, তারপর বাকি অংশগুলো
+            const anchor = document.createElement('div'); block1.parentNode.insertBefore(anchor, block1);
+            const g = rest.length ? mk('🏷️ লোগো ও প্রতিষ্ঠানের তথ্য', rest) : null;
+            boxes.forEach(bx => mk(titleOf(bx, 'সেটিং'), [bx]));
+            others.forEach((o, i) => mk(titleOf(o, 'অংশ ' + (i + 1)), [o]));
+            // block1 এখন ফাঁকা কিন্তু accordion-গুলো তার ভেতরে/আগে — ক্রম ঠিক রাখতে সব accordion block1-এর আগে সরানো
+            items.forEach(w => { if (block1.contains(w)) block1.parentNode.insertBefore(w, block1); });
+            // ক্রম: g, boxes..., others... ইতিমধ্যে তৈরির ক্রমে; block1 খালি হলে মুছে ফেলা
+            if (!block1.children.length) block1.remove();
+            anchor.remove();
+            const tools = document.createElement('div'); tools.className = 'mf-acc-tools';
+            tools.innerHTML = '<span class="small muted">শিরোনামে চাপলে খুলবে — একটি খুললে আগেরটি বন্ধ হবে।</span><button type="button" class="btn btn-outline btn-sm" data-acc="all">সব খুলুন</button><button type="button" class="btn btn-outline btn-sm" data-acc="none">সব বন্ধ</button>';
+            items[0].parentNode.insertBefore(tools, items[0]);
+            tools.onclick = (ev) => { const a = ev.target.closest('[data-acc]'); if (!a) return; items.forEach(w => setOpen(w, a.dataset.acc === 'all')); window.__mfAccOpen = ''; };
+            window.mfAccOpenFor = (el) => { const w = el && el.closest && el.closest('.mf-acc'); if (w && !w.classList.contains('open')) toggle(w); };
+            if (window.__mfAccOpen && Date.now() - (window.__mfAccTs || 0) < 120000) { const w = items.find(x => x.dataset.t === window.__mfAccOpen); if (w) setOpen(w, true); }
+        };
         const openSettingsForm = () => {
             openModal(settingsFormHtml(), () => {
+                try { mfSettingsAccordion(); } catch (e) { console.error('[settings accordion]', e); }
                 const currentFields = () => {
                     const tl = {};
                     CONFIG.TAB_ORDER.forEach(k => { tl[k] = document.getElementById(`s-tablabel-${k}`).value; });
@@ -7989,7 +8042,7 @@ body.dark-mode .btn-outline{border-color:var(--gold-300)!important;color:var(--g
                 };
 
                 const saveSettings = () => {
-                    { const _e = document.getElementById('s-notify-url'), _raw = _e ? _e.value.trim() : ''; if (_raw && !normNotifyUrl(_raw)) { toast('⚠️ নোটিফিকেশন URL ঠিক নয় — https://script.google.com/macros/s/…/exec ফরম্যাটে দিন'); try { _e.focus(); } catch (x) { } return; } }   // 🆕 [v16.5.54] আর চুপচাপ বাতিল হবে না
+                    { const _e = document.getElementById('s-notify-url'), _raw = _e ? _e.value.trim() : ''; if (_raw && !normNotifyUrl(_raw)) { toast('⚠️ নোটিফিকেশন URL ঠিক নয় — https://script.google.com/macros/s/…/exec ফরম্যাটে দিন'); try { if (window.mfAccOpenFor) window.mfAccOpenFor(_e); _e.focus(); } catch (x) { } return; } }   // 🆕 [v16.5.54] আর চুপচাপ বাতিল হবে না
                     const f = currentFields();
                     const tl = {};
                     CONFIG.TAB_ORDER.forEach(k => { tl[k] = document.getElementById(`s-tablabel-${k}`).value.trim() ||
@@ -8150,6 +8203,29 @@ body.dark-mode .btn-outline{border-color:var(--gold-300)!important;color:var(--g
                         const u = get(); if (!u) return; st.textContent = '⏳...';
                         try { const g = await notifyCall(u); const s2 = await notifyCall(u, 'status'); st.style.whiteSpace = 'pre-line'; st.textContent = '✅ চালু (' + (g.version || '') + ') · টোকেনসহ ইউজার ' + s2.usersWithTokens + ' · টোকেন ' + s2.tokens + (s2.appUrlSet ? '' : ' · (APP_URL ঐচ্ছিক — শুধু ক্লিকে অ্যাপ খোলার লিংকের জন্য)') + notifyHealthText(s2); }
                         catch (e) { st.textContent = '❌ ' + (e.message || e); }
+                    };
+                    document.getElementById('notify-all').onclick = async () => {
+                        st.style.whiteSpace = 'pre-line';
+                        try {
+                            const { doc, setDoc } = window._firestore;
+                            await setDoc(doc(window._firestoreDb, 'app_settings', 'user_panel_toggle'), { pushReqAt: new Date().toISOString(), pushReqBy: (window.currentUser && window.currentUser.email) || '' }, { merge: true });
+                            const L = (typeof userList !== 'undefined' && userList) ? userList : [];
+                            const withTok = L.filter(u => Array.isArray(u.fcmTokens) && u.fcmTokens.length).length;
+                            st.textContent = '✅ অনুরোধ পাঠানো হয়েছে। এখন থেকে যে ডিভাইসে অ্যাপ খোলা হবে (বা খোলা আছে) সেখানে "নোটিফিকেশন চালু করুন" ব্যানার আসবে; অনুমতি দেওয়া থাকলে চুপচাপ টোকেন জমা হবে।\nবর্তমানে টোকেনসহ ইউজার: ' + withTok + ' / ' + L.length + ' (কিছুক্ষণ পর "স্ট্যাটাস দেখুন" দিয়ে বাড়ছে কিনা দেখুন)।\n⚠️ কেউ Block/Don\'t allow দিলে ব্রাউজার টোকেন দেয় না — তাকে নিজে সেটিংস থেকে Allow করতে হবে।';
+                        } catch (e) { st.textContent = '❌ ' + (e.message || e); }
+                    };
+                    document.getElementById('notify-dev').onclick = async () => {
+                        st.style.whiteSpace = 'pre-line'; st.textContent = '⏳ ...';
+                        try { const r = await window.mfPushEnable(); st.textContent = r.lines.join('\n'); } catch (e) { st.textContent = '❌ ' + (e.message || e); }
+                    };
+                    document.getElementById('notify-testpush').onclick = async () => {
+                        const u = get(); if (!u) return; st.style.whiteSpace = 'pre-line'; st.textContent = '⏳ পাঠানো হচ্ছে...';
+                        try {
+                            const r = await notifyCall(u, 'test_push');
+                            if (!r.tokens) { st.textContent = '⚠️ এই অ্যাকাউন্টে (' + r.email + ') কোনো ডিভাইস-টোকেন নেই — ফোনে এই অ্যাকাউন্টে লগইন করে "📱 এই ডিভাইসে নোটিফিকেশন চালু করুন" চাপুন।'; return; }
+                            const ok = r.results.filter(x => x.ok).length;
+                            st.textContent = ok + '/' + r.tokens + ' টোকেনে পাঠানো গেছে — ফোনে নোটিফিকেশন দেখুন।' + r.results.map(x => '\n• …' + x.tail + ': ' + (x.ok ? '✅ গেছে' : '❌ ' + (x.removed ? 'ডিভাইস আর নেই (টোকেন মুছে ফেলা হয়েছে)' : x.errorCode + (x.message ? ' — ' + x.message : '')))).join('');
+                        } catch (e) { st.textContent = '❌ ' + (e.message || e) + (/অজানা action/.test(String(e.message)) ? ' — Notify_v5.gs ডিপ্লয় করুন' : ''); }
                     };
                     document.getElementById('notify-run').onclick = async () => {
                         const u = get(); if (!u || !window.confirm('এখনই নতুন নোটিশ/চ্যাট/মেসেজের নোটিফিকেশন পাঠানো হবে। এগোবেন?')) return; st.textContent = '⏳ চলছে...';
@@ -11850,6 +11926,7 @@ body.dark-mode .btn-outline{border-color:var(--gold-300)!important;color:var(--g
                 const { doc, onSnapshot } = window._firestore;
                 _userPanelToggleUnsub = onSnapshot(doc(window._firestoreDb, 'app_settings', 'user_panel_toggle'), (snap) => {
                     userPanelToggleOn = !!(snap.exists() && snap.data().on);
+                    try { if (snap.exists() && window.mfPushCampaignCheck) window.mfPushCampaignCheck(snap.data()); } catch (e) { }
                     if (currentTab === 'users') renderMain();
                 }, () => {});
             } catch (e) {}
@@ -11863,7 +11940,7 @@ body.dark-mode .btn-outline{border-color:var(--gold-300)!important;color:var(--g
                 const { doc, setDoc } = window._firestore;
                 await setDoc(doc(window._firestoreDb, 'app_settings', 'user_panel_toggle'), {
                     on: !!on, updatedAt: new Date().toISOString(), updatedBy: window.currentUser?.email || ''
-                });
+                }, { merge: true }); // 🔧 [v16.5.92] merge — pushReqAt মুছে না যায়
                 toast(on ? '✅ ইউজার প্যানেলে Edit Mode ফিচার চালু করা হয়েছে' : '⛔ ইউজার প্যানেলে Edit Mode ফিচার বন্ধ করা হয়েছে');
             } catch (e) { console.error(e);
                 toast('হালনাগাদ করতে সমস্যা হয়েছে'); }
@@ -24666,11 +24743,11 @@ body.dark-mode .btn-outline{border-color:var(--gold-300)!important;color:var(--g
                 log('শুরু হচ্ছে...');
                 if (!('Notification' in window) || !('serviceWorker' in navigator)) {
                     warn('এই ব্রাউজার Notification বা Service Worker সাপোর্ট করে না — থেমে গেল।');
-                    return;
+                    return { ok: false, msg: String('এই ব্রাউজার Notification বা Service Worker সাপোর্ট করে না — থেমে গেল।') };
                 }
                 if (!(await isMessagingSupported())) {
                     warn('Firebase Messaging এই কনটেক্সটে সাপোর্টেড না (iOS-এ "Add to Home Screen" ছাড়া এমন হতে পারে) — থেমে গেল।');
-                    return;
+                    return { ok: false, msg: String('Firebase Messaging এই কনটেক্সটে সাপোর্টেড না (iOS-এ "Add to Home Screen" ছাড়া এমন হতে পারে) — থেমে গেল।') };
                 }
 
                 log('সার্ভিস ওয়ার্কার রেজিস্টার করা হচ্ছে (/firebase-messaging-sw.js)...');
@@ -24696,12 +24773,13 @@ body.dark-mode .btn-outline{border-color:var(--gold-300)!important;color:var(--g
                             };
                             document.addEventListener('pointerdown', onTap, true);
                         }
-                        return;
+                        return { ok: false, msg: 'ব্রাউজারের অনুমতি-বক্স দেখা যায়নি — স্ক্রিনে একবার ট্যাপ করে আবার চেষ্টা করুন' };
                     }
+                    return { ok: false, msg: 'অনুমতি এখনো দেওয়া হয়নি — ট্যাপ করলে ব্রাউজার অনুমতি চাইবে' };
                 }
                 if (permission !== 'granted') {
                     warn('পারমিশন দেওয়া হয়নি (' + permission + ') — টোকেন সংগ্রহ বাদ দেওয়া হলো।');
-                    return;
+                    return { ok: false, msg: String('পারমিশন দেওয়া হয়নি (' + permission + ') — টোকেন সংগ্রহ বাদ দেওয়া হলো।') };
                 }
 
                 log('FCM টোকেন সংগ্রহ করা হচ্ছে...');
@@ -24709,7 +24787,7 @@ body.dark-mode .btn-outline{border-color:var(--gold-300)!important;color:var(--g
                 const token = await getToken(messaging, { vapidKey: VAPID_KEY, serviceWorkerRegistration: registration });
                 if (!token) {
                     warn('getToken() খালি ফলাফল দিয়েছে — টোকেন পাওয়া যায়নি।');
-                    return;
+                    return { ok: false, msg: String('getToken() খালি ফলাফল দিয়েছে — টোকেন পাওয়া যায়নি।') };
                 }
                 log('✅ টোকেন পাওয়া গেছে (শুরুর ১৫ অক্ষর): ' + token.substring(0, 15) + '...');
 
@@ -24725,11 +24803,58 @@ body.dark-mode .btn-outline{border-color:var(--gold-300)!important;color:var(--g
                     if (window.toast) window.toast(`${title}${body ? ': ' + body : ''}`,
                         targetTab ? () => window.goToTab && window.goToTab(targetTab) : undefined);
                 });
+                return { ok: true, msg: 'এই ডিভাইসের টোকেন সেভ হয়েছে (…' + token.slice(-6) + '), নোটিফিকেশন এখন এই ডিভাইসে আসবে' };
             } catch (e) {
                 warn('এরর হয়েছে (অ্যাপের বাকি অংশ স্বাভাবিক চলবে): ' + (e && e.message ? e.message : e));
                 console.error(e);
+                return { ok: false, msg: 'এরর: ' + (e && e.message ? e.message : e) };
             }
         };
+        // 🆕 [v16.5.91] বোতাম চেপে এই ডিভাইসে নোটিফিকেশন চালু (ইউজারের ট্যাপে অনুমতি চাওয়া) + না-হলে কারণসহ বার্তা
+        window.mfPushEnable = async () => {
+            const lines = [], ua = navigator.userAgent || '';
+            const uid = (window.currentUser && window.currentUser.uid) || (typeof currentUser !== 'undefined' && currentUser && currentUser.uid) || '';
+            if (!uid) return { ok: false, lines: ['❌ লগইন করা নেই — আগে লগইন করুন'] };
+            if (!window.isSecureContext) lines.push('⚠️ পেজটি https-এ নেই — নোটিফিকেশন চলবে না');
+            if (/FBAN|FBAV|FB_IAB|Messenger|Instagram|Line\/|; wv\)/i.test(ua)) lines.push('⚠️ এটি Facebook/Messenger/অন্য অ্যাপের ভেতরের ব্রাউজার — এখানে নোটিফিকেশন চলে না। লিংকটি Chrome (ফোনের মূল ব্রাউজার)-এ খুলুন।');
+            const ios = /iPhone|iPad|iPod/i.test(ua), standalone = (window.matchMedia && matchMedia('(display-mode: standalone)').matches) || navigator.standalone;
+            if (ios && !standalone) lines.push('⚠️ আইফোনে নোটিফিকেশনের জন্য Safari-তে Share → "Add to Home Screen" করে হোম-স্ক্রিনের আইকন থেকে খুলতে হবে।');
+            lines.push('অনুমতির অবস্থা: ' + (('Notification' in window) ? Notification.permission : 'এই ব্রাউজারে সাপোর্ট নেই'));
+            if ('Notification' in window && Notification.permission === 'denied') {
+                lines.push('❌ নোটিফিকেশন ব্লক করা আছে — ব্রাউজারের ঠিকানা-বারের 🔒 / সাইট-সেটিংস → Notifications → Allow করুন (ফোনের Settings → Apps → Chrome → Notifications-ও চালু থাকতে হবে), তারপর আবার চাপুন।');
+                return { ok: false, lines };
+            }
+            const r = await initPushNotifications(uid);
+            lines.push((r && r.ok ? '✅ ' : '❌ ') + (r ? r.msg : 'অজানা ফল'));
+            return { ok: !!(r && r.ok), lines };
+        };
+
+        // 🆕 [v16.5.92] এডমিন "সব ডিভাইসে নোটিফিকেশন অনুরোধ" চাপলে app_settings/user_panel_toggle.pushReqAt বদলায়।
+        // প্রতিটি ডিভাইস খোলা থাকলে/খুললে এটি দেখে: অনুমতি দেওয়া থাকলে চুপচাপ টোকেন হালনাগাদ; না থাকলে বড় বোতামসহ ব্যানার (ব্রাউজার নিয়মে ট্যাপ ছাড়া অনুমতি-বক্স আসে না)।
+        // ⚠️ ব্যবহারকারী "Block/Don't allow" দিলে ব্রাউজার কোনোভাবেই টোকেন দেয় না — তাদের জন্য ব্যানারে চালু করার ধাপ দেখানো হয়।
+        window.mfPushCampaignCheck = (data) => {
+            try {
+                const at = data && data.pushReqAt; if (!at) return;
+                const uid = window.currentUser && window.currentUser.uid; if (!uid) return;
+                let seen = ''; try { seen = localStorage.getItem('mf_push_req_seen') || ''; } catch (e) { }
+                if (seen === at) return;
+                if (!('Notification' in window)) return;
+                const done = () => { try { localStorage.setItem('mf_push_req_seen', at); } catch (e) { } const o = document.getElementById('mf-push-banner'); if (o) o.remove(); };
+                if (Notification.permission === 'granted') { initPushNotifications(uid).then(done, done); return; }
+                if (document.getElementById('mf-push-banner')) return;
+                const bn = document.createElement('div'); bn.id = 'mf-push-banner';
+                bn.style.cssText = 'position:fixed;left:10px;right:10px;bottom:12px;z-index:99999;background:#0a8f5b;color:#fff;border-radius:14px;padding:12px 14px;box-shadow:0 6px 24px rgba(0,0,0,.35);font-size:14px;line-height:1.5;';
+                const denied = Notification.permission === 'denied';
+                bn.innerHTML = '<div style="font-weight:700;margin-bottom:4px;">🔔 নোটিফিকেশন চালু করুন</div><div id="mf-pb-t" style="white-space:pre-line;">' + (denied ? 'নোটিফিকেশন ব্লক করা আছে। ঠিকানা-বারের 🔒 → Site settings → Notifications → Allow করুন, তারপর নিচের বোতাম চাপুন।' : 'নতুন নোটিশ, চ্যাট ও রিকোয়েস্ট সময়মতো পেতে অনুমতি দিন।') + '</div><div style="display:flex;gap:8px;margin-top:8px;"><button type="button" id="mf-pb-go" style="flex:1;min-height:44px;border:0;border-radius:10px;font-weight:700;background:#fff;color:#0a6b46;">📱 চালু করুন</button><button type="button" id="mf-pb-x" style="min-height:44px;padding:0 14px;border:1px solid #fff;border-radius:10px;background:transparent;color:#fff;">পরে</button></div>';
+                document.body.appendChild(bn);
+                document.getElementById('mf-pb-x').onclick = () => bn.remove();
+                document.getElementById('mf-pb-go').onclick = async () => {
+                    const t = document.getElementById('mf-pb-t'); t.textContent = '⏳ ...';
+                    try { const r = await window.mfPushEnable(); t.textContent = r.lines.join('\n'); if (r.ok) { done(); setTimeout(() => bn.remove(), 2500); bn.style.background = '#0a8f5b'; } } catch (e) { t.textContent = '❌ ' + (e.message || e); }
+                };
+            } catch (e) { console.error('[push campaign]', e); }
+        };
+
 
         // নোটিফিকেশনের data payload (type: notices/chat/requests) থেকে কোন ট্যাবে যেতে হবে বের করা
         const notificationDataToTab = (data) => {
