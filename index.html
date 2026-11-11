@@ -2,6 +2,8 @@
 <html lang="bn">
 <head>
     <meta charset="UTF-8" />
+    <!-- 🔧 [v16.5.90] রিসিপ্ট নম্বরের আইডি এখন যিনি এন্ট্রি দিচ্ছেন (লগইন ইউজার) তাঁর — ইউজারের "গ্রুপ আইডি" বা তাঁর ইমেইলের সদস্য-রেকর্ডের "আইডি নং"; ক্রমও প্রতি এন্ট্রিকারীর নিজস্ব (দুই ইউজার একসাথে এন্ট্রি দিলেও নম্বর মেলে না)। -->
+    <!-- 🔧 [v16.5.89] সেটিংস → নোটিফিকেশন "সংযোগ ও স্ট্যাটাস": সর্বশেষ চেকের সময়, ট্রিগার আছে কিনা ও সর্বশেষ রানের হিসাব (Notify_v4.gs-এর সাথে)। -->
     <!-- 🔧 [v16.5.88] এক্সেল ইমপোর্ট (সদস্য/মাসিক/বার্ষিক/ব্যয়): আগে যাচাই; ত্রুটি থাকলে সারি+কলামসহ তালিকা দেখিয়ে কিছুই সেভ করে না; ত্রুটি না থাকলে সারাংশ দেখিয়ে কনফার্ম চেয়ে সেভ। তারিখ DD/MM/YYYY ও বাংলা অঙ্কও পড়া হয়; ফাঁকা সারি আর "বাদ" গোনা হয় না। -->
     <!-- 🔧 [v16.5.87] আইডি নং না থাকলে রিসিপ্ট নম্বর জারি হয় না (সতর্কতা; আইডি দিলেই জারি); রেজিস্টারে ডুপ্লিকেট নম্বর লাল চিহ্ন + "নতুন নম্বর" বাটন। -->
     <!-- 🔧 [v16.5.86] রিসিপ্ট নম্বর সদস্যভিত্তিক: MF-{সদস্য নং}{সাল}-{ক্রম} (যেমন MF-৪৪২৬-০০১)। প্রতি সদস্যের নিজস্ব ক্রম, তাই দুই প্যানেলে একই সময়ে এন্ট্রি দিলেও নম্বর মেলে না। আগের নম্বর অপরিবর্তিত। -->
@@ -5909,6 +5911,19 @@ body.dark-mode .btn-outline{border-color:var(--gold-300)!important;color:var(--g
             if (!j.success) throw new Error(j.error || 'ব্যর্থ');
             return j;
         };
+        // 🆕 [v16.5.89] নোটিফিকেশন স্ক্রিপ্টের স্বাস্থ্য: সর্বশেষ চেক কখন, ট্রিগার আছে কিনা, সর্বশেষ রানে কী হলো (Notify_v4.gs-এর স্ট্যাটাস থেকে)
+        const notifyHealthText = (s2) => {
+            const out = [];
+            if (s2.lastCheckedAt) {
+                const mins = Math.max(0, Math.round((Date.now() - new Date(s2.lastCheckedAt).getTime()) / 60000));
+                out.push('\n🕒 সর্বশেষ চেক: ' + (mins < 1 ? 'এইমাত্র' : mins < 90 ? mins + ' মিনিট আগে' : Math.round(mins / 60) + ' ঘণ্টা আগে') + (mins > 20 ? ' ⚠️ ট্রিগার বন্ধ মনে হচ্ছে — নোটিফিকেশন আসবে না' : ' ✅'));
+            } else out.push('\n⚠️ স্ক্রিপ্ট এখনো একবারও চেক করেনি — ট্রিগার (প্রতি ৫ মিনিট) বসেনি, তাই নোটিফিকেশন যাচ্ছে না');
+            if (s2.triggers === 0) out.push('\n⚠️ Apps Script-এ checkAndNotify-এর ট্রিগার নেই — setupTrigger ফাংশনটি একবার Run করুন');
+            else if (s2.triggers > 1) out.push('\n⚠️ ' + s2.triggers + 'টি ট্রিগার আছে (একটির বেশি হলে ডুপ্লিকেট নোটিফিকেশন যেতে পারে) — setupTrigger Run করলে একটিই থাকবে');
+            if (s2.lastRun) { const r = s2.lastRun; out.push('\nশেষ রান: নতুন নোটিশ ' + r.notices + ', চ্যাট ' + r.chat + ', রিকোয়েস্ট ' + r.requests + ', মেসেজ ' + r.dm + ' · পাঠানো ' + r.sent + ', ব্যর্থ ' + r.failed + (r.errors && r.errors.length ? '\n⚠️ এরর: ' + r.errors.join(' | ') : '')); }
+            else if (s2.version && s2.version !== 'notify-v4') out.push('\n(বিস্তারিত হিসাব পেতে Notify_v4.gs ডিপ্লয় করুন)');
+            return out.join('');
+        };
         const IMG_CAT_BY_FIELD = { 'f-imageUrl': 'members', 'ue-photo': 'members', 'f-noticeImage': 'notices', 'f-announcementImage': 'announcements', 'un-image': 'notices', 's-logo-url': 'logo' };
         const IMG_CAT_DEFAULT = 'others';   // নতুন কোনো মেনু থেকে আপলোড হলে wireImageUploadField/mfUploadImage-এ সেই মেনুর নাম দিন — সেই নামেই ফোল্ডার হবে
         window.mfUploadImage = uploadImageToDrive; // 🆕 [v16.5.15] ERP কেন্দ্রের "সংগঠন" এডিটর ব্যবহার করে (শুধু এডমিন-প্যানেলে)
@@ -8133,12 +8148,12 @@ body.dark-mode .btn-outline{border-color:var(--gold-300)!important;color:var(--g
                     const get = () => { const v = normNotifyUrl(inp.value); if (v) { inp.value = v; persist(v); } if (!NOTIFY_URL_RE.test(v)) { st.textContent = '⚠️ সঠিক URL দিন (https://script.google.com/macros/s/…/exec)'; return ''; } return v; };
                     document.getElementById('notify-test').onclick = async () => {
                         const u = get(); if (!u) return; st.textContent = '⏳...';
-                        try { const g = await notifyCall(u); const s2 = await notifyCall(u, 'status'); st.textContent = '✅ চালু (' + (g.version || '') + ') · টোকেনসহ ইউজার ' + s2.usersWithTokens + ' · টোকেন ' + s2.tokens + (s2.appUrlSet ? '' : ' · ⚠️ APP_URL সেট নেই'); }
+                        try { const g = await notifyCall(u); const s2 = await notifyCall(u, 'status'); st.style.whiteSpace = 'pre-line'; st.textContent = '✅ চালু (' + (g.version || '') + ') · টোকেনসহ ইউজার ' + s2.usersWithTokens + ' · টোকেন ' + s2.tokens + (s2.appUrlSet ? '' : ' · (APP_URL ঐচ্ছিক — শুধু ক্লিকে অ্যাপ খোলার লিংকের জন্য)') + notifyHealthText(s2); }
                         catch (e) { st.textContent = '❌ ' + (e.message || e); }
                     };
                     document.getElementById('notify-run').onclick = async () => {
                         const u = get(); if (!u || !window.confirm('এখনই নতুন নোটিশ/চ্যাট/মেসেজের নোটিফিকেশন পাঠানো হবে। এগোবেন?')) return; st.textContent = '⏳ চলছে...';
-                        try { await notifyCall(u, 'notify_now'); st.textContent = '✅ চালানো হয়েছে'; } catch (e) { st.textContent = '❌ ' + (e.message || e); }
+                        try { const rr = await notifyCall(u, 'notify_now'); st.style.whiteSpace = 'pre-line'; st.textContent = '✅ চালানো হয়েছে' + (rr.run ? ' — নতুন: নোটিশ ' + rr.run.notices + ', চ্যাট ' + rr.run.chat + ', রিকোয়েস্ট ' + rr.run.requests + ', মেসেজ ' + rr.run.dm + ' · পাঠানো ' + rr.run.sent + ', ব্যর্থ ' + rr.run.failed + (rr.run.errors && rr.run.errors.length ? '\n⚠️ এরর: ' + rr.run.errors.join(' | ') : '') + (!rr.run.notices && !rr.run.chat && !rr.run.requests && !rr.run.dm ? '\n(নতুন কিছু ছিল না — নতুন নোটিশ/চ্যাট পাঠিয়ে আবার চেষ্টা করুন)' : '') : ' (পুরনো Notify স্ক্রিপ্ট — Notify_v4.gs ডিপ্লয় করলে বিস্তারিত হিসাব দেখাবে)'); } catch (e) { st.textContent = '❌ ' + (e.message || e); }
                     };
                 })();
                 // 🆕 [v16.5.51] ছবির মেয়াদ-প্যানেল (শুধু এডমিন; সেটিংস-সেভের অংশ নয় — নিজস্ব "সংরক্ষণ" বাটন)
@@ -14622,22 +14637,26 @@ body.dark-mode .btn-outline{border-color:var(--gold-300)!important;color:var(--g
             if (!m.assigned || typeof m.assigned !== 'object') m.assigned = {};
             return m;
         };
-        // 🆕 [v16.5.86] সদস্যভিত্তিক রিসিপ্ট নম্বর: MF-{সদস্য নং}{সাল ২ অঙ্ক}-{ওই সদস্যের নিজস্ব ক্রম} (যেমন MF-৪৪২৬-০০১)।
-        // সদস্য নং = সদস্যের "আইডি নং" কলাম (শুধু অঙ্ক হলে); আইডি না থাকলে নম্বর জারি হয় না (সতর্কতা আসে), আইডি দিলেই জারি হয়। একবার ঠিক হলে receiptNoMap.mem-এ স্থায়ী।
-        const rnoMemNo = (memberId, persist) => {
-            const root = (state.settings && state.settings.receiptNoMap) || {};
-            let mem = (root.mem && typeof root.mem === 'object') ? root.mem : {};
-            if (mem[memberId] != null && mem[memberId] !== '') return mem[memberId];
-            const used = new Set(Object.keys(mem).map(k => String(mem[k]))), ms = state.members || [], mb = ms.find(x => x && x.id === memberId);
-            const idn = mb ? parseInt(String(mb.idNumber || '').replace(/[০-৯]/g, c => '০১২৩৪৫৬৭৮৯'.indexOf(c)).replace(/\D/g, ''), 10) : NaN;
-            if (!(isFinite(idn) && idn > 0 && idn < 100000) || used.has(String(idn))) return null;   // আইডি নং নেই/অঙ্ক নয়/অন্য সদস্যের সাথে মেলে → নম্বর আটকে থাকে
-            const n = idn;
-            if (persist) { const w = rnoMapW(); if (!w.mem || typeof w.mem !== 'object') w.mem = {}; w.mem[memberId] = n; }
+        const rnoEnterEmail = (e, persist) => {
+            const mp = (state.settings && state.settings.receiptNoMap) || {};
+            let em = String((e && e.addedByEmail) || (mp.by && e && mp.by[e.id]) || '').trim().toLowerCase();
+            if (!em) { em = String((window.currentUser && window.currentUser.email) || '').trim().toLowerCase(); if (persist && em && e && e.id) { const w = rnoMapW(); if (!w.by || typeof w.by !== 'object') w.by = {}; w.by[e.id] = em; } }
+            return em;
+        };
+        // 🆕 [v16.5.90] রিসিপ্ট নম্বরে বসে "যিনি এন্ট্রি দিচ্ছেন (লগইন করা ইউজার)"-এর আইডি নম্বর — যাঁর নামে টাকা তাঁর নয়।
+        // ক্রম: ১) ইউজার-ডকের "গ্রুপ আইডি নম্বর" (groupIdNo) ২) না থাকলে ওই ইমেইলের সদস্য-রেকর্ডের "আইডি নং"। কোনোটাই না থাকলে নম্বর আটকে থাকে।
+        const rnoEnterNo = (e, persist) => {
+            const em = rnoEnterEmail(e, persist); if (!em) return null;
+            const dg = (v) => { const d = parseInt(String(v || '').replace(/[০-৯]/g, c => '০১২৩৪৫৬৭৮৯'.indexOf(c)).replace(/\D/g, ''), 10); return (isFinite(d) && d > 0 && d < 100000) ? d : null; };
+            const own = window._ownUserDoc && String(window._ownUserDoc.email || '').toLowerCase() === em ? window._ownUserDoc : null;
+            const u = own || (typeof userList !== 'undefined' ? userList : []).find(x => x && String(x.email || '').toLowerCase() === em);
+            let n = u ? dg(u.groupIdNo) : null;
+            if (n == null) { const m = (state.members || []).find(x => x && String(x.email || '').trim().toLowerCase() === em); n = m ? dg(m.idNumber) : null; }
             return n;
         };
-        const rnoBlocked = (t) => { const cfg = getRnoCfg(); return !!(cfg.enabled && cfg.perMember && t && t.entry && rnoIsReal(t) && !rnoAssignedOf(t.entry.id) && rnoMemNo(t.entry.memberId, false) == null); };
+        const rnoBlocked = (t) => { const cfg = getRnoCfg(); return !!(cfg.enabled && cfg.perMember && t && t.entry && rnoIsReal(t) && !rnoAssignedOf(t.entry.id) && rnoEnterNo(t.entry, false) == null); };
         const rnoWarned = {};
-        const rnoWarnBlocked = (list) => { try { const names = []; list.forEach(t => { const id = t.entry.memberId; if (rnoWarned[id]) return; rnoWarned[id] = 1; const m = (state.members || []).find(x => x && x.id === id); names.push(m ? m.name : '(সদস্য নেই)'); }); if (names.length) toast('⚠️ আইডি নং নেই — রিসিপ্ট নম্বর আটকে আছে: ' + names.slice(0, 3).join(', ') + (names.length > 3 ? ' ও আরও ' + (names.length - 3) + 'জন' : '') + '। সদস্য তালিকায় "আইডি নং" দিন।'); } catch (e) { } };
+        const rnoWarnBlocked = (list) => { try { const who = []; list.forEach(t => { const em = rnoEnterEmail(t.entry, false) || '(লগইন নেই)'; if (rnoWarned[em]) return; rnoWarned[em] = 1; who.push(em); }); if (who.length) toast('⚠️ এন্ট্রিকারীর আইডি নম্বর নেই — রিসিপ্ট নম্বর আটকে আছে: ' + who.slice(0, 2).join(', ') + '। ইউজার-ব্যবস্থাপনায় "গ্রুপ আইডি" দিন (বা সদস্য তালিকায় এই ইমেইলসহ সদস্যের "আইডি নং" দিন)।'); } catch (e) { } };
         const rnoYearPart = (cfg, d) => cfg.yearMode === 'none' ? '' : (cfg.yearMode === 'fixed' ? cfg.fixedYear : String(d.getFullYear()));
         const rnoSeriesKey = (cfg, d, mem) => cfg.prefix + '|' + (cfg.perMember ? mem + '|' : '') + (cfg.resetYearly ? rnoYearPart(cfg, d) : '');
         const rnoFormat = (n, cfg, d, mem) => {
@@ -14663,12 +14682,12 @@ body.dark-mode .btn-outline{border-color:var(--gold-300)!important;color:var(--g
             if (!rnoIsReal(t)) { const d = new Date(); return rnoFormat(rnoNext(cfg, d, 0), cfg, d, 0); }
             if (!rnoApplies(t, cfg)) return txnReceiptNoLegacy(t);
             if (rnoBlocked(t)) return 'নম্বর বাকি';
-            const d = new Date(), mem = rnoMemNo(e.memberId, false); return rnoFormat(rnoNext(cfg, d, mem), cfg, d, mem);
+            const d = new Date(), mem = rnoEnterNo(e, false); return rnoFormat(rnoNext(cfg, d, mem), cfg, d, mem);
         };
         // প্রকৃত জারি — সফল ইমেইল-পাঠানো/রেজিস্টারের "নম্বর দিন" থেকে; একবার দিলে স্থায়ী
         const issueRnoCore = (t, when, noSave) => {
-            const cfg = getRnoCfg(), d = when || new Date(), m = rnoMapW(), mem = rnoMemNo(t.entry.memberId, true), key = rnoSeriesKey(cfg, d, mem);
-            if (cfg.perMember && mem == null) return '';   // আইডি নং নেই — নম্বর জারি হবে না
+            const cfg = getRnoCfg(), d = when || new Date(), m = rnoMapW(), mem = rnoEnterNo(t.entry, true), key = rnoSeriesKey(cfg, d, mem);
+            if (cfg.perMember && mem == null) return '';   // এন্ট্রিকারীর আইডি নেই — নম্বর জারি হবে না
             // 🆕 [v16.5.83] একই গ্রুপের (একাধিক মাস একসাথে) এন্ট্রি হলে আগের নম্বরই ব্যবহার — নতুন ক্রম খরচ হয় না
             { const G = window.mfRnoGroup, gi = m.grp && m.grp[t.entry.id]; let reuse = '';
               if (G && G.no) reuse = G.no;
@@ -15812,7 +15831,7 @@ body.dark-mode .btn-outline{border-color:var(--gold-300)!important;color:var(--g
                     </div>
                     <div style="display:flex;gap:16px;flex-wrap:wrap;font-size:13px;margin:4px 0 8px;">
                       <label><input type="checkbox" id="rn-bn" ${cfg.bn ? 'checked' : ''}> বাংলা অঙ্কে (০০০১)</label>
-                      <label><input type="checkbox" id="rn-pm" ${cfg.perMember ? 'checked' : ''}> সদস্যভিত্তিক নম্বর: MF-(সদস্য নং)(সাল)-(ক্রম) — যেমন MF-৪৪২৬-০০১ (চালু থাকলে নিচের ফরম্যাট/অঙ্ক ঘর কাজ করে না)</label>
+                      <label><input type="checkbox" id="rn-pm" ${cfg.perMember ? 'checked' : ''}> এন্ট্রিকারীর আইডিভিত্তিক নম্বর: MF-(যিনি এন্ট্রি দিচ্ছেন তাঁর আইডি)(সাল)-(ক্রম) — যেমন MF-৪৪২৬-০০১ (চালু থাকলে নিচের ফরম্যাট/অঙ্ক ঘর কাজ করে না)</label>
                       <label><input type="checkbox" id="rn-reset" ${cfg.resetYearly ? 'checked' : ''}> বছর/প্রিফিক্স বদলালে ক্রম আবার শুরু থেকে</label>
                     </div>
                     <div class="small muted" style="margin-bottom:6px;">ফরম্যাটে ব্যবহারযোগ্য: ${['{prefix}', '{year}', '{yy}', '{month}', '{seq}'].map(t => `<code>${t}</code>`).join(' ')} — অবশ্যই <code>{seq}</code> থাকতে হবে। যেমন: <code>{prefix}-{year}-{seq}</code> → MF-২০২৬-০০০১ · <code>{prefix}/{yy}/{seq}</code> → PF/27/০০০১</div>
@@ -15832,7 +15851,7 @@ body.dark-mode .btn-outline{border-color:var(--gold-300)!important;color:var(--g
                 };
                 const norm = (c) => { const keep = state.settings.receiptNo; state.settings.receiptNo = c; try { return getRnoCfg(); } finally { if (keep === undefined) delete state.settings.receiptNo; else state.settings.receiptNo = keep; } };
                 const pv = () => {
-                    const c = norm(draft()), d = new Date(), m0 = (state.members || [])[0], pmem = m0 ? rnoMemNo(m0.id, false) : 1, n = rnoNext(c, d, pmem);
+                    const c = norm(draft()), d = new Date(), pmem = rnoEnterNo({ id: '' }, false) || 1, n = rnoNext(c, d, pmem);
                     const hasSeq = /\{seq\}/i.test(q('rn-pattern').value);
                     q('rn-pv').innerHTML = `<b>পরবর্তী নম্বর:</b> ${escapeHtml(rnoFormat(n, c, d, pmem))} &nbsp;·&nbsp; ${escapeHtml(rnoFormat(n + 1, c, d, pmem))} &nbsp;·&nbsp; ${escapeHtml(rnoFormat(n + 2, c, d, pmem))}` + (c.enabled ? '' : ' <span class="small muted">(ক্রমিক বন্ধ — এখন আগের ধরন চলছে)</span>') + (hasSeq ? '' : '<div class="small" style="color:#a13a3a;">ফরম্যাটে {seq} নেই — সংরক্ষণের সময় স্বয়ংক্রিয়ভাবে যুক্ত হবে</div>');
                 };
@@ -20465,13 +20484,9 @@ body.dark-mode .btn-outline{border-color:var(--gold-300)!important;color:var(--g
                     const md = normalizeMobileForMatch(mob); if (mob && (md.length < 10 || md.length > 15)) E.push({ row: rowNo, col: 'মোবাইল নাম্বার', msg: '"' + mob + '" — সংখ্যা ' + md.length + 'টি (১০–১৫টি হতে হবে)' });
                     if (id) {
                         if (seenId[id]) E.push({ row: rowNo, col: 'আইডি নং', msg: '"' + id + '" ফাইলের ' + toBengaliNum(seenId[id]) + ' নং সারিতেও আছে — আইডি অদ্বিতীয় হতে হবে' }); else seenId[id] = rowNo;
-                        const d = impDigits(id);
-                        if (!isFinite(d) || d <= 0) W.push({ row: rowNo, msg: 'আইডি "' + id + '"-এ কোনো সংখ্যা নেই — এই সদস্যের রিসিপ্ট নম্বর জারি হবে না' });
-                        else if ((digs[d] || []).some(x => x !== id)) W.push({ row: rowNo, msg: 'আইডি "' + id + '"-এর সংখ্যা (' + d + ') আরেক সদস্যের আইডি "' + digs[d].find(x => x !== id) + '"-এর সাথে মেলে — রিসিপ্ট নম্বরে সংঘর্ষ হবে' });
-                        (digs[d] = digs[d] || []).push(id);
                         const ex = state.members.find(x => String(x.idNumber || '').trim() === id);
                         if (ex && name && ex.name !== name) W.push({ row: rowNo, msg: 'আইডি "' + id + '" আগে থেকেই "' + ex.name + '"-এর — নাম বদলে "' + name + '" হবে' });
-                    } else if (name) W.push({ row: rowNo, msg: '"' + name + '" — আইডি নং নেই (রিসিপ্ট নম্বর জারি করতে পরে আইডি দিতে হবে)' });
+                    }
                 });
                 return { E, W };
             },
