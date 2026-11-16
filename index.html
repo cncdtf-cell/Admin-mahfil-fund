@@ -2,6 +2,17 @@
 <html lang="bn">
 <head>
     <meta charset="UTF-8" />
+    <!-- 🔧 [v16.5.95] এক্সেল-লাইব্রেরি লোড না হলে এক্সেল বোতামে বন্ধুসুলভ বার্তা (আগে কাঁচা এরর)। -->
+    <!-- 🔧 [v16.5.102] (১) আইডি নং = প্রিফিক্স+সংখ্যা (MP-023), সেটিংসে বদলানো যায় (🆔 আইডি ফরম্যাট) — মিল/ফাঁকা-নম্বর/ইমপোর্ট সংখ্যা ধরে। (২) এডমিনের কলাম-বিন্যাস সব টেবিলের জন্য ইউজারদের কাছে নিজে প্রকাশ + "🌐 সব টেবিল পাঠান" বাটন; আলাদা ইউজার-প্রস্থ ওভাররাইট ডিফল্ট বন্ধ (এডমিনের প্রস্থই যায়)। (৩) রিসিপ্ট নম্বর এন্ট্রির গায়ে সেভ (e.rno) — ইউজার-প্যানেলে জারি হওয়া নম্বর এখন এডমিনেও দেখা যায়। (৪) মেথড কলামে "পাঠানো হয়েছে" বাদ — শুধু রিসিপ্ট নং-এ। -->
+    <!-- 🔧 [v16.5.101] নোটিফিকেশন-অনুরোধের চালু/বন্ধ সুইচ (এডমিন): বন্ধ থাকলে কোনো ডিভাইসে ব্যানার/অনুরোধ আসে না; ব্যানারের ✕ চাপলে একই অনুরোধ আর ফেরে না। Rules অপরিবর্তিত। -->
+    <!-- 🔧 [v16.5.100] (ক) "দ্রুত অনুদান আপডেট" বাদ — 💰 বাটনে এখন সরাসরি "মাসিক সংগ্রহ" উইজার্ড। (খ) ডাবল-এন্ট্রি সতর্কতা এখন এককালীন উইজার্ড ও মাসিক/বার্ষিক পুরনো এন্ট্রি সম্পাদনাতেও (তারিখ/টাকা বদলালে)। (গ) স্বয়ংক্রিয় ব্যাকআপে কয়টি ফাইল রাখবেন নিজে লিখতে পারবেন (১–১০০)। -->
+    <!-- 🔧 [v16.5.99] (৪) স্বয়ংক্রিয় সাপ্তাহিক Drive-ব্যাকআপ (ব্যাকআপ মেনুতে চালু/বন্ধ টিক; Apps Script v16.5.38 লাগবে পুরনো স্বয়ংক্রিয় ফাইল ছাঁটাইয়ের জন্য)। -->
+    <!-- 🔧 [v16.5.99] (১) এডমিন সারসংক্ষেপে "🟢 লাইভ কালেক্ট" কার্ড: এই মুহূর্তে কোন নাম কার হাতে লক আছে (সময়সহ, ১০ মিনিটের বেশি হলে লাল, এডমিন লক খুলতে পারেন)। (২) ডাবল-এন্ট্রি সতর্কতা (একই সদস্য+একই দিন+একই টাকা)। (৩) মাসিক টেবিলের ঘরে টাইপ করলেও (Edit Mode) নাম লক। আগের সব আচরণ অক্ষত। Rules অপরিবর্তিত (entry_locks-এর আগের অংশই লাগে)। -->
+    <!-- 🔧 [v16.5.98] নাম-লক: ফান্ড কালেক্টে সদস্যের নাম বাছলে লক হয়, অন্য কেউ একই নামে একসাথে এন্ট্রি দিতে পারে না (২ মিনিট নিষ্ক্রিয়/জানালা বন্ধে নিজে খোলে; এডমিন জোর করে খুলতে পারেন)। ⚠️ Firestore Rules-এ entry_locks অংশ যোগ করতে হবে (আলাদা ফাইল) — না যোগ করা পর্যন্ত লক ছাড়াই আগের মতো চলে। -->
+    <!-- 🔧 [v16.5.97] (১) সদস্য ফর্মে আইডি-নং সাজেশন: নতুন সদস্যে সর্বশেষের পরের নম্বর স্বয়ংক্রিয়, ফাঁকা নম্বর ক্লিকে বসে, ডুপ্লিকেটে সতর্কতা। (২) "🔢 আইডি নম্বর দিন" বোতামে নম্বর-বিহীন সবাইকে একসাথে নম্বর। (৩) এক্সেল ইমপোর্টে আইডি-ছাড়া নতুন সদস্য স্বয়ংক্রিয় নম্বর পায়। (৪) এক্সেল লাইব্রেরি মূল CDN-এ না এলে আরও দুই CDN থেকে নিজে লোড — ইমপোর্ট/এক্সপোর্ট সবসময় চলবে। -->
+    <!-- 🔧 [v16.5.96] Drive ব্যাকআপ তালিকায় প্রতিটির পাশে "↩️ রিস্টোর" বোতাম (Code_combined_v16_5_37.gs-এর backup_get লাগবে); এডমিনের মাসিক/বার্ষিক টেবিলে "বিস্তারিত" বোতাম। -->
+    <!-- 🔧 [v16.5.95] সার্চ-বাগ ফিক্স: অক্ষর+সংখ্যা মেশানো সার্চ (যেমন "m2@x", "গ্রাম1") আগে শুধু সংখ্যা ধরে প্রায় সবাইকে দেখাত — এখন শুধু সংখ্যা-সার্চেই সংখ্যা-মিল। -->
+    <!-- 🔧 [v16.5.94] (১) মাসিক/বার্ষিক টেবিলের মেথড কলামে পাঠানোর পর "✓ পাঠানো হয়েছে · মাধ্যম" স্বয়ংক্রিয় (রিসিপ্ট-নং কলাম লুকানো থাকলেও)। (২) বার্ষিক/এককালীন অনুদান সংরক্ষণের পর শেয়ার প্যানেল (ছবিসহ ইমেইল/হোয়াটসঅ্যাপ/মেসেঞ্জার/শেয়ার) — আগে শুধু মাসিকে ছিল, তাই বার্ষিকে কিছু চিহ্নিত হতো না। -->
     <!-- 🔧 [v16.5.93] নোটিফিকেশন: "কার কার ডিভাইসে টোকেন আছে দেখুন" বোতাম (টোকেনসহ/টোকেনহীন ইউজার-তালিকা)। Rules অপরিবর্তিত। -->
     <!-- 🔧 [v16.5.92] নোটিফিকেশন: "সব ডিভাইসে অনুমতির অনুরোধ পাঠান" বোতাম (ডিভাইসে ব্যানার/চুপচাপ টোকেন সংগ্রহ); দ্রুত খোলার জন্য Firebase preconnect + modulepreload ও xlsx লাইব্রেরি defer। Firestore Rules অপরিবর্তিত। -->
     <!-- 🔧 [v16.5.91] (১) সেটিংসের অংশগুলো ক্লিকে খোলে/বন্ধ (অ্যাকর্ডিয়ন; একটি খুললে বাকিগুলো বন্ধ)। (২) নোটিফিকেশন: "টেস্ট নোটিফিকেশন পাঠান" ও "এই ডিভাইসে নোটিফিকেশন চালু করুন" বোতাম (ডিভাইসের অনুমতি/ইন-অ্যাপ-ব্রাউজার/আইফোন সমস্যা কারণসহ দেখায়); Notify_v5.gs-এর সাথে। -->
@@ -65,6 +76,42 @@
     <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Baloo+Da+2:wght@500;600;700;800&family=Hind+Siliguri:wght@400;500;600;700&display=swap" /></noscript>
     <!-- 🆕 সদস্য তালিকা এক্সেল ইমপোর্ট/এক্সপোর্ট — SheetJS (ফ্রি, ওপেন-সোর্স) -->
     <script defer src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+    <script>
+    /* 🔧 [v16.5.97] এক্সেল লাইব্রেরি সবসময় পাওয়ার ব্যবস্থা: মূল CDN ব্যর্থ হলে আরও দুটি CDN থেকে নিজে লোড করে; বোতাম চাপার সময় না থাকলে লোড শেষে আবার চালায় */
+    window.mfLoadXlsx = function () {
+        if (window.XLSX) return Promise.resolve(true);
+        if (window.__mfXlsxP) return window.__mfXlsxP;
+        var urls = ['https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js', 'https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js', 'https://unpkg.com/xlsx@0.18.5/dist/xlsx.full.min.js'];
+        window.__mfXlsxP = new Promise(function (res) {
+            var i = 0;
+            (function next() {
+                if (window.XLSX) return res(true);
+                if (i >= urls.length) { window.__mfXlsxP = null; return res(false); }
+                var s = document.createElement('script'), done = false; s.src = urls[i++];
+                var t = setTimeout(function () { if (!done) { done = true; try { s.remove(); } catch (e) { } next(); } }, 15000);
+                s.onload = function () { if (done) return; done = true; clearTimeout(t); window.XLSX ? res(true) : next(); };
+                s.onerror = function () { if (done) return; done = true; clearTimeout(t); try { s.remove(); } catch (e) { } next(); };
+                document.head.appendChild(s);
+            })();
+        });
+        return window.__mfXlsxP;
+    };
+    window.addEventListener('load', function () { setTimeout(function () { if (!window.XLSX) window.mfLoadXlsx(); }, 1500); });
+    function mfXlsxToast(msg) { var t = document.createElement('div'); t.textContent = msg; t.style.cssText = 'position:fixed;left:12px;right:12px;bottom:70px;z-index:99999;background:#333;color:#fff;padding:12px 14px;border-radius:10px;font-size:14px;text-align:center;'; document.body.appendChild(t); setTimeout(function () { t.remove(); }, 3200); }
+    document.addEventListener('click', function (ev) {
+        try {
+            var b = ev.target && ev.target.closest && ev.target.closest('[id*="excel" i],[id*="xlsx" i]');
+            if (!b || window.XLSX || window.__mfXlsxBypass) return;
+            if (b.tagName === 'INPUT' || b.tagName === 'LABEL' || b.type === 'file') return;   // ফাইল-বাছাই আটকানো হয় না; ইমপোর্ট নিজেই লাইব্রেরি লোড করে নেয়
+            ev.preventDefault(); ev.stopImmediatePropagation();
+            mfXlsxToast('⏳ এক্সেল লাইব্রেরি লোড হচ্ছে…');
+            window.mfLoadXlsx().then(function (ok) {
+                if (ok) { window.__mfXlsxBypass = 1; try { b.click(); } finally { window.__mfXlsxBypass = 0; } }
+                else mfXlsxToast('❌ এক্সেল লাইব্রেরি লোড হয়নি — ইন্টারনেট দেখে আবার চেষ্টা করুন');
+            });
+        } catch (e) { }
+    }, true);
+    </script>
     <style>
         /* ===== রুট ভেরিয়েবল ===== */
         :root {
@@ -6064,17 +6111,19 @@ body.dark-mode .btn-outline{border-color:var(--gold-300)!important;color:var(--g
         const toBengaliNum = n => String(n).replace(/[0-9]/g, d => CONFIG.BN_DIGITS[parseInt(d)]);
         const bnToEnDigits = s => String(s ?? '').replace(/[০-৯]/g, d => String(CONFIG.BN_DIGITS.indexOf(d)));
         const digitsOnly = s => bnToEnDigits(s).replace(/[^0-9]/g, '');
+        const nrm = s => String(s ?? '').normalize('NFC').replace(/[\u200c\u200d]/g, '').toLowerCase().replace(/\s+/g, ' ');   // 🆕 [v16.5.100] সার্চ-নর্মালাইজ: বাংলা ড়/ঢ়/য় এর ভিন্ন কোড, অদৃশ্য ZWJ/ZWNJ ও বাড়তি স্পেস সমান ধরা
+        const isNumQ = n => /^[0-9\s+\-().,/:]+$/.test(n);   // 🔧 শুধু সংখ্যা/ফোনের চিহ্ন হলে তবেই সংখ্যা-ভিত্তিক মিল ("m2@x", "গ্রাম1" লিখলে সব মিলে যেত)
 
         const memberMatches = (m, q) => {
             if (!q) return true;
-            const needle = bnToEnDigits(q).trim().toLowerCase();
+            const needle = nrm(bnToEnDigits(q)).trim();
             if (!needle) return true;
-            if ((m.name || '').toLowerCase().includes(needle) || (m.father || '').toLowerCase().includes(needle)) return true;
+            if (nrm(m.name).includes(needle) || nrm(m.father).includes(needle)) return true;
             // 🆕 [১.৪] নাম/পিতার নাম/মোবাইলের পাশাপাশি এখন আইডি নম্বর দিয়েও সার্চ করা যাবে
-            if ((m.idNumber || '').toString().toLowerCase().includes(needle)) return true;
+            if (nrm(bnToEnDigits(m.idNumber)).includes(needle)) return true;
             const nd = digitsOnly(q);
-            if (nd) return digitsOnly(m.mobile || '').includes(nd) || digitsOnly((m.idNumber || '').toString()).includes(nd);
-            return (m.mobile || '').toLowerCase().includes(needle);
+            if (nd && isNumQ(needle)) return digitsOnly(m.mobile || '').includes(nd) || digitsOnly((m.idNumber || '').toString()).includes(nd);
+            return nrm(m.mobile).includes(needle);
         };
 
         const mobileLink = (mobile, cls) => {
@@ -6117,14 +6166,14 @@ body.dark-mode .btn-outline{border-color:var(--gold-300)!important;color:var(--g
         // মিল খুঁজবে (কাস্টম কলামের মানও)। memberMatches() মেম্বার-পিকার/মাসিক/বার্ষিক সার্চে ব্যবহৃত হয়
         // বলে সেটা অপরিবর্তিত রেখে এই আলাদা ফাংশনটা শুধু সদস্য তালিকায় প্লাগ করা হয়েছে।
         const memberGlobalMatches = (m, q) => {
-            const needle = bnToEnDigits(q).trim().toLowerCase().replace(/\s+/g, ' ');
+            const needle = nrm(bnToEnDigits(q)).trim();
             if (!needle) return true;
             const textFields = [m.name, m.father, m.email, m.status, m.position, m.remarks, m.joinDate, m.idNumber];
-            if (textFields.some(v => (v || '').toString().toLowerCase().replace(/\s+/g, ' ').includes(needle))) return true;
-            if (m.customFields && Object.values(m.customFields).some(v => (v || '').toString().toLowerCase().includes(needle))) return true;
-            if ((m.mobile || '').toLowerCase().includes(needle)) return true;
+            if (textFields.some(v => nrm(bnToEnDigits(v)).includes(needle))) return true;
+            if (m.customFields && Object.values(m.customFields).some(v => nrm(bnToEnDigits(v)).includes(needle))) return true;
+            if (nrm(m.mobile).includes(needle)) return true;
             const nd = digitsOnly(q);
-            if (nd) {
+            if (nd && isNumQ(needle)) {
                 if (digitsOnly(m.mobile || '').includes(nd)) return true;
                 if (digitsOnly((m.idNumber || '').toString()).includes(nd)) return true;
                 if (String(memberTotal(m.id)).includes(nd)) return true;
@@ -7107,7 +7156,122 @@ body.dark-mode .btn-outline{border-color:var(--gold-300)!important;color:var(--g
           `;
         };
 
-        const initMemberPicker = (idPrefix, onSelect) => {
+
+        // 🆕 [v16.5.98] নাম-লক: ফান্ড কালেক্টে সদস্যের নাম বাছলে সেই নাম লক হয় — অন্য কেউ একই নামে একসাথে এন্ট্রি দিতে পারে না।
+        // লক থাকে Firestore-এর entry_locks/{সদস্য-আইডি}-এ; সার্ভার-সময় (Rules) দিয়ে নিশ্চিত হয়, তাই দুজন একসাথে চাইলেও একজনই পায়।
+        // ৪০ সেকেন্ডে নবায়ন; ২ মিনিট নিষ্ক্রিয় থাকলে বা জানালা বন্ধ হলে লক নিজে খুলে যায়।
+        const mfLock = (() => {
+            const COL = 'entry_locks', HB_MS = 40000;
+            let held = null, hbT = null, idleT = null, locks = new Map(), started = false, warned = false, lastAct = Date.now(), serr = false; const lost = new Set(), subs = new Set(), seen = new Map();
+            const F = () => window._firestore, DB = () => window._firestoreDb, me = () => window.currentUser || {};
+            const ready = () => !!(F() && DB() && F().serverTimestamp && me().uid);
+            const ref = (id) => F().doc(DB(), COL, String(id));
+            const payload = (id, name) => ({ uid: me().uid, email: me().email || '', name: String(name || '').slice(0, 80), member: String(id), by: String((window._ownUserDoc && window._ownUserDoc.displayName) || me().displayName || me().email || '').slice(0, 80), hb: F().serverTimestamp() });
+            const start = () => { if (started || !ready()) return; started = true; try { F().onSnapshot(F().collection(DB(), COL), (snap) => { const m = new Map(); snap.forEach(d => m.set(d.id, d.data())); locks = m; serr = false; const now = Date.now(); m.forEach((d, id) => { const s = seen.get(id); if (!s || s.uid !== d.uid) seen.set(id, { uid: d.uid, t: now }); }); Array.from(seen.keys()).forEach(id => { if (!m.has(id)) seen.delete(id); }); subs.forEach(f => { try { f(); } catch (e) { } }); }, () => { serr = true; subs.forEach(f => { try { f(); } catch (e) { } }); }); } catch (e) { } };
+            const holderOf = (id) => { const d = locks.get(String(id)); if (!d || d.uid === me().uid) return null; const ms = d.hb && d.hb.toMillis ? d.hb.toMillis() : 0; if (ms && Date.now() - ms > 150000) return null; return d; };
+            const stopTimers = () => { clearInterval(hbT); clearInterval(idleT); hbT = idleT = null; };
+            const beat = async () => { if (!held) return; try { await F().setDoc(ref(held.id), payload(held.id, held.name)); lost.delete(held.id); } catch (e) { lost.add(held.id); } };
+            const release = async (id) => { id = id || (held && held.id); if (!id) return; if (held && held.id === id) { held = null; stopTimers(); } lost.delete(id); try { if (ready()) await F().deleteDoc(ref(id)); } catch (e) { } };
+            const sel = (id) => '#main .cell-input[data-member="' + String(id).replace(/"/g, '\\"') + '"]';
+            const watchModal = () => { let miss = 0; idleT = setInterval(() => { if (!held) return; if (held.inline) { if (!document.querySelector(sel(held.id))) { if (++miss >= 2) release(); return; } miss = 0; const ae = document.activeElement, inRow = !!(ae && ae.matches && ae.matches(sel(held.id))), idle = Date.now() - lastAct; if ((!inRow && idle > 8000) || idle > 120000) release(); return; } if (!document.getElementById('modal-backdrop')) { if (++miss >= 2) release(); } else miss = 0; }, 1500); };
+            const live = (d) => { const ms = d && d.hb && d.hb.toMillis ? d.hb.toMillis() : 0; return !(ms && Date.now() - ms > 150000); };
+            const list = () => Array.from(locks.entries()).filter(([id, d]) => live(d)).map(([id, d]) => ({ id, name: d.name || '', by: d.by || d.email || '', email: d.email || '', mine: d.uid === me().uid, since: (seen.get(id) || { t: Date.now() }).t }));
+            const force = async (id) => { if (held && held.id === id) { await release(id); return; } await F().deleteDoc(ref(id)); };
+            const acquire = async (id, name, opts) => {
+                const inline = !!(opts && opts.inline); lastAct = Date.now();
+                if (!ready()) return { ok: true, degraded: true };
+                start();
+                if (held && held.id !== id) await release(held.id);
+                if (held && held.id === id) { if (!inline) held.inline = false; return { ok: true }; }
+                try { await F().setDoc(ref(id), payload(id, name)); }
+                catch (e) {
+                    let d = null; try { const s = await F().getDoc(ref(id)); d = s.exists() ? s.data() : null; } catch (e2) { }
+                    if (d && d.uid && d.uid !== me().uid) return { ok: false, holder: d };
+                    if (!warned) { warned = true; try { toast('⚠️ নাম-লক চালু নেই (Firestore Rules-এ entry_locks যোগ হয়নি) — একই নামে একসাথে এন্ট্রি দিলে সতর্ক থাকুন'); } catch (x) { } }
+                    return { ok: true, degraded: true };
+                }
+                held = { id, name, inline }; lost.delete(id); stopTimers(); hbT = setInterval(beat, HB_MS); watchModal();
+                return { ok: true };
+            };
+            const canSave = (id) => !lost.has(String(id));
+            const deny = (r, name, id) => {
+                const h = (r && r.holder) || {}; const who = h.by || h.email || 'অন্য একজন';
+                const isAdm = (typeof isAdminUser === 'function') && isAdminUser();
+                const old = document.getElementById('mf-lock-deny'); if (old) old.remove();
+                const ov = document.createElement('div'); ov.id = 'mf-lock-deny';
+                ov.style.cssText = 'position:fixed;inset:0;z-index:2147483100;background:rgba(0,0,0,.55);display:flex;align-items:center;justify-content:center;padding:14px;';
+                ov.innerHTML = '<div style="background:var(--paper-raised,#fff);color:inherit;border-radius:16px;padding:16px;max-width:440px;width:100%;border:2px solid #b3261e;font-size:15px;line-height:1.6;"><h3 style="margin:0 0 8px;">🔒 এই নামে এখন অন্যজন এন্ট্রি করছেন</h3><p style="margin:0 0 8px;">"<b>' + escapeHtml(name || '') + '</b>" নামে এখন <b>' + escapeHtml(who) + '</b>' + (h.email && h.by && h.by !== h.email ? ' (' + escapeHtml(h.email) + ')' : '') + ' এন্ট্রি করছেন। একই নামে একসাথে এন্ট্রি দিলে ভুল হতে পারে, তাই লক আছে।</p><p class="small muted" style="margin:0 0 10px;">তিনি শেষ করলে বা ২ মিনিট নিষ্ক্রিয় থাকলে লক নিজে খুলে যাবে — তখন আপনি এন্ট্রি দিতে পারবেন।</p><div style="display:flex;gap:8px;justify-content:flex-end;flex-wrap:wrap;">' + (isAdm ? '<button type="button" class="btn btn-outline" id="lk-force">🔓 জোর করে লক খুলুন (এডমিন)</button>' : '') + '<button type="button" class="btn btn-primary" id="lk-ok">ঠিক আছে</button></div></div>';
+                document.body.appendChild(ov);
+                document.getElementById('lk-ok').onclick = () => ov.remove();
+                const fb = document.getElementById('lk-force'); if (fb) fb.onclick = async () => { try { await F().deleteDoc(ref(id)); toast('🔓 লক খোলা হয়েছে — আবার নাম নির্বাচন করুন'); } catch (e) { toast('❌ লক খোলা যায়নি'); } ov.remove(); };
+            };
+            return { acquire, release, canSave, holderOf, deny, ensure: start, list, force, touch: () => { lastAct = Date.now(); }, subscribe: (f) => { subs.add(f); return () => subs.delete(f); }, status: () => ({ ready: ready(), started, err: serr }), lostMsg: () => toast('🔒 লক নবায়ন হয়নি (নেটওয়ার্ক?) — জানালা বন্ধ করে আবার নাম নির্বাচন করুন') };
+        })();
+        window.mfLock = mfLock;
+
+        // 🆕 [v16.5.99] ডাবল-এন্ট্রি সতর্কতা: একই সদস্য + একই দিন + একই পরিমাণ আগে থেকে থাকলে সংরক্ষণের আগে নিশ্চিতকরণ চায় (লকের পরিপূরক)।
+        window.mfDup = (() => {
+            const near = (a, b) => Math.abs(Number(a) - Number(b)) < 0.005;
+            const find = (o) => {
+                const A = ((o && o.amounts) || []).map(Number).filter(x => x > 0);
+                if (!o || !o.memberId || !o.date || !A.length) return null;
+                const rows = [];
+                (state.monthly || []).forEach(r => { if (r.memberId === o.memberId && r.date === o.date && Number(r.amount) > 0 && r.month !== o.skipMonthKey && r.id !== o.skipId) rows.push({ kind: 'মাসিক', amount: Number(r.amount), collector: r.collector || '', month: r.month || '' }); });
+                (state.yearly || []).forEach(r => { if (r.memberId === o.memberId && r.date === o.date && Number(r.amount) > 0 && r.id !== o.skipId) rows.push({ kind: 'বার্ষিক/এককালীন', amount: Number(r.amount), collector: r.collector || '', month: '' }); });
+                if (!rows.length) return null;
+                const sum = rows.reduce((s, r) => s + r.amount, 0);
+                const hit = rows.find(r => A.some(a => near(a, r.amount))) || (rows.length > 1 && A.some(a => near(a, sum)) ? rows[0] : null);
+                return hit ? Object.assign({ count: rows.length }, hit) : null;
+            };
+            const ask = (name, date, d, onYes) => {
+                const old = document.getElementById('mf-dup-ask'); if (old) old.remove();
+                const ov = document.createElement('div'); ov.id = 'mf-dup-ask';
+                ov.style.cssText = 'position:fixed;inset:0;z-index:2147483100;background:rgba(0,0,0,.55);display:flex;align-items:center;justify-content:center;padding:14px;';
+                const dt = (typeof fmtDate === 'function') ? fmtDate(date) : date;
+                ov.innerHTML = '<div style="background:var(--paper-raised,#fff);color:inherit;border-radius:16px;padding:16px;max-width:440px;width:100%;border:2px solid #b26a00;font-size:15px;line-height:1.6;"><h3 style="margin:0 0 8px;">⚠️ সম্ভাব্য ডাবল এন্ট্রি</h3><p style="margin:0 0 10px;">"<b>' + escapeHtml(name || '') + '</b>" নামে <b>' + escapeHtml(dt) + '</b> তারিখে ইতিমধ্যে <b>' + escapeHtml(d.kind) + ' ' + escapeHtml(fmtMoney(d.amount)) + '</b>' + (d.month ? ' (' + escapeHtml(d.month) + ')' : '') + (d.collector ? ' — সংগ্রাহক: ' + escapeHtml(d.collector) : '') + ' এন্ট্রি আছে। আবার একই টাকা ভুলে দেওয়া হচ্ছে না তো?</p><div style="display:flex;gap:8px;justify-content:flex-end;flex-wrap:wrap;"><button type="button" class="btn btn-outline" id="dup-yes">হ্যাঁ, তবুও সংরক্ষণ করুন</button><button type="button" class="btn btn-primary" id="dup-no">না, ফিরে যাই</button></div></div>';
+                document.body.appendChild(ov);
+                document.getElementById('dup-no').onclick = () => ov.remove();
+                document.getElementById('dup-yes').onclick = () => { ov.remove(); try { onYes(); } catch (e) { console.error(e); } };
+                try { document.getElementById('dup-no').focus(); } catch (e) { }
+            };
+            return { find, ask };
+        })();
+        window.__mfLockIds = new Set(['smc-member']);
+
+        // 🆕 [v16.5.99] 🟢 লাইভ কালেক্ট — এই মুহূর্তে কোন নাম কার হাতে লক আছে (entry_locks-এর রিয়েল-টাইম তালিকা)
+        window.mfLiveCard = (() => {
+            let unsub = null, tmr = null;
+            const dur = (ms) => { const s = Math.max(0, Math.floor(ms / 1000)); if (s < 60) return toBengaliNum(s) + ' সেকেন্ড'; const m = Math.floor(s / 60); if (m < 60) return toBengaliNum(m) + ' মিনিট'; return toBengaliNum(Math.floor(m / 60)) + ' ঘণ্টা ' + toBengaliNum(m % 60) + ' মিনিট'; };
+            const stop = () => { if (unsub) { unsub(); unsub = null; } clearInterval(tmr); tmr = null; };
+            const render = () => {
+                const el = document.getElementById('mf-live-card'); if (!el) { stop(); return; }
+                const st = window.mfLock.status(); const L = window.mfLock.list().sort((a, b) => a.since - b.since);
+                const adm = (typeof isAdminUser === 'function') && isAdminUser();
+                let body;
+                if (!st.ready) body = '<div class="small muted">ক্লাউডের সাথে সংযোগের অপেক্ষায়…</div>';
+                else if (st.err) body = '<div class="small" style="color:#b3261e;">⚠️ লক-তালিকা পড়া যাচ্ছে না — Firestore Rules-এ entry_locks অংশ যোগ হয়েছে কি দেখুন।</div>';
+                else if (!L.length) body = '<div class="small muted">এই মুহূর্তে কেউ কোনো নাম ধরে রাখেননি।</div>';
+                else body = L.map(x => { const ms = Date.now() - x.since, old = ms >= 600000; return '<div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;padding:8px 10px;margin-top:6px;border-radius:10px;border:1px solid ' + (old ? '#b3261e' : 'var(--line,#d9d9d9)') + ';' + (old ? 'background:rgba(179,38,30,.10);' : '') + '"><span style="font-size:12px;">' + (old ? '🔴' : '🟢') + '</span><div style="flex:1;min-width:150px;"><b>' + escapeHtml(x.name || 'নাম নেই') + '</b><div class="small muted">' + escapeHtml(x.by || 'অজানা') + (x.mine ? ' (আপনি)' : '') + ' · ' + dur(ms) + ' ধরে' + (old ? ' — ১০ মিনিটের বেশি, আটকে আছে কি?' : '') + '</div></div>' + (adm ? '<button type="button" class="btn btn-outline" data-lc-force="' + escapeHtml(x.id) + '" data-lc-name="' + escapeHtml(x.name || '') + '">🔓 লক খুলুন</button>' : '') + '</div>'; }).join('');
+                el.innerHTML = '<div class="card" style="padding:12px 14px;margin-bottom:16px;"><div style="display:flex;justify-content:space-between;align-items:center;gap:8px;"><b>🟢 লাইভ কালেক্ট' + (st.ready && !st.err ? ' (' + toBengaliNum(L.length) + ')' : '') + '</b><span class="small muted">নিজে নিজে হালনাগাদ হয়</span></div>' + body + '</div>';
+                el.onclick = async (ev) => { const b = ev.target.closest && ev.target.closest('[data-lc-force]'); if (!b) return; const id = b.dataset.lcForce; if (!confirm('"' + (b.dataset.lcName || '') + '" নামের লক খুলে দেবেন? (যিনি ধরে রেখেছেন তাঁর সংরক্ষণ আটকে যেতে পারে)')) return; try { await window.mfLock.force(id); toast('🔓 লক খোলা হয়েছে'); } catch (e) { toast('❌ লক খোলা যায়নি'); } };
+            };
+            const mount = () => { stop(); if (!window.mfLock) return; window.mfLock.ensure(); render(); unsub = window.mfLock.subscribe(render); tmr = setInterval(render, 5000); };
+            return { mount, stop, render };
+        })();
+
+        // 🆕 [v16.5.99] মাসিক টেবিলের ঘরে (Edit Mode) টাইপ শুরু করলেই ওই সদস্যের নাম লক; অন্যের হাতে থাকলে ঘরটি আটকে যায়।
+        document.addEventListener('focusin', (e) => {
+            const t = e.target; if (!t || !t.matches || !t.matches('#main .cell-input[data-member]')) return;
+            if (currentTab !== 'monthly' || !isMonthlyEditModeOn() || !window.mfLock) return;
+            const mid = t.dataset.member, m = memberById(mid);
+            window.mfLock.touch();
+            window.mfLock.acquire(mid, m ? m.name : '', { inline: true }).then(r => { if (!r.ok) { try { t.blur(); } catch (x) { } window.mfLock.deny(r, m ? m.name : '', mid); renderMain(); } });
+        });
+        document.addEventListener('input', (e) => { const t = e.target; if (t && t.matches && t.matches('#main .cell-input[data-member]') && window.mfLock) window.mfLock.touch(); });
+
+        const initMemberPicker = (idPrefix, onSelect, opts) => {
+            const _lockOn = !!((opts && opts.lock) || (window.__mfLockIds && window.__mfLockIds.has(idPrefix)));
+            if (_lockOn && window.mfLock) window.mfLock.ensure();
             const searchEl = document.getElementById(`${idPrefix}-search`);
             const hiddenEl = document.getElementById(idPrefix);
             const listEl = document.getElementById(`${idPrefix}-list`);
@@ -7122,21 +7286,31 @@ body.dark-mode .btn-outline{border-color:var(--gold-300)!important;color:var(--g
                 if (!matches.length) {
                     listEl.innerHTML = `<div class="mp-item mp-empty">কোনো সদস্য পাওয়া যায়নি</div>`;
                 } else {
-                    listEl.innerHTML = matches.map(m => `
-                    <div class="mp-item" data-mp-id="${m.id}">
-                      <div class="mp-item-name">${escapeHtml(m.name)}</div>
-                      <div class="mp-item-sub small muted">${m.mobile ? escapeHtml(m.mobile) : 'মোবাইল নেই'}${m.father ? ' · ' + escapeHtml(m.father) : ''}</div>
+                    if (_lockOn && window.mfLock) window.mfLock.ensure();
+                    listEl.innerHTML = matches.map(m => { const _hl = (_lockOn && window.mfLock) ? window.mfLock.holderOf(m.id) : null; return `
+                    <div class="mp-item" data-mp-id="${m.id}"${_hl ? ' style="opacity:.55;"' : ''}>
+                      <div class="mp-item-name">${_hl ? '🔒 ' : ''}${escapeHtml(m.name)}</div>
+                      <div class="mp-item-sub small muted">${_hl ? 'এখন ' + escapeHtml(_hl.by || _hl.email || 'অন্যজন') + ' এন্ট্রি করছেন' : (m.mobile ? escapeHtml(m.mobile) : 'মোবাইল নেই') + (m.father ? ' · ' + escapeHtml(m.father) : '')}</div>
                     </div>
-                  `).join('');
+                  `; }).join('');
                     listEl.querySelectorAll('[data-mp-id]').forEach(item => {
                         item.addEventListener('mousedown', ev => {
                             ev.preventDefault();
                             const m = memberById(item.dataset.mpId);
-                            hiddenEl.value = m.id;
-                            searchEl.value = m.name;
-                            infoEl.textContent = mpInfoLine(m);
-                            listEl.style.display = 'none';
-                            if (onSelect) onSelect(m);
+                            const _pick = () => {
+                                hiddenEl.value = m.id;
+                                searchEl.value = m.name;
+                                infoEl.textContent = mpInfoLine(m);
+                                listEl.style.display = 'none';
+                                if (onSelect) onSelect(m);
+                            };
+                            if (_lockOn && window.mfLock) {
+                                listEl.style.display = 'none'; infoEl.textContent = '⏳ নাম লক করা হচ্ছে…';
+                                window.mfLock.acquire(m.id, m.name).then(r => {
+                                    if (r.ok) _pick();
+                                    else { hiddenEl.value = ''; searchEl.value = ''; infoEl.textContent = ''; window.mfLock.deny(r, m.name, m.id); }
+                                });
+                            } else _pick();
                         });
                     });
                 }
@@ -7746,7 +7920,9 @@ body.dark-mode .btn-outline{border-color:var(--gold-300)!important;color:var(--g
                   <button type="button" class="btn btn-outline btn-sm" id="notify-test">🔌 সংযোগ ও স্ট্যাটাস</button>
                   <button type="button" class="btn btn-outline btn-sm" id="notify-run">🔔 এখনই চালান</button>
                   <button type="button" class="btn btn-outline btn-sm" id="notify-testpush">📲 টেস্ট নোটিফিকেশন পাঠান</button>
-                  <button type="button" class="btn btn-sm" id="notify-all">📣 সব ডিভাইসে নোটিফিকেশন-অনুমতির অনুরোধ পাঠান</button>
+                  <button type="button" class="btn btn-sm" id="notify-all">📣 অনুরোধ চালু করুন (সব ডিভাইসে)</button>
+                  <button type="button" class="btn btn-outline btn-sm" id="notify-all-off">🔕 অনুরোধ বন্ধ করুন</button>
+                  <span id="notify-req-st" class="small" style="font-weight:700;"></span>
                   <button type="button" class="btn btn-outline btn-sm" id="notify-list">📋 কার কার ডিভাইসে টোকেন আছে দেখুন</button>
                   <button type="button" class="btn btn-outline btn-sm" id="notify-dev">📱 এই ডিভাইসে নোটিফিকেশন চালু করুন</button>
                   <span id="notify-st" class="small"></span>
@@ -7780,6 +7956,16 @@ body.dark-mode .btn-outline{border-color:var(--gold-300)!important;color:var(--g
               <div class="field"><label>যোগাযোগ</label><input type="text" id="s-contact" value="${escapeHtml(s.contact)}"></div>
               <div class="field"><label>সময়কাল</label><input type="text" id="s-period" value="${escapeHtml(s.period)}"></div>
               <div class="field"><label>অ্যাডমিন ইমেইল (নোট — অ্যাক্সেস-নিয়ন্ত্রণে আর ব্যবহৃত হয় না)</label><input type="email" id="s-admin-email" value="${escapeHtml(s.adminEmail || '')}" placeholder="admin@example.com"><div class="small muted" style="margin-top:4px;">নতুন এডমিন যোগ/অপসারণ করতে "ইউজার" ট্যাবের "👑 এডমিন" সাব-ট্যাব ব্যবহার করুন।</div></div>
+            </div>
+            <div style="border-bottom:1px dashed var(--line);padding-bottom:12px;margin-bottom:12px;">
+              <label style="margin-bottom:6px;">💬 ভাসমান যোগাযোগ বাটন (AI · গ্রুপ চ্যাট · হোয়াটসঅ্যাপ · মেসেঞ্জার)</label>
+              <div class="small muted" style="margin:4px 0 8px;">কোন বাটন সবাইকে দেখাবে এবং হোয়াটসঅ্যাপ/মেসেঞ্জারের লিংক এখান থেকে ঠিক করুন। লিংক ফাঁকা থাকলে ওই বাটন দেখাবে না।</div>
+              <button type="button" class="btn btn-outline btn-sm" data-sd-open="1">💬 বাটন সেটিংস খুলুন</button>
+            </div>
+            <div style="border-bottom:1px dashed var(--line);padding-bottom:12px;margin-bottom:12px;">
+              <label style="margin-bottom:6px;">🆔 সদস্য আইডি নম্বরের ফরম্যাট</label>
+              <div class="small muted" style="margin:4px 0 8px;">এখন: <b>${escapeHtml(window.mfIdFormat ? window.mfIdFormat(23) : 'MP-023')}</b> — প্রিফিক্স (MP), বিভাজক ও অঙ্ক-সংখ্যা এখান থেকে বদলানো যায়।</div>
+              <button type="button" class="btn btn-outline btn-sm" data-idfmt-open="1">🆔 আইডি ফরম্যাট সেটিংস খুলুন</button>
             </div>
             <div style="border-bottom:1px dashed var(--line);padding-bottom:12px;margin-bottom:12px;">
               <label style="margin-bottom:10px;">🏠 সাইডবার ও ফুটার টেক্সট সম্পাদনা</label>
@@ -8229,12 +8415,21 @@ body.dark-mode .btn-outline{border-color:var(--gold-300)!important;color:var(--g
                         st.style.whiteSpace = 'pre-line';
                         try {
                             const { doc, setDoc } = window._firestore;
-                            await setDoc(doc(window._firestoreDb, 'app_settings', 'user_panel_toggle'), { pushReqAt: new Date().toISOString(), pushReqBy: (window.currentUser && window.currentUser.email) || '' }, { merge: true });
+                            await setDoc(doc(window._firestoreDb, 'app_settings', 'user_panel_toggle'), { pushReqAt: new Date().toISOString(), pushReqOn: true, pushReqBy: (window.currentUser && window.currentUser.email) || '' }, { merge: true });
                             const L = (typeof userList !== 'undefined' && userList) ? userList : [];
                             const withTok = L.filter(u => Array.isArray(u.fcmTokens) && u.fcmTokens.length).length;
                             st.textContent = '✅ অনুরোধ পাঠানো হয়েছে। এখন থেকে যে ডিভাইসে অ্যাপ খোলা হবে (বা খোলা আছে) সেখানে "নোটিফিকেশন চালু করুন" ব্যানার আসবে; অনুমতি দেওয়া থাকলে চুপচাপ টোকেন জমা হবে।\nবর্তমানে টোকেনসহ ইউজার: ' + withTok + ' / ' + L.length + ' (কিছুক্ষণ পর "স্ট্যাটাস দেখুন" দিয়ে বাড়ছে কিনা দেখুন)।\n⚠️ কেউ Block/Don\'t allow দিলে ব্রাউজার টোকেন দেয় না — তাকে নিজে সেটিংস থেকে Allow করতে হবে।';
                         } catch (e) { st.textContent = '❌ ' + (e.message || e); }
                     };
+                    document.getElementById('notify-all-off').onclick = async () => {   // 🆕 [v16.5.101] অনুরোধ বন্ধ — কারও কাছে আর ব্যানার/অনুমতি-অনুরোধ যাবে না
+                        st.style.whiteSpace = 'pre-line';
+                        try {
+                            const { doc, setDoc } = window._firestore;
+                            await setDoc(doc(window._firestoreDb, 'app_settings', 'user_panel_toggle'), { pushReqOn: false, pushReqOffAt: new Date().toISOString(), pushReqOffBy: (window.currentUser && window.currentUser.email) || '' }, { merge: true });
+                            st.textContent = '🔕 অনুরোধ বন্ধ করা হয়েছে — এখন থেকে কেউ নোটিফিকেশনের ব্যানার/অনুরোধ দেখবেন না। (যাঁদের টোকেন আগেই জমা হয়েছে তাঁরা নোটিফিকেশন পেতেই থাকবেন।) আবার দরকার হলে "অনুরোধ চালু করুন" চাপুন।';
+                        } catch (e) { st.textContent = '❌ ' + (e.message || e); }
+                    };
+                    { const _rs = document.getElementById('notify-req-st'); const _paint = () => { const el = document.getElementById('notify-req-st'); if (!el) { window.removeEventListener('mf-pushreq', _paint); return; } const r = window.__mfPushReq; el.textContent = r ? (r.on ? '🟢 অনুরোধ এখন চালু' : '🔴 অনুরোধ এখন বন্ধ') : ''; el.style.color = r && r.on ? '#0a8f5b' : '#b3261e'; }; if (_rs) { _paint(); window.addEventListener('mf-pushreq', _paint); } }
                     document.getElementById('notify-dev').onclick = async () => {
                         st.style.whiteSpace = 'pre-line'; st.textContent = '⏳ ...';
                         try { const r = await window.mfPushEnable(); st.textContent = r.lines.join('\n'); } catch (e) { st.textContent = '❌ ' + (e.message || e); }
@@ -8809,6 +9004,7 @@ body.dark-mode .btn-outline{border-color:var(--gold-300)!important;color:var(--g
                     }
                 });
                 if (changed && typeof window.renderMain === 'function') window.renderMain();
+                try { if (isAdminUser()) setTimeout(() => window.mfPublishLayouts && window.mfPublishLayouts(false, true), 1500); } catch (e) { }   // 🆕 [v16.5.102] অপ্রকাশিত টেবিলের বিন্যাস ইউজারদের জন্য নিজে প্রকাশ
             } catch (err) {
                 console.error('Table column configs cloud থেকে লোড করতে সমস্যা:', err);
             }
@@ -9036,6 +9232,27 @@ body.dark-mode .btn-outline{border-color:var(--gold-300)!important;color:var(--g
         };
         // 🆕 [সিঙ্ক-বাটন ফিক্স] উপরের applyGlobalColVisibilityData-এর মতোই — টেবিল-স্ট্রাকচার
         // ডকুমেন্টের (কলামের নাম/ক্রম/প্রস্থ/visible ফ্ল্যাগ) এককালীন মান সরাসরি বসানোর ব্রিজ।
+
+        // 🆕 [v16.5.102] এডমিনের সাজানো কলাম-বিন্যাস (ক্রম/প্রস্থ/নাম/দৃশ্যমানতা) সব টেবিলের জন্য ইউজার প্যানেলে প্রকাশ।
+        // আগে শুধু "সেভের মুহূর্তে" প্রকাশ হতো — তাই আগে সাজানো টেবিলগুলো ইউজার কখনো পেত না। এখন লগইনে অপ্রকাশিত টেবিলগুলো নিজে প্রকাশ হয় (বিদ্যমান প্রকাশিত অংশ ছোঁয়া হয় না);
+        // "সব টেবিল ইউজারদের কাছে পাঠান" বাটনে (force) সবগুলো এডমিনের বর্তমান বিন্যাসে হালনাগাদ হয়। merge:true — অন্য টেবিল মুছে যায় না।
+        window.mfPublishLayouts = async (force, silent) => {
+            try {
+                const uid = window.currentUser && window.currentUser.uid;
+                if (!uid || !isAdminUser() || typeof window._firestore === 'undefined' || !window._firestoreDb) return { n: 0 };
+                const { doc, getDoc, getDocs, collection, setDoc } = window._firestore, db = window._firestoreDb;
+                let cur = {}; try { const g = await getDoc(doc(db, 'app_settings', 'table_columns_sync')); if (g.exists()) cur = (g.data() && g.data().tables) || {}; } catch (e) { }
+                const add = {}, mk = (c) => ({ syncEnabled: true, columns: c.columns, deletedDefaultKeys: c.deletedDefaultKeys || [] });
+                try { const snap = await getDocs(collection(db, 'adminUserPrefs', uid, 'tableColumns')); snap.forEach(d => { const c = d.data(); if (c && Array.isArray(c.columns) && (force || !cur[d.id])) add[d.id] = mk(c); }); } catch (e) { console.error(e); }
+                Object.keys(TABLE_COLUMN_CACHE).forEach(id => { const c = TABLE_COLUMN_CACHE[id]; if (c && Array.isArray(c.columns) && (force || !cur[id])) add[id] = mk(c); });
+                const ids = Object.keys(add); if (!ids.length) { if (!silent) toast('✅ সব টেবিলের বিন্যাস আগে থেকেই ইউজারদের কাছে আছে'); return { n: 0 }; }
+                await setDoc(doc(db, 'app_settings', 'table_columns_sync'), { tables: add }, { merge: true });
+                GLOBAL_TABLE_COLUMNS.tables = Object.assign({}, GLOBAL_TABLE_COLUMNS.tables || {}, add);
+                try { localStorage.setItem(GLOBAL_TABLE_COLUMNS_LOCAL_KEY, JSON.stringify(GLOBAL_TABLE_COLUMNS)); } catch (e) { }
+                toast('🌐 ' + toBengaliNum(ids.length) + 'টি টেবিলের কলাম-বিন্যাস ইউজারদের জন্য প্রকাশ হয়েছে');
+                return { n: ids.length, ids };
+            } catch (e) { console.error('mfPublishLayouts', e); if (!silent) toast('❌ প্রকাশ করা যায়নি — আবার চেষ্টা করুন'); return { n: 0, err: true }; }
+        };
         window.applyGlobalTableColumnsData = (data) => {
             if (data && data.tables) {
                 GLOBAL_TABLE_COLUMNS = data;
@@ -9066,7 +9283,7 @@ body.dark-mode .btn-outline{border-color:var(--gold-300)!important;color:var(--g
         const isValidUserColWidth = (n) => typeof n === 'number' && isFinite(n) && n >= USER_COL_W_MIN && n <= USER_COL_W_MAX;
         const getUserColWidth = (tableId, key) => {
             const t = GLOBAL_USER_COL_WIDTHS.tables && GLOBAL_USER_COL_WIDTHS.tables[tableId];
-            const v = t ? Number(t[key]) : NaN;
+            const v = (t && t._on === true) ? Number(t[key]) : NaN;   // 🆕 [v16.5.102] আলাদা ইউজার-প্রস্থ শুধু এডমিন স্পষ্টভাবে সেট করলেই (_on) প্রযোজ্য — নইলে এডমিনের প্রস্থই ইউজার দেখে
             return isValidUserColWidth(v) ? Math.round(v) : null;
         };
         const _persistUserColWidths = async () => {
@@ -9088,8 +9305,8 @@ body.dark-mode .btn-outline{border-color:var(--gold-300)!important;color:var(--g
         const setUserColWidth = async (tableId, key, px) => {
             if (!GLOBAL_USER_COL_WIDTHS.tables) GLOBAL_USER_COL_WIDTHS.tables = {};
             const t = Object.assign({}, GLOBAL_USER_COL_WIDTHS.tables[tableId] || {});
-            if (px === null) delete t[key]; else t[key] = Math.round(px);
-            if (Object.keys(t).length) GLOBAL_USER_COL_WIDTHS.tables[tableId] = t; else delete GLOBAL_USER_COL_WIDTHS.tables[tableId];
+            if (px === null) delete t[key]; else { t[key] = Math.round(px); t._on = true; }
+            if (Object.keys(t).filter(k => k !== '_on').length) GLOBAL_USER_COL_WIDTHS.tables[tableId] = t; else delete GLOBAL_USER_COL_WIDTHS.tables[tableId];
             await _persistUserColWidths();
         };
         const resetUserColWidths = async (tableId) => {
@@ -9241,6 +9458,7 @@ body.dark-mode .btn-outline{border-color:var(--gold-300)!important;color:var(--g
             <div class="modal-actions" style="justify-content:space-between;margin-top:16px;flex-wrap:wrap;gap:10px;">
               <div style="display:flex;gap:8px;flex-wrap:wrap;">
                 <button class="btn btn-outline btn-sm" id="col-settings-reset">🔄 ডিফল্টে ফিরুন</button>
+                <button class="btn btn-outline btn-sm" id="col-settings-publish-all" title="আপনার সাজানো সব টেবিলের কলাম-ক্রম/প্রস্থ এখনই সব ইউজার প্যানেলে পাঠান">🌐 সব টেবিল ইউজারদের কাছে পাঠান</button>
                 <button class="btn btn-outline btn-sm" id="col-settings-reset-user-widths" title="শুধু ইউজার/পার্সোনাল প্যানেলের প্রস্থ মুছে ডিফল্টে ফেরায় — এডমিনের নিজের প্রস্থ ও অন্য সেটিং অক্ষত">👥 ইউজার প্রস্থ ডিফল্টে ফেরান</button>
               </div>
               <div style="display:flex;gap:10px;">
@@ -9486,6 +9704,7 @@ body.dark-mode .btn-outline{border-color:var(--gold-300)!important;color:var(--g
                     btn.onclick = apply;
                     inp.addEventListener('keydown', (e) => { if (e.key === 'Enter') { e.preventDefault(); apply(); } });
                 });
+                document.getElementById('col-settings-publish-all').onclick = async (ev) => { const b = ev.currentTarget; b.disabled = true; try { await window.mfPublishLayouts(true, false); } finally { b.disabled = false; } };
                 document.getElementById('col-settings-reset-user-widths').onclick = () => {
                     const has = GLOBAL_USER_COL_WIDTHS.tables && GLOBAL_USER_COL_WIDTHS.tables[tableId] && Object.keys(GLOBAL_USER_COL_WIDTHS.tables[tableId]).length;
                     if (!has) { toast('এই টেবিলে কোনো ইউজার-প্রস্থ সেট করা নেই'); return; }
@@ -11271,15 +11490,15 @@ body.dark-mode .btn-outline{border-color:var(--gold-300)!important;color:var(--g
         // User ID/নাম/পিতার নাম/মোবাইল/ইমেইল দিয়ে খোঁজার জন্য আলাদা matcher — memberMatches()
         // অন্য জায়গায় ব্যবহৃত হয় বলে সেটা অপরিবর্তিত রেখে এখানে ইমেইল-ম্যাচও যোগ করা হলো।
         const regSearchMatches = (m, q) => {
-            const needle = bnToEnDigits(q).trim().toLowerCase();
+            const needle = nrm(bnToEnDigits(q)).trim();
             if (!needle) return false;
-            if ((m.name || '').toLowerCase().includes(needle)) return true;
-            if ((m.father || '').toLowerCase().includes(needle)) return true;
-            if ((m.email || '').toLowerCase().includes(needle)) return true;
-            if ((m.idNumber || '').toString().toLowerCase().includes(needle)) return true;
+            if (nrm(m.name).includes(needle)) return true;
+            if (nrm(m.father).includes(needle)) return true;
+            if (nrm(m.email).includes(needle)) return true;
+            if (nrm(bnToEnDigits(m.idNumber)).includes(needle)) return true;
             const nd = digitsOnly(q);
-            if (nd) return digitsOnly(m.mobile || '').includes(nd) || digitsOnly((m.idNumber || '').toString()).includes(nd);
-            return (m.mobile || '').toLowerCase().includes(needle);
+            if (nd && isNumQ(needle)) return digitsOnly(m.mobile || '').includes(nd) || digitsOnly((m.idNumber || '').toString()).includes(nd);
+            return nrm(m.mobile).includes(needle);
         };
 
         // 🆕 [Registration — v16, স্টেপ ১; পরে ধাপ ২ — সার্চ/অটো-ফিল + সফট-ভ্যালিডেশন যোগ] এডমিন প্যানেল
@@ -12782,8 +13001,8 @@ body.dark-mode .btn-outline{border-color:var(--gold-300)!important;color:var(--g
             host.appendChild(ov);
             const list = ov.querySelector('#dmx-fwd-list');
             const draw = (q) => {
-                const qq = String(q || '').trim().toLowerCase();
-                const rows = users.filter(u => !qq || String(u.displayName || u.email).toLowerCase().includes(qq));
+                const qq = String(q || '').trim().normalize('NFC').replace(/[\u200c\u200d]/g, '').toLowerCase();
+                const rows = users.filter(u => !qq || String(u.displayName || u.email).normalize('NFC').replace(/[\u200c\u200d]/g, '').toLowerCase().includes(qq));
                 list.innerHTML = rows.length ? rows.map(u => `<button type="button" class="fw-row" data-fw="${escapeHtml(u.email)}"><span>👤</span><span><b>${escapeHtml(u.displayName || String(u.email).split('@')[0])}</b><br><span class="small muted">${escapeHtml(u.email)}</span></span></button>`).join('')
                     : '<div class="small muted" style="padding:16px;text-align:center;">কাউকে পাওয়া যায়নি</div>';
             };
@@ -13392,6 +13611,7 @@ body.dark-mode .btn-outline{border-color:var(--gold-300)!important;color:var(--g
             <div class="section-title">${escapeHtml(getTabLabel('dashboard'))}</div>
             <p class="section-sub">${escapeHtml(getTabSub('dashboard'))} — ${escapeHtml(state.settings.period)} &nbsp;|&nbsp; ${filtered ? '📅 ফিল্টার প্রয়োগ করা হয়েছে' : 'চলমান বছর: <strong>' + yearLabel + '</strong>'} ${filterIndicator}</p>
             ${renderDateRangeFilter('dashboard')}
+            <div id="mf-live-card" class="no-print"></div>
             <div class="grid cols-3" style="margin-bottom:22px;">
               <div class="card stat-card income"><div class="ico">৳</div><div class="label">মোট তহবিল সংগ্রহ ${fl}</div><div class="value">${fmtMoney(coll)}</div><div class="sub">মাসিক ${fmtMoney(mTot)} + বার্ষিক ${fmtMoney(yTot)}</div></div>
               <div class="card stat-card expense"><div class="ico">−</div><div class="label">মোট ব্যয় ${fl}</div><div class="value">${fmtMoney(exp)}</div><div class="sub">${ef.length} টি খরচের এন্ট্রি</div></div>
@@ -13482,6 +13702,7 @@ body.dark-mode .btn-outline{border-color:var(--gold-300)!important;color:var(--g
             if (btnExp) btnExp.addEventListener('click', () => { showExpenseByMonth = !showExpenseByMonth;
                 renderMain(); });
             wireDateRangeFilter('dashboard');
+            try { if (window.mfLiveCard) window.mfLiveCard.mount(); } catch (e) { console.error(e); }   // 🆕 [v16.5.99]
             // 🆕 STEP 9 — "সর্বোচ্চ অনুদানকারী (টপ ১০)" টেবিলে কলাম-সেটিংস
             const btnColSettingsTopDonors = document.getElementById('btn-col-settings-top-donors');
             if (btnColSettingsTopDonors) btnColSettingsTopDonors.addEventListener('click', () =>
@@ -14818,8 +15039,27 @@ body.dark-mode .btn-outline{border-color:var(--gold-300)!important;color:var(--g
             const m = rnoMapW();
             if (!Array.isArray(m.base)) m.base = rnoAllTxns().filter(t => !m.assigned[t.entry.id]).map(t => t.entry.id);
         };
+        // 🆕 [v16.5.102] রিসিপ্ট নম্বর এন্ট্রির গায়েই (e.rno / e.rg / e.addedByEmail) সেভ হয় — কালেক্টররা settings লিখতে পারেন না, কিন্তু monthly/yearly লিখতে পারেন।
+        // এই ফাংশন সেই নম্বর receiptNoMap-এ (শুধু মেমরিতে) তুলে নেয়, ফলে সব পুরনো রিডার অপরিবর্তিতভাবে নম্বর দেখে। এডমিনের জারি-করা নম্বর (assigned) সবসময় অগ্রাধিকার পায়।
+        window.mfRnoAdopt = () => {
+            try {
+                if (!state || !state.settings) return;
+                const all = (state.monthly || []).concat(state.yearly || []);
+                if (!all.some(e => e && e.rno)) return;
+                const mm = state.settings.receiptNoMap = (state.settings.receiptNoMap && typeof state.settings.receiptNoMap === 'object') ? state.settings.receiptNoMap : {};
+                if (!mm.assigned || typeof mm.assigned !== 'object') mm.assigned = {};
+                if (!mm.by || typeof mm.by !== 'object') mm.by = {};
+                all.forEach(e => {
+                    if (!e || !e.id || !e.rno) return;
+                    if (!mm.assigned[e.id]) mm.assigned[e.id] = String(e.rno);
+                    if (e.addedByEmail && !mm.by[e.id]) mm.by[e.id] = String(e.addedByEmail).toLowerCase();
+                    if (e.rg && e.rg.n > 1) { if (!mm.grp || typeof mm.grp !== 'object') mm.grp = {}; if (!mm.grp[e.id]) mm.grp[e.id] = e.rg; }
+                });
+            } catch (er) { console.error('[rno adopt]', er); }
+        };
         const rnoEnsureAuto = () => {
             if (rnoBusy || typeof state === 'undefined' || !state || !state.settings) return 0;
+            try { window.mfRnoAdopt(); } catch (e) { }
             rnoBusy = true;
             try {
                 rnoInit();
@@ -14948,7 +15188,17 @@ body.dark-mode .btn-outline{border-color:var(--gold-300)!important;color:var(--g
             todo.forEach(t => issueRno(t));
             return todo.length;
         };
-        window.mfRno = { noOf: (e, kind) => { const t = { kind: kind || rnoKindOf(e), entry: e }; return (Number(e.amount) > 0) ? (rnoAssignedOf(e.id) || (rnoPending(t) ? '' : txnReceiptNo(t))) : ''; }, ensure: rnoEnsureAuto, init: rnoInit, cell: rnoCellHtml, notifySet, notifyClear, notifyOf, getCfg: getRnoCfg, format: rnoFormat, next: rnoNext, pending: rnoPending, issue: issueRno, issueAll: issueAllPendingRno, assigned: rnoAssignedOf };
+        // 🆕 [v16.5.94] মেথড কলামেই "✓ পাঠানো হয়েছে · মাধ্যম" লেখা দেখায় (হাতে লিখতে হবে না); পাঠালে স্বয়ংক্রিয় জমা হয়
+        const sentTagHtml = (e) => {
+            try {
+                if (!e || !(Number(e.amount) > 0)) return '';
+                const nt = notifyOf({ kind: rnoKindOf(e), entry: e }); if (!nt) return '';
+                const via = viasOf(nt).join(', ');
+                return `<div class="small mf-sent-tag" style="color:#1b5e20;font-weight:600;white-space:nowrap;line-height:1.4;">✓ পাঠানো হয়েছে${via ? `<span style="font-weight:400;"> · ${escapeHtml(via)}</span>` : ''}</div>`;
+            } catch (er) { return ''; }
+        };
+        window.mfSentTag = () => '';   // 🆕 [v16.5.102] মেথড কলামে "✓ পাঠানো হয়েছে" আর দেখানো হয় না — পাঠানোর অবস্থা শুধু "রিসিপ্ট নং" কলামে থাকে
+        window.mfRno = { sent: sentTagHtml, noOf: (e, kind) => { const t = { kind: kind || rnoKindOf(e), entry: e }; return (Number(e.amount) > 0) ? (rnoAssignedOf(e.id) || (rnoPending(t) ? '' : txnReceiptNo(t))) : ''; }, ensure: rnoEnsureAuto, init: rnoInit, cell: rnoCellHtml, notifySet, notifyClear, notifyOf, getCfg: getRnoCfg, format: rnoFormat, next: rnoNext, pending: rnoPending, issue: issueRno, issueAll: issueAllPendingRno, assigned: rnoAssignedOf };
 
         // ---------------------- সিগনেচার / অনুমোদন-লাইব্রেরি ----------------------
         const SIG_MAX = 10, SIG_IMG_MAX_CHARS = 150000;
@@ -16747,7 +16997,7 @@ body.dark-mode .btn-outline{border-color:var(--gold-300)!important;color:var(--g
                 willingYearly: { label: 'বার্ষিক অনুদান ইচ্ছুক', td: (m) => `<td>${m.willingYearly ? '✅ হ্যাঁ' : '—'}</td>` },
                 willingYearlyAmount: { label: 'বার্ষিক পরিমাণ', thClass: 'num', td: (m) => `<td class="num">${m.willingYearly && m.willingYearlyAmount ? fmtMoney(m.willingYearlyAmount) : '—'}</td>` },
                 remarks: { label: 'মন্তব্য', td: (m) => `<td class="muted">${escapeHtml(m.remarks || '—')}</td>` },
-                actions: { label: 'কার্যক্রম', thClass: 'no-print', td: (m) => `<td class="no-print"><button class="btn btn-outline btn-sm" data-details="${m.id}">📋</button><button class="btn btn-outline btn-sm" data-edit="${m.id}">✎</button><button class="btn btn-outline btn-sm" data-quick-update="${m.id}" title="দ্রুত মাসিক/বার্ষিক অনুদান আপডেট">💰</button>${emailButtonHtml(m.id)}<button class="btn btn-danger btn-sm" data-del="${m.id}">🗑</button></td>` }
+                actions: { label: 'কার্যক্রম', thClass: 'no-print', td: (m) => `<td class="no-print"><button class="btn btn-outline btn-sm" data-details="${m.id}">📋</button><button class="btn btn-outline btn-sm" data-edit="${m.id}">✎</button><button class="btn btn-outline btn-sm" data-quick-update="${m.id}" title="মাসিক সংগ্রহ (একাধিক মাস / এককালীন)">💰</button>${emailButtonHtml(m.id)}<button class="btn btn-danger btn-sm" data-del="${m.id}">🗑</button></td>` }
             };
             const _membersVisibleKeys = visibleColumnKeys('members', window.MEMBERS_DEFAULT_COLUMNS);
             const _membersColConfig = getColumnConfig('members', window.MEMBERS_DEFAULT_COLUMNS);
@@ -16797,6 +17047,8 @@ body.dark-mode .btn-outline{border-color:var(--gold-300)!important;color:var(--g
                  মোবাইলে পাশাপাশি সমান-প্রস্থ দুটি বাটন হিসেবে দেখানোর জন্য আলাদা সারি -->
             <div class="toolbar no-print member-excel-toolbar" style="margin-top:-6px;">
               <input type="file" id="member-excel-input" accept=".xlsx,.xls" style="display:none;">
+              <button class="btn btn-outline btn-sm no-print" id="btn-assign-ids" title="যাদের আইডি নং নেই তাদের নম্বর দিন">🔢 আইডি নম্বর দিন</button>
+              <button class="btn btn-outline btn-sm no-print" data-idfmt-open="1" title="আইডির প্রিফিক্স (MP), বিভাজক ও অঙ্ক-সংখ্যা বদলান">🆔 আইডি ফরম্যাট</button>
               <button class="btn btn-outline btn-sm no-print" id="btn-export-members-excel" title="সদস্য তালিকা এক্সেল ফাইলে ডাউনলোড করুন">📤 এক্সেল এক্সপোর্ট</button>
               <button class="btn btn-outline btn-sm no-print" id="btn-import-members-excel" title="এক্সেল ফাইল থেকে সদস্য যোগ/হালনাগাদ করুন">📥 এক্সেল ইমপোর্ট</button>
             </div>
@@ -16867,9 +17119,153 @@ body.dark-mode .btn-outline{border-color:var(--gold-300)!important;color:var(--g
         // 🆕 [ধাপ ৩] "সদস্যের তথ্য সম্পাদনা" ফর্মে এখন কলাম-কনফিগ থেকে যোগ করা কাস্টম
         // কলামগুলোও স্বয়ংক্রিয়ভাবে ইনপুট-ফিল্ড হিসেবে যোগ হয় (একই নামে) — অ্যাডমিন
         // "➕ নতুন কলাম যোগ করুন" দিয়ে কলাম বানালেই এখানে এডিট করার ফিল্ডও চলে আসে।
+
+        // 🆕 [v16.5.97] আইডি-নং সাজেশন: নতুন সদস্যে "সর্বশেষ আইডির পরের নম্বর" বসে; সম্পাদনায় ফাঁকা নম্বরগুলো ক্লিকযোগ্য সাজেশন হিসেবে দেখায়; ডুপ্লিকেট নম্বরে সতর্কতা
+        // 🆕 [v16.5.102] সদস্য-আইডি ফরম্যাট: প্রিফিক্স + সংখ্যা (যেমন MP-023)। প্রিফিক্স/বিভাজক/অঙ্ক-সংখ্যা/বাংলা-অঙ্ক সেটিংস থেকে বদলানো যায় (settings.idFmt)।
+        // পুরনো আইডি (শুধু সংখ্যা বা অন্য প্রিফিক্স) অক্ষত থাকে; মিল খোঁজা/ফাঁকা-নম্বর সাজেশন সংখ্যা ধরে হয়, তাই "MP-023", "23", "০২৩" একই নম্বর।
+        const idFmtCfg = () => {
+            const s = (state.settings && state.settings.idFmt) || {};
+            const prefix = String(s.prefix == null ? 'MP' : s.prefix).replace(/[\d০-৯\s\-_.\/]/g, '').slice(0, 8);
+            const sepRaw = s.sep == null ? '-' : String(s.sep);
+            let width = parseInt(s.width, 10); if (!(width >= 0 && width <= 8)) width = 3;
+            return { prefix, sep: prefix ? (['-', '_', '.', '/', ''].indexOf(sepRaw) >= 0 ? sepRaw : '-') : '', width, bn: s.bn === true, auto: s.auto !== false };
+        };
+        const idParse = (raw) => {
+            const t = bnToEnDigits(String(raw == null ? '' : raw)).normalize('NFC').trim(); if (!t) return null;
+            const m = t.match(/^([^\d]*?)[\s\-_.\/]*(\d+)$/); if (!m) return null;
+            const n = parseInt(m[2], 10); if (!(n > 0) || n >= 100000) return null;
+            return { n, prefix: m[1].replace(/[\s\-_.\/]+$/, '').trim(), digits: m[2] };
+        };
+        const idFormat = (n, cfgIn) => { const c = cfgIn || idFmtCfg(); let s = String(n); while (s.length < c.width) s = '0' + s; s = c.prefix + c.sep + s; return c.bn ? toBengaliNum(s) : s; };
+        const idCanon = (raw) => { const t = String(raw == null ? '' : raw).trim(); if (!t) return ''; const p = idParse(t), c = idFmtCfg(); return (p && !p.prefix && c.auto && c.prefix) ? idFormat(p.n, c) : t; };
+        const idSame = (a, b) => { const x = idParse(a), y = idParse(b); if (!x || !y) return String(a == null ? '' : a).trim() === String(b == null ? '' : b).trim(); return x.n === y.n && (!x.prefix || !y.prefix || x.prefix.toUpperCase() === y.prefix.toUpperCase()); };
+        const memIdInfo = (excludeId) => {
+            const used = new Map(); let max = 0;
+            (state.members || []).forEach(x => {
+                if (x.id === excludeId) return;
+                const p = idParse(x.idNumber); if (!p) return;
+                if (!used.has(p.n)) used.set(p.n, x);
+                if (p.n > max) max = p.n;
+            });
+            const gaps = []; for (let i = 1; i < max && gaps.length < 300; i++) if (!used.has(i)) gaps.push(i);
+            return { used, max, next: max + 1, gaps, width: 0, bn: false };
+        };
+        const memIdFmt = (n) => idFormat(n);
+        window.mfMemIdInfo = memIdInfo; window.mfMemIdFmt = memIdFmt;
+        window.mfIdFmtCfg = idFmtCfg; window.mfIdParse = idParse; window.mfIdFormat = idFormat; window.mfIdCanon = idCanon; window.mfIdSame = idSame;
+        window.mfIdWire = (m) => {
+            const inp = document.getElementById('f-idNumber'); if (!inp) return;
+            const info = memIdInfo(m && m.id);
+            if (!m && !inp.value.trim()) inp.value = memIdFmt(info.next, info);
+            const box = document.createElement('div'); box.id = 'f-id-sug'; box.className = 'small'; box.style.cssText = 'margin:-4px 0 12px;line-height:2;';
+            const fld = inp.closest('.field') || inp.parentNode; fld.insertAdjacentElement('afterend', box);
+            let showAll = false;
+            const chip = (n) => '<button type="button" class="btn btn-outline btn-sm" data-idpick="' + memIdFmt(n, info) + '" style="padding:2px 10px;min-height:32px;margin:0 4px 4px 0;">' + memIdFmt(n, info) + '</button>';
+            const render = () => {
+                const _pp = idParse(inp.value); let html = '';
+                if (_pp) { const o = info.used.get(_pp.n); if (o) html += '<div style="color:#b3261e;font-weight:600;">⚠️ এই নম্বর (' + escapeHtml(inp.value.trim()) + ') আগে থেকেই "' + escapeHtml(o.name || '') + '"-এর — অন্য নম্বর নিন।</div>'; }
+                html += '<div>💡 পরবর্তী নতুন নম্বর: ' + chip(info.next) + '</div>';
+                if (info.gaps.length) { const list = showAll ? info.gaps : info.gaps.slice(0, 12); html += '<div>🕳️ ফাঁকা নম্বর (' + toBengaliNum(info.gaps.length) + ' টি — ক্লিক করলে বসবে): ' + list.map(chip).join('') + (info.gaps.length > 12 ? ' <button type="button" class="btn btn-outline btn-sm" data-idall="1" style="padding:2px 10px;min-height:32px;">' + (showAll ? 'কম দেখান' : 'সব দেখান') + '</button>' : '') + '</div>'; }
+                else html += '<div class="muted">কোনো ফাঁকা নম্বর নেই (১ থেকে ' + memIdFmt(info.max, info) + ' পর্যন্ত সব ব্যবহৃত)।</div>';
+                box.innerHTML = html;
+            };
+            box.addEventListener('click', (ev) => {
+                const p = ev.target.closest('[data-idpick]'); if (p) { inp.value = p.dataset.idpick; render(); try { inp.focus(); } catch (e) { } return; }
+                if (ev.target.closest('[data-idall]')) { showAll = !showAll; render(); }
+            });
+            inp.addEventListener('input', render); render();
+        };
+        // সংরক্ষণের আগে: ডুপ্লিকেট হলে নিশ্চিতকরণ; নতুন সদস্যে ঘর খালি থাকলে পরের নম্বর বসানো। false = থামুন
+        window.mfIdPrepare = (m) => {
+            const inp = document.getElementById('f-idNumber'); if (!inp) return true;
+            const info = memIdInfo(m && m.id);
+            if (!m && !inp.value.trim()) inp.value = memIdFmt(info.next, info);
+            { const _c = idCanon(inp.value); if (_c !== inp.value.trim()) inp.value = _c; }   // 🆕 [v16.5.102] "23" লিখলে "MP-023"
+            const _pp = idParse(inp.value);
+            if (_pp) { const o = info.used.get(_pp.n); if (o && !window.confirm('এই আইডি নম্বর আগে থেকেই "' + (o.name || '') + '"-এর। তবুও একই নম্বর রাখবেন?')) return false; }
+            return true;
+        };
+
+
+        // 🆕 [v16.5.102] "🆔 আইডি নম্বর ফরম্যাট" সেটিংস — প্রিফিক্স (ডিফল্ট MP), বিভাজক, অঙ্ক-সংখ্যা; সব সদস্যের আইডি একসাথে নতুন ফরম্যাটে আনার প্রিভিউ-সহ বাটন
+        window.mfIdFmtSettings = () => {
+            if (!(typeof isAdminUser === 'function' && isAdminUser())) { toast('আইডি ফরম্যাট শুধু এডমিন বদলাতে পারবেন'); return; }
+            const c = idFmtCfg();
+            openModal('<h3>🆔 আইডি নম্বরের ফরম্যাট</h3>'
+                + '<p class="small muted">নতুন সদস্যের আইডি এই ফরম্যাটে বসবে (যেমন <b>MP-023</b>)। ঘরে শুধু সংখ্যা (২৩ বা ০২৩) লিখলেও সংরক্ষণের সময় প্রিফিক্স নিজে বসে যাবে। এডমিন ও ইউজার — দুই প্যানেলেই একই ফরম্যাট।</p>'
+                + '<div class="field"><label>প্রিফিক্স (অক্ষর, সর্বোচ্চ ৮টি — ফাঁকা রাখলে শুধু সংখ্যা)</label><input type="text" id="idf-prefix" maxlength="8" value="' + escapeHtml(c.prefix) + '" placeholder="MP"></div>'
+                + '<div class="field"><label>বিভাজক</label><select id="idf-sep">' + [['-', 'ড্যাশ ( - )'], ['_', 'আন্ডারস্কোর ( _ )'], ['.', 'ডট ( . )'], ['/', 'স্ল্যাশ ( / )'], ['', 'কিছু নয়']].map(x => '<option value="' + x[0] + '"' + (c.sep === x[0] ? ' selected' : '') + '>' + x[1] + '</option>').join('') + '</select></div>'
+                + '<div class="field"><label>সংখ্যা কত অঙ্কের (০ = শূন্য-বসানো নেই)</label><input type="number" id="idf-width" min="0" max="8" value="' + c.width + '"></div>'
+                + '<label style="display:flex;gap:8px;align-items:center;margin:6px 0;"><input type="checkbox" id="idf-bn"' + (c.bn ? ' checked' : '') + '> বাংলা অঙ্ক ব্যবহার করুন (MP-০২৩)</label>'
+                + '<label style="display:flex;gap:8px;align-items:center;margin:6px 0;"><input type="checkbox" id="idf-auto"' + (c.auto ? ' checked' : '') + '> শুধু সংখ্যা লিখলে স্বয়ংক্রিয়ভাবে প্রিফিক্স বসান</label>'
+                + '<div style="margin:10px 0;padding:10px;border:1px dashed var(--line);border-radius:10px;">নমুনা: <b id="idf-prev"></b> · পরের নতুন সদস্য: <b id="idf-next"></b></div>'
+                + '<div class="small muted" style="margin-bottom:8px;">ℹ️ ফরম্যাট বদলালে আগের আইডি নিজে বদলায় না — নিচের বাটনে চেপে সব সদস্যের আইডি একসাথে নতুন ফরম্যাটে আনতে পারেন (আগে প্রিভিউ দেখাবে)। রিসিপ্ট নম্বর অপরিবর্তিত থাকে।</div>'
+                + '<div class="modal-actions" style="flex-wrap:wrap;gap:8px;"><button class="btn btn-outline" id="idf-apply">🔄 সব সদস্যের আইডি এই ফরম্যাটে আনুন</button><button class="btn btn-outline" id="idf-cancel">বাতিল</button><button class="btn btn-primary" id="idf-save">💾 সংরক্ষণ</button></div>', () => {
+                const read = () => {
+                    const prefix = String(document.getElementById('idf-prefix').value || '').replace(/[\d০-৯\s\-_.\/]/g, '').slice(0, 8);
+                    let width = parseInt(document.getElementById('idf-width').value, 10); if (!(width >= 0 && width <= 8)) width = 3;
+                    return { prefix, sep: document.getElementById('idf-sep').value, width, bn: document.getElementById('idf-bn').checked, auto: document.getElementById('idf-auto').checked };
+                };
+                const norm = (o) => ({ prefix: o.prefix, sep: o.prefix ? o.sep : '', width: o.width, bn: o.bn, auto: o.auto });
+                const prev = () => { const o = norm(read()); document.getElementById('idf-prev').textContent = idFormat(23, o); document.getElementById('idf-next').textContent = idFormat(memIdInfo().next, o); };
+                ['idf-prefix', 'idf-sep', 'idf-width', 'idf-bn', 'idf-auto'].forEach(id => document.getElementById(id).addEventListener('input', prev));
+                document.getElementById('idf-sep').addEventListener('change', prev); prev();
+                const save = () => { const o = norm(read()); state.settings.idFmt = o; saveState(); try { addActivityLog('update', 'settings', '', 'আইডি ফরম্যাট: ' + idFormat(23, o)); } catch (e) { } return o; };
+                document.getElementById('idf-cancel').onclick = closeModal;
+                document.getElementById('idf-save').onclick = () => { save(); closeModal(); try { renderMain(); } catch (e) { } toast('✅ আইডি ফরম্যাট সংরক্ষিত: ' + idFormat(23)); };
+                document.getElementById('idf-apply').onclick = () => {
+                    const o = save(); const plan = [], cnt = {};
+                    (state.members || []).forEach(m => { const p = idParse(m.idNumber); if (!p) return; cnt[p.n] = (cnt[p.n] || 0) + 1; const nv = idFormat(p.n, o); if (nv !== String(m.idNumber || '').trim()) plan.push({ m, nv, dup: false }); });
+                    plan.forEach(x => { const p = idParse(x.m.idNumber); x.dup = cnt[p.n] > 1; });
+                    if (!plan.length) { closeModal(); toast('✅ সব আইডি আগে থেকেই এই ফরম্যাটে আছে'); return; }
+                    const rows = plan.slice(0, 80).map(x => '<tr><td>' + escapeHtml(x.m.name || '') + '</td><td>' + escapeHtml(String(x.m.idNumber)) + '</td><td><b>' + escapeHtml(x.nv) + '</b>' + (x.dup ? ' <span style="color:#b3261e;">⚠️ একই নম্বর একাধিক জনের</span>' : '') + '</td></tr>').join('') + (plan.length > 80 ? '<tr><td colspan="3" class="muted small">… আরও ' + toBengaliNum(plan.length - 80) + ' জন</td></tr>' : '');
+                    openModal('<h3>🔄 আইডি নতুন ফরম্যাটে আনুন</h3><p class="small muted">' + toBengaliNum(plan.length) + ' জনের আইডি বদলাবে (শুধু প্রিফিক্স/অঙ্ক-সংখ্যা/বিভাজক — নম্বর একই থাকবে)। যাদের আইডি ফাঁকা বা বোঝা যায় না তারা বাদ।</p><div class="table-wrap" style="max-height:48vh;overflow:auto;"><table><thead><tr><th>সদস্য</th><th>এখন</th><th>হবে</th></tr></thead><tbody>' + rows + '</tbody></table></div><div class="modal-actions"><button class="btn btn-outline" id="idf2-cancel">বাতিল</button><button class="btn btn-primary" id="idf2-ok">✅ প্রয়োগ করুন</button></div>', () => {
+                        document.getElementById('idf2-cancel').onclick = closeModal;
+                        document.getElementById('idf2-ok').onclick = () => { plan.forEach(x => { x.m.idNumber = x.nv; }); saveState(); try { addActivityLog('edit', 'member', '', toBengaliNum(plan.length) + ' জন সদস্যের আইডি নতুন ফরম্যাটে (' + idFormat(23, o) + ') আনা হয়েছে'); } catch (e) { } closeModal(); try { renderMain(); } catch (e) { } toast('✅ ' + toBengaliNum(plan.length) + ' জনের আইডি বদলেছে'); };
+                    });
+                };
+            });
+        };
+        document.addEventListener('click', (ev) => { if (ev.target && ev.target.closest && ev.target.closest('[data-idfmt-open]')) { ev.preventDefault(); window.mfIdFmtSettings(); } });
+
+        window.mfSpeedDialSettings = () => {
+            if (!(typeof isAdminUser === 'function' && isAdminUser())) { toast('এই সেটিংস শুধু এডমিন বদলাতে পারবেন'); return; }
+            const c = (state.settings && state.settings.speedDial) || {};
+            const chk = (id, on, label) => '<label style="display:flex;gap:8px;align-items:center;margin:6px 0;"><input type="checkbox" id="' + id + '"' + (on ? ' checked' : '') + '> ' + label + '</label>';
+            openModal('<h3>💬 ভাসমান যোগাযোগ বাটন</h3>'
+                + '<p class="small muted">ডান-নিচের একটি বাটনে ক্লিক করলে নিচের বাটনগুলো অ্যানিমেশনসহ ওপরে খুলবে। সব ইউজারের জন্য একসাথে কাজ করে।</p>'
+                + chk('sd-ai', c.ai !== 0, '🤖 AI সহকারী দেখান <span class="muted small">(যাদের AI-এর অনুমতি আছে শুধু তারাই দেখবেন)</span>')
+                + chk('sd-chat', c.chat !== 0, '👥 গ্রুপ চ্যাট দেখান')
+                + '<div style="border-top:1px dashed var(--line);margin:10px 0 6px;"></div>'
+                + chk('sd-tel-on', c.telOn !== 0, '📞 কল বাটন দেখান')
+                + '<div class="field"><label>কলের ফোন নম্বর</label><input type="tel" id="sd-tel" value="' + escapeHtml(c.tel || '') + '" placeholder="যেমন: 01712345678"></div>'
+                + chk('sd-wa-on', c.waOn !== 0, '🟢 হোয়াটসঅ্যাপ দেখান')
+                + '<div class="field"><label>হোয়াটসঅ্যাপ নম্বর বা লিংক</label><input type="text" id="sd-wa" value="' + escapeHtml(c.wa || '') + '" placeholder="যেমন: 01712345678 অথবা https://wa.me/8801712345678"></div>'
+                + chk('sd-ms-on', c.msOn !== 0, '🔵 মেসেঞ্জার দেখান')
+                + '<div class="field"><label>মেসেঞ্জার লিংক বা ফেসবুক পেজ/ইউজারনেম</label><input type="text" id="sd-ms" value="' + escapeHtml(c.ms || '') + '" placeholder="যেমন: https://m.me/আপনার-পেজ অথবা শুধু পেজের নাম"></div>'
+                + '<div class="small muted" id="sd-hint" style="margin:4px 0 8px;"></div>'
+                                + '<div class="modal-actions"><button class="btn btn-outline" id="sd-cancel">বাতিল</button><button class="btn btn-primary" id="sd-save">💾 সংরক্ষণ</button></div>');
+            const N = window.mfSdNorm || { wa: () => '', ms: () => '' };
+            const hint = () => {
+                const tl = N.tel(document.getElementById('sd-tel').value), tv = document.getElementById('sd-tel').value.trim(), w = N.wa(document.getElementById('sd-wa').value), m = N.ms(document.getElementById('sd-ms').value);
+                const wv = document.getElementById('sd-wa').value.trim(), mv = document.getElementById('sd-ms').value.trim();
+                document.getElementById('sd-hint').innerHTML = (tv ? (tl ? '✅ কল: <b>' + escapeHtml(tl) + '</b>' : '⚠️ ফোন নম্বর বোঝা যায়নি') : 'কলের নম্বর ফাঁকা — বাটন দেখাবে না') + '<br>' + (wv ? (w ? '✅ হোয়াটসঅ্যাপ: <b>' + escapeHtml(w) + '</b>' : '⚠️ হোয়াটসঅ্যাপ নম্বর/লিংক বোঝা যায়নি') : 'হোয়াটসঅ্যাপ লিংক ফাঁকা — বাটন দেখাবে না')
+                    + '<br>' + (mv ? (m ? '✅ মেসেঞ্জার: <b>' + escapeHtml(m) + '</b>' : '⚠️ মেসেঞ্জার লিংক/নাম বোঝা যায়নি') : 'মেসেঞ্জার লিংক ফাঁকা — বাটন দেখাবে না');
+            };
+            ['sd-tel', 'sd-wa', 'sd-ms'].forEach(id => document.getElementById(id).addEventListener('input', hint)); hint();
+            document.getElementById('sd-cancel').onclick = closeModal;
+            document.getElementById('sd-save').onclick = () => {
+                const g = id => document.getElementById(id);
+                state.settings.speedDial = { ai: g('sd-ai').checked ? 1 : 0, chat: g('sd-chat').checked ? 1 : 0, telOn: g('sd-tel-on').checked ? 1 : 0, tel: g('sd-tel').value.trim(), waOn: g('sd-wa-on').checked ? 1 : 0, msOn: g('sd-ms-on').checked ? 1 : 0, wa: g('sd-wa').value.trim(), ms: g('sd-ms').value.trim() };
+                saveState(); try { addActivityLog('update', 'settings', '', 'ভাসমান যোগাযোগ বাটন সেটিংস বদলানো হয়েছে'); } catch (e) { }
+                closeModal(); toast('✅ ভাসমান বাটন সেটিংস সংরক্ষিত');
+            };
+        };
+        document.addEventListener('click', (ev) => { if (ev.target && ev.target.closest && ev.target.closest('[data-sd-open]')) { ev.preventDefault(); window.mfSpeedDialSettings(); } });
+
         const memberFormHtml = (m, config) => `
           <h3>${m ? 'সদস্যের তথ্য সম্পাদনা' : 'নতুন সদস্য যোগ করুন'}</h3>
-          <div class="field"><label>আইডি নং</label><input type="text" id="f-idNumber" value="${escapeHtml(m?.idNumber || '')}" placeholder="যেমন: ০০১"></div>
+          <div class="field"><label>আইডি নং</label><input type="text" id="f-idNumber" value="${escapeHtml(m?.idNumber || '')}" placeholder="যেমন: ${window.mfIdFormat ? window.mfIdFormat(23) : 'MP-023'}"></div>
           <div class="field"><label>নাম *</label><input type="text" id="f-name" value="${escapeHtml(m?.name || '')}" placeholder="যেমন: মো: আলাউদ্দিন সরদার"></div>
           <div class="field"><label>পিতা/স্বামীর নাম</label><input type="text" id="f-father" value="${escapeHtml(m?.father || '')}"></div>
           <div class="field"><label>মোবাইল</label><input type="tel" id="f-mobile" value="${escapeHtml(m?.mobile || '')}" placeholder="01XXX-XXXXXX"></div>
@@ -16914,7 +17310,8 @@ body.dark-mode .btn-outline{border-color:var(--gold-300)!important;color:var(--g
                 const kk = k.toString().trim();
                 if (keys.includes(kk)) {
                     const v = row[k];
-                    return v === null || v === undefined ? '' : v.toString().trim();
+                    const _sv = v === null || v === undefined ? '' : v.toString().trim();
+                    return (keys.includes('আইডি নম্বর') && _sv) ? idCanon(_sv) : _sv;   // 🆕 [v16.5.102] আইডি-কলামে শুধু সংখ্যা থাকলে প্রিফিক্সসহ (MP-023)
                 }
             }
             return '';
@@ -16949,8 +17346,37 @@ body.dark-mode .btn-outline{border-color:var(--gold-300)!important;color:var(--g
         // কলাম দেওয়া থাকলে সেটাই সবচেয়ে নির্ভরযোগ্য মিল হিসেবে সবার আগে চেক করা হয় — নিশ্চিতভাবে
         // সঠিক সদস্যের রেকর্ড আপডেট হয়, ভুল হওয়ার সুযোগ থাকে না। আইডি না থাকা সারির জন্য
         // আগের মতো নাম+পিতা / নাম+মোবাইল দিয়ে ফলব্যাক ম্যাচিং হয়।
+
+        // 🆕 [v16.5.97] আইডি-নং নেই এমন সব সদস্যকে একসাথে নম্বর (প্রিভিউ → নিশ্চিত)
+        document.addEventListener('click', (ev) => {
+            if (!(ev.target && ev.target.closest && ev.target.closest('#btn-assign-ids'))) return;
+            const noId = state.members.filter(m => !String(m.idNumber == null ? '' : m.idNumber).trim());
+            if (!noId.length) { toast('✅ সবার আইডি নম্বর দেওয়া আছে'); return; }
+            const build = (gapsFirst) => {
+                const info = memIdInfo(); let nx = info.next; const gaps = info.gaps.slice();
+                return noId.map(m => ({ m, no: memIdFmt(gapsFirst && gaps.length ? gaps.shift() : nx++, info) }));
+            };
+            let plan = build(false);
+            const rowsHtml = () => plan.slice(0, 60).map(p => '<tr><td>' + escapeHtml(p.m.name || '') + '</td><td><b>' + escapeHtml(p.no) + '</b></td></tr>').join('') + (plan.length > 60 ? '<tr><td colspan="2" class="muted small">… আরও ' + toBengaliNum(plan.length - 60) + ' জন</td></tr>' : '');
+            openModal('<h3>🔢 আইডি নম্বর দিন</h3><p class="small muted">আইডি-নং নেই এমন ' + toBengaliNum(noId.length) + ' জন সদস্য। নিচের প্রস্তাবিত নম্বর বসবে (আগে থেকে থাকা নম্বর বদলাবে না)।</p>'
+                + '<label style="display:flex;gap:8px;align-items:center;margin:6px 0;"><input type="checkbox" id="ai-gaps"> ফাঁকা নম্বরগুলো আগে ব্যবহার করুন (নইলে সর্বশেষ আইডির পর থেকে)</label>'
+                + '<div class="table-wrap" style="max-height:45vh;overflow:auto;"><table><thead><tr><th>সদস্য</th><th>নতুন আইডি</th></tr></thead><tbody id="ai-rows">' + rowsHtml() + '</tbody></table></div>'
+                + '<div class="modal-actions"><button class="btn btn-outline" id="ai-cancel">বাতিল</button><button class="btn btn-primary" id="ai-ok">✅ নম্বর বসান</button></div>', () => {
+                document.getElementById('ai-cancel').onclick = closeModal;
+                document.getElementById('ai-gaps').onchange = (e) => { plan = build(e.target.checked); document.getElementById('ai-rows').innerHTML = rowsHtml(); };
+                document.getElementById('ai-ok').onclick = () => {
+                    plan.forEach(p => { p.m.idNumber = p.no; });
+                    saveState(); addActivityLog('edit', 'member', '', plan.length + ' জন সদস্যের আইডি নম্বর স্বয়ংক্রিয় বসানো হয়েছে');
+                    closeModal(); renderMain(); toast('✅ ' + toBengaliNum(plan.length) + ' জনের আইডি নম্বর বসেছে');
+                };
+            });
+        });
+
         const importMembersFromRows = (rows) => {
             let added = 0, updated = 0, skipped = 0;
+            // 🆕 [v16.5.97] আইডি-ছাড়া নতুন সদস্য: সর্বশেষ আইডির পরের নম্বর স্বয়ংক্রিয় (ফাইলের আইডিও হিসাবে ধরা হয়, যাতে ধাক্কা না লাগে)
+            const _idi = memIdInfo(); let _idNext = _idi.next;
+            rows.forEach(r0 => { const v = parseInt(bnToEnDigits(String(pickRowField(r0, ['আইডি নম্বর', 'আইডি নাম্বার', 'আইডি', 'আইডি নং', 'ID', 'Id', 'id', 'idNumber']) || '')).trim(), 10); if (v >= _idNext && /^\d+$/.test(bnToEnDigits(String(pickRowField(r0, ['আইডি নম্বর', 'আইডি নাম্বার', 'আইডি', 'আইডি নং', 'ID', 'Id', 'id', 'idNumber']) || '')).trim())) _idNext = v + 1; });
             rows.forEach(row => {
                 const name = pickRowField(row, ['নাম', 'সদস্যের নাম', 'Name', 'name']);
                 const father = pickRowField(row, ['পিতা বা স্বামীর নাম', 'পিতা/স্বামীর নাম', 'পিতা বা স্বামী', 'Father', 'father']);
@@ -16971,7 +17397,7 @@ body.dark-mode .btn-outline{border-color:var(--gold-300)!important;color:var(--g
                 let match = null;
                 // ১) সবার আগে আইডি নম্বর মিলিয়ে খোঁজা — সবচেয়ে নির্ভরযোগ্য, সেম-নাম সমস্যা এড়ায়
                 if (nIdNumber) {
-                    match = state.members.find(m => (m.idNumber || '').toString().trim() === nIdNumber);
+                    match = state.members.find(m => idSame(m.idNumber, nIdNumber));
                 }
                 // ২) না পেলে নাম + পিতা/স্বামীর নাম মিলিয়ে খোঁজা
                 if (!match && father) {
@@ -17006,7 +17432,7 @@ body.dark-mode .btn-outline{border-color:var(--gold-300)!important;color:var(--g
                         name,
                         father: father || '',
                         mobile: mobile || '',
-                        idNumber: nIdNumber || '', email: email || '', imageUrl: '', joinDate: joinDate || '',
+                        idNumber: nIdNumber || memIdFmt(_idNext++, _idi), email: email || '', imageUrl: '', joinDate: joinDate || '',
                         status: 'সক্রিয়', position: '', willingMonthly: false, willingMonthlyAmount: '',
                         willingYearly: false, willingYearlyAmount: '', remarks: remarks || '', customFields: {},
                     });
@@ -17165,6 +17591,7 @@ body.dark-mode .btn-outline{border-color:var(--gold-300)!important;color:var(--g
             const _colConfig = getColumnConfig('members', window.MEMBERS_DEFAULT_COLUMNS);
             openModal(memberFormHtml(m, _colConfig), () => {
                 document.getElementById('f-cancel').onclick = closeModal;
+                try { window.mfIdWire(m); } catch (e) { console.error(e); }
                 wireImageUploadField('f-imageUrl', () => ({
                     name: document.getElementById('f-name').value.trim() || 'member',
                     mobile: document.getElementById('f-mobile').value.trim()
@@ -17172,6 +17599,7 @@ body.dark-mode .btn-outline{border-color:var(--gold-300)!important;color:var(--g
                 document.getElementById('f-save').onclick = () => {
                     const name = document.getElementById('f-name').value.trim();
                     if (!name) { toast('নাম আবশ্যক'); return; }
+                    if (!window.mfIdPrepare(m)) return;
                     const customFields = { ...(m?.customFields || {}) };
                     document.querySelectorAll('.f-custom-field').forEach(inp => {
                         customFields[inp.dataset.customKey] = inp.value.trim();
@@ -17676,7 +18104,7 @@ body.dark-mode .btn-outline{border-color:var(--gold-300)!important;color:var(--g
         window.MEMBER_DETAILS_MONTHLY_CELLS = {
             month: { label: 'মাস', td: (r) => `<td>${escapeHtml(r.month)}</td>` },
             amount: { label: 'পরিমাণ', thClass: 'num', td: (r) => `<td class="num">${fmtMoney(r.amount)}</td>` },
-            method: { label: 'মেথড', td: (r) => `<td class="muted">${escapeHtml(r.method)}</td>` },
+            method: { label: 'মেথড', td: (r) => `<td class="muted">${escapeHtml(r.method)}${window.mfSentTag ? window.mfSentTag(r) : ''}</td>` },
             rno: { label: 'রিসিপ্ট নং', td: (r) => window.mfRno.cell(r) },
             collector: { label: 'সংগ্রাহক', td: (r) => `<td class="muted">${escapeHtml(r.collector)}</td>` },
             actions: { label: 'কার্যক্রম', thClass: 'no-print' }
@@ -17684,7 +18112,7 @@ body.dark-mode .btn-outline{border-color:var(--gold-300)!important;color:var(--g
         window.MEMBER_DETAILS_YEARLY_CELLS = {
             date: { label: 'তারিখ', td: (r) => `<td>${fmtDate(r.date)}</td>` },
             amount: { label: 'পরিমাণ', thClass: 'num', td: (r) => `<td class="num">${fmtMoney(r.amount)}</td>` },
-            method: { label: 'মেথড', td: (r) => `<td class="muted">${escapeHtml(r.method)}</td>` },
+            method: { label: 'মেথড', td: (r) => `<td class="muted">${escapeHtml(r.method)}${window.mfSentTag ? window.mfSentTag(r) : ''}</td>` },
             rno: { label: 'রিসিপ্ট নং', td: (r) => window.mfRno.cell(r) },
             collector: { label: 'সংগ্রাহক', td: (r) => `<td class="muted">${escapeHtml(r.collector)}</td>` },
             remarks: { label: 'মন্তব্য', td: (r) => `<td class="muted small">${escapeHtml(r.remarks)}</td>` },
@@ -17710,7 +18138,8 @@ body.dark-mode .btn-outline{border-color:var(--gold-300)!important;color:var(--g
                 const input = document.getElementById('global-search-input');
                 const resultsEl = document.getElementById('global-search-results');
                 const runSearch = () => {
-                    const q = input.value.trim().toLowerCase();
+                    const q = nrm(input.value).trim(), qd = bnToEnDigits(q), qdig = isNumQ(qd) ? digitsOnly(qd) : '';
+                    const H = (v) => { const t = nrm(v); return t.includes(q) || t.includes(qd); };
                     if (!q) { resultsEl.innerHTML = '<p class="small muted">টাইপ করা শুরু করুন...</p>';
                         return; }
                     // 🆕 [পয়েন্ট ৪] আগে মাত্র ১৫ জন সদস্য পর্যন্ত দেখানো হতো — এখন সীমা অনেক
@@ -17718,23 +18147,16 @@ body.dark-mode .btn-outline{border-color:var(--gold-300)!important;color:var(--g
                     // সিলিং রাখা)। মোবাইল/ইমেইল/আইডি ছাড়াও এখন মোট অনুদানের টাকার অংক এবং
                     // জয়েন-ডেট দিয়েও খোঁজা যাবে।
                     const allMemberHits = state.members.filter(m =>
-                        (m.name || '').toLowerCase().includes(q) ||
-                        (m.idNumber || '').toLowerCase().includes(q) ||
-                        (m.mobile || '').toLowerCase().includes(q) ||
-                        (m.email || '').toLowerCase().includes(q) ||
-                        (m.father || '').toLowerCase().includes(q) ||
-                        (m.joinDate || '').toLowerCase().includes(q) ||
-                        fmtMoney(memberTotal(m.id)).toLowerCase().includes(q)
+                        H(m.name) || H(m.idNumber) || H(m.mobile) || H(m.email) || H(m.father) || H(m.joinDate) ||
+                        H(fmtMoney(memberTotal(m.id))) || (qdig && digitsOnly(m.mobile || '').includes(qdig))
                     );
                     const memberHits = allMemberHits.slice(0, 60);
                     const allExpenseHits = state.expenses.filter(e =>
-                        (e.description || '').toLowerCase().includes(q) ||
-                        (e.date || '').toLowerCase().includes(q) ||
-                        fmtMoney(e.amount || 0).toLowerCase().includes(q)
+                        H(e.description) || H(e.date) || H(fmtMoney(e.amount || 0)) || H(e.category) || (qdig && String(e.amount || '').includes(qdig))
                     );
                     const expenseHits = allExpenseHits.slice(0, 40);
                     const allNoticeHits = (state.notices || []).filter(n =>
-                        (n.title || '').toLowerCase().includes(q) || (n.content || '').toLowerCase().includes(q)
+                        H(n.title) || H(n.content)
                     );
                     const noticeHits = allNoticeHits.slice(0, 30);
                     // 🆕 [পয়েন্ট ৪] "মেনু" বা কোনো ট্যাবের নাম লিখে সার্চ করলে সেই ট্যাব/মেনুও
@@ -17742,7 +18164,7 @@ body.dark-mode .btn-outline{border-color:var(--gold-300)!important;color:var(--g
                     const tabKeys = ['dashboard', 'members', 'monthly', 'yearly', 'expenses', 'notices',
                         'notifications', 'backup', 'users', 'chat'
                     ];
-                    const menuHits = tabKeys.filter(k => getTabLabel(k).toLowerCase().includes(q));
+                    const menuHits = tabKeys.filter(k => nrm(getTabLabel(k)).includes(q));
                     if (!memberHits.length && !expenseHits.length && !noticeHits.length && !menuHits.length) {
                         resultsEl.innerHTML = '<div class="empty-state"><div class="em">🔍</div>কোনো ফলাফল পাওয়া যায়নি।</div>';
                         return;
@@ -17808,12 +18230,12 @@ body.dark-mode .btn-outline{border-color:var(--gold-300)!important;color:var(--g
                 // সেই মেনু খুলে যাবে (ক্লিক করার প্রয়োজন নেই)
                 input.addEventListener('keydown', (e) => {
                     if (e.key !== 'Enter') return;
-                    const q = input.value.trim().toLowerCase();
+                    const q = nrm(input.value).trim();
                     if (!q) return;
                     const tabKeys = ['dashboard', 'members', 'monthly', 'yearly', 'expenses', 'notices',
                         'notifications', 'backup', 'users', 'chat'
                     ];
-                    const firstMenu = tabKeys.find(k => getTabLabel(k).toLowerCase().includes(q));
+                    const firstMenu = tabKeys.find(k => nrm(getTabLabel(k)).includes(q));
                     if (firstMenu) {
                         closeModal();
                         currentTab = firstMenu;
@@ -17853,6 +18275,11 @@ body.dark-mode .btn-outline{border-color:var(--gold-300)!important;color:var(--g
         };
         window.openMobileAddSheet = openMobileAddSheet;
 
+        // 🆕 [v16.5.96] মাসিক/বার্ষিক টেবিলের "📋 বিস্তারিত" বোতাম (সদস্য-তালিকার মতোই) — একটি ডেলিগেট দিয়ে সব টেবিলে
+        document.addEventListener('click', (ev) => {
+            const b = ev.target && ev.target.closest && ev.target.closest('[data-mdetails]'); if (!b) return;
+            ev.preventDefault(); try { openMemberDetails(b.dataset.mdetails); } catch (e) { console.error(e); toast('বিস্তারিত খোলা যায়নি'); }
+        });
         const openMemberDetails = (memberId) => {
             const m = memberById(memberId);
             if (!m) return;
@@ -18074,7 +18501,7 @@ body.dark-mode .btn-outline{border-color:var(--gold-300)!important;color:var(--g
             // মেনু থেকে এডিট করার ব্যবস্থা অক্ষত রেখে, সদস্যবৃন্দ তালিকা থেকেই সরাসরি এক-ক্লিকে
             // মাস/বছর বেছে পরিমাণ বসানোর শর্টকাট
             document.querySelectorAll('[data-quick-update]').forEach(b => b.addEventListener('click', () =>
-                openMemberQuickUpdate(b.dataset.quickUpdate)));
+                openSmartMonthlyCollection(b.dataset.quickUpdate)));   // 🆕 [v16.5.100] "দ্রুত অনুদান আপডেট" বাদ — এখন সরাসরি "মাসিক সংগ্রহ" উইজার্ড
             wireEmailButtons(); // 🆕 [ধাপ ৪] ✉️ ইমেইল বাটন
             document.querySelectorAll('[data-del]').forEach(b => b.addEventListener('click', () => {
                 const m = memberById(b.dataset.del);
@@ -18247,10 +18674,10 @@ body.dark-mode .btn-outline{border-color:var(--gold-300)!important;color:var(--g
                     amount: `<td class="num">${fmtMoney(r.amount)}</td>`,
                     month: `<td>${escapeHtml(r.month)}</td>`,
                     date: `<td>${fmtDate(r.date)}</td>`,
-                    method: `<td class="muted small">${escapeHtml(r.method)}</td>`,
+                    method: `<td class="muted small">${escapeHtml(r.method)}${window.mfSentTag ? window.mfSentTag(r) : ''}</td>`,
                     rno: window.mfRno.cell(r, 'monthly'),
                     collector: `<td class="muted small">${escapeHtml(r.collector)}</td>`,
-                    actions: `<td class="no-print"><button class="btn btn-outline btn-sm" data-edit-monthly="${r.id}" ${isMonthlyEditModeOn() ? '' : 'data-edit-mode-off="1"'} title="${isMonthlyEditModeOn() ? 'এডিট করুন' : 'Edit Mode বন্ধ আছে'}">✎</button>${m ? emailButtonHtml(m.id, 'monthly', r.month) : ''}<button class="btn btn-danger btn-sm" data-del-monthly="${r.id}">🗑</button></td>`
+                    actions: `<td class="no-print">${m ? `<button type="button" class="btn btn-outline btn-sm" data-mdetails="${m.id}" title="সদস্যের বিস্তারিত দেখুন" aria-label="বিস্তারিত">📋</button>` : ''}<button class="btn btn-outline btn-sm" data-edit-monthly="${r.id}" ${isMonthlyEditModeOn() ? '' : 'data-edit-mode-off="1"'} title="${isMonthlyEditModeOn() ? 'এডিট করুন' : 'Edit Mode বন্ধ আছে'}">✎</button>${m ? emailButtonHtml(m.id, 'monthly', r.month) : ''}<button class="btn btn-danger btn-sm" data-del-monthly="${r.id}">🗑</button></td>`
                 });
                 if (sorted.length) {
                     tableRows = sorted.map((r, i) => {
@@ -18296,10 +18723,10 @@ body.dark-mode .btn-outline{border-color:var(--gold-300)!important;color:var(--g
                     email: `<td class="muted small">${escapeHtml(m.email || '—')}</td>`,
                     amount: `<td><input type="number" class="cell-input" data-member="${m.id}" data-field="amount" value="${entry ? entry.amount : ''}" min="0" placeholder="0" ${_roAttr}><span class="print-value num">${entry && Number(entry.amount) > 0 ? fmtMoney(entry.amount) : '—'}</span></td>`,
                     date: `<td><input type="date" class="cell-input" data-member="${m.id}" data-field="date" value="${entry && entry.date ? entry.date : ''}" ${_roAttr}><span class="print-value">${entry && entry.date ? fmtDate(entry.date) : '—'}</span></td>`,
-                    method: `<td><select class="cell-input" data-member="${m.id}" data-field="method" ${_roAttr}>${methodOptionsHtml(entry ? entry.method : '')}</select><span class="print-value">${escapeHtml(entry && entry.method ? entry.method : '—')}</span></td>`,
+                    method: `<td><select class="cell-input" data-member="${m.id}" data-field="method" ${_roAttr}>${methodOptionsHtml(entry ? entry.method : '')}</select><span class="print-value">${escapeHtml(entry && entry.method ? entry.method : '—')}</span>${window.mfSentTag ? window.mfSentTag(entry) : ''}</td>`,
                     rno: window.mfRno.cell(entry, 'monthly'),
                     collector: `<td><select class="cell-input" data-member="${m.id}" data-field="collector" ${_roAttr}>${collectorOptionsHtml(entry ? entry.collector : '')}</select><span class="print-value">${escapeHtml(entry && entry.collector ? entry.collector : '—')}</span></td>`,
-                    actions: `<td class="no-print"><button class="btn btn-outline btn-sm mobile-only-btn" data-edit-monthly="${entry ? entry.id : ''}" ${entry ? '' : 'disabled'} ${_monthlyEditOn ? '' : 'data-edit-mode-off="1"'} title="${_monthlyEditOn ? 'এডিট করুন' : 'Edit Mode বন্ধ আছে'}">✎</button>${emailButtonHtml(m.id, 'monthly', currentMonth)}<button class="btn btn-danger btn-sm" data-del-monthly="${m.id}" ${entry ? '' : 'disabled'} title="মুছে ফেলুন">🗑</button></td>`
+                    actions: `<td class="no-print"><button type="button" class="btn btn-outline btn-sm" data-mdetails="${m.id}" title="সদস্যের বিস্তারিত দেখুন" aria-label="বিস্তারিত">📋</button><button class="btn btn-outline btn-sm mobile-only-btn" data-edit-monthly="${entry ? entry.id : ''}" ${entry ? '' : 'disabled'} ${_monthlyEditOn ? '' : 'data-edit-mode-off="1"'} title="${_monthlyEditOn ? 'এডিট করুন' : 'Edit Mode বন্ধ আছে'}">✎</button>${emailButtonHtml(m.id, 'monthly', currentMonth)}<button class="btn btn-danger btn-sm" data-del-monthly="${m.id}" ${entry ? '' : 'disabled'} title="মুছে ফেলুন">🗑</button></td>`
                 });
                 if (fm.length) {
                     tableRows = fm.map((m, i) => {
@@ -18972,6 +19399,7 @@ body.dark-mode .btn-outline{border-color:var(--gold-300)!important;color:var(--g
                     const method = document.getElementById('smc-ot-method').value;
                     const collector = document.getElementById('smc-ot-collector').value;
                     const remarks = document.getElementById('smc-ot-remarks').value.trim();
+                    if (!window.__mfDupOk && window.mfDup) { const _dd = window.mfDup.find({ memberId: memberId, amounts: [received], date: date }); if (_dd) { window.mfDup.ask(m.name, date, _dd, () => { window.__mfDupOk = true; try { document.getElementById('smc-preview-btn').onclick(); } finally { window.__mfDupOk = false; } }); return; } }
                     state.yearly.push({ id: uid(), memberId, date, amount: received, method, collector, remarks });
                     if (!m.willingYearly) { m.willingYearly = true; }
                     saveState();
@@ -18980,6 +19408,7 @@ body.dark-mode .btn-outline{border-color:var(--gold-300)!important;color:var(--g
                     closeModal();
                     renderMain();
                     toast('✅ এককালীন অনুদান সংরক্ষণ হয়েছে');
+                    try { const _ne = state.yearly[state.yearly.length - 1]; if (_ne && window.mfYearlyShare) window.mfYearlyShare(_ne.id); } catch (er) { console.error(er); }
                     return;
                 }
                 smcState.memberId = memberId;
@@ -19368,6 +19797,79 @@ body.dark-mode .btn-outline{border-color:var(--gold-300)!important;color:var(--g
             });
         };
 
+        // 🆕 [v16.5.94] বার্ষিক/এককালীন অনুদান সংরক্ষণের পরেও শেয়ার প্যানেল (ইমেইল · হোয়াটসঅ্যাপ · মেসেঞ্জার · শেয়ার) — পাঠালে মেথড কলামে "✓ পাঠানো হয়েছে" স্বয়ংক্রিয়
+        const openYearlyConfirmedModal = (entryId) => {
+            const e = (state.yearly || []).find(x => x.id === entryId); if (!e) return;
+            const m = memberById(e.memberId); const $q = id => document.getElementById(id);
+            const st = state.settings || {}, D = (typeof CONFIG !== 'undefined' && CONFIG.DEFAULT_SETTINGS) || {};
+            const org = st.name || D.name || 'মাহফিল কমিটি';
+            const name = m ? m.name : 'সম্মানিত দাতা';
+            const subject = 'অনুদান গ্রহণের নিশ্চয়তা — ' + org;
+            const msgInit = 'আসসালামু আলাইকুম ' + name + ',\n\nআপনার ' + fmtMoney(e.amount) + ' টাকার অনুদান' + (e.method ? ' (' + e.method + ')' : '') + (e.date ? ' ' + fmtDate(e.date) + ' তারিখে' : '') + ' সফলভাবে গ্রহণ করা হয়েছে। আল্লাহ আপনার দান কবুল করুন, আমিন।\n\n— ' + org;
+            const to = m ? (m.email || '') : '';
+            const waNum = (() => { let d = String((m && m.mobile) || '').replace(/[০-৯]/g, c => '০১২৩৪৫৬৭৮৯'.indexOf(c)).replace(/\D/g, ''); if (!d) return ''; if (d.indexOf('880') === 0) return d; if (d.charAt(0) === '0') return '88' + d; if (d.length === 10) return '880' + d; return d; })();
+            let imgFile = null, imgState = 'idle', imgPromise = null;
+            const buildImg = async () => {
+                const t = { kind: 'yearly', entry: e };
+                const show = { method: true, collector: true, thanks: true, contact: true, breakdown: false };
+                const sigWrap = (typeof withPdfSig === 'function' && typeof resolveSig === 'function') ? (fn => withPdfSig(resolveSig('', undefined), fn)) : (fn => fn());
+                try { if (typeof issueRno === 'function') issueRno(t); } catch (er) { }
+                const url = await sigWrap(() => generateJpgForType('simple', m, t, show, 'money'));
+                const parts = String(url).split(','), bin = atob(parts[1]), u8 = new Uint8Array(bin.length);
+                for (let i = 0; i < bin.length; i++) u8[i] = bin.charCodeAt(i);
+                return new File([u8], sanitizeFileName('রিসিপ্ট-' + name) + '.jpg', { type: 'image/jpeg' });
+            };
+            const setSt = () => { const el = $q('yc-img-st'); if (!el) return; const on = $q('yc-img') && $q('yc-img').checked; el.textContent = !on ? '' : imgState === 'loading' ? '⏳ রিসিপ্ট তৈরি হচ্ছে…' : imgState === 'ready' ? '✅ রিসিপ্ট তৈরি' : imgState === 'error' ? '⚠️ রিসিপ্ট তৈরি হয়নি' : ''; };
+            const startImg = () => { if (imgState === 'loading' || imgState === 'ready') return; imgState = 'loading'; setSt(); imgPromise = buildImg().then(f => { imgFile = f; imgState = 'ready'; setSt(); return f; }).catch(er => { console.error(er); imgState = 'error'; setSt(); return null; }); };
+            const download = f => { const u = URL.createObjectURL(f), a = document.createElement('a'); a.href = u; a.download = f.name; document.body.appendChild(a); a.click(); a.remove(); setTimeout(() => URL.revokeObjectURL(u), 4000); };
+            const copyText = async (s) => { try { await navigator.clipboard.writeText(s); return true; } catch (er) { try { const ta = $q('yc-msg'); ta.focus(); ta.select(); return document.execCommand('copy'); } catch (e2) { return false; } } };
+            const openUrl = u => { const w = window.open(u, '_blank', 'noopener'); if (!w) window.location.href = u; };
+            const mark = (ch, label) => {
+                const b = document.querySelector('[data-yc-ch="' + ch + '"]');
+                if (b) { b.style.background = '#e7f6ec'; b.style.borderColor = '#2e7d32'; b.style.color = '#1b5e20'; const t = b.querySelector('.yc-tick'); if (t) t.textContent = ' ✓ পাঠানো হয়েছে'; }
+                toast('✓ ' + label + ' — পাঠানো হয়েছে');
+                try { if (window.mfNotifyAdd) window.mfNotifyAdd([e.id], label); } catch (er) { }
+                try { addActivityLog('email', 'yearly', e.memberId, label + '-এ অনুদানের বার্তা পাঠানো হয়েছে'); } catch (er) { }
+            };
+            const nativeShare = async (withImg) => {
+                const data = { text: $q('yc-msg').value, title: subject };
+                if (withImg && imgFile) { if (!(navigator.canShare && navigator.canShare({ files: [imgFile] }))) return null; data.files = [imgFile]; }
+                if (!navigator.share) return null;
+                try { await navigator.share(data); return true; } catch (er) { if (er && er.name === 'AbortError') return false; return null; }
+            };
+            const fallbackCopy = async (withImg) => { const ok = await copyText($q('yc-msg').value); if (withImg && imgFile) download(imgFile); toast((ok ? '📋 বার্তা কপি হয়েছে' : 'বার্তা বক্স থেকে কপি করুন') + (withImg && imgFile ? '; রিসিপ্ট ডাউনলোড হয়েছে — চ্যাটে সংযুক্ত করুন' : '')); };
+            const handlers = {
+                email: async () => { if (!to) { toast('এই সদস্যের ইমেইল ঠিকানা যোগ করা নেই'); return; } window.location.href = 'mailto:' + encodeURIComponent(to) + '?subject=' + encodeURIComponent(subject) + '&body=' + encodeURIComponent($q('yc-msg').value); if (imgFile && $q('yc-img').checked) toast('রিসিপ্ট জুড়তে "⬇️ ডাউনলোড" চেপে সংযুক্ত করুন'); mark('email', 'ইমেইল'); },
+                whatsapp: async () => { const wi = $q('yc-img').checked && !!imgFile; if (wi) { const r = await nativeShare(true); if (r === true) { mark('whatsapp', 'হোয়াটসঅ্যাপ'); return; } if (r === false) return; await fallbackCopy(true); } openUrl('https://wa.me/' + waNum + '?text=' + encodeURIComponent($q('yc-msg').value)); mark('whatsapp', 'হোয়াটসঅ্যাপ'); },
+                messenger: async () => { const wi = $q('yc-img').checked && !!imgFile; const r = await nativeShare(wi); if (r === true) { mark('messenger', 'মেসেঞ্জার'); return; } if (r === false) return; await fallbackCopy(wi); openUrl('https://www.messenger.com/'); mark('messenger', 'মেসেঞ্জার'); },
+                share: async () => { const wi = $q('yc-img').checked && !!imgFile; const r = await nativeShare(wi); if (r === true) { mark('share', 'শেয়ার'); return; } if (r === false) return; await fallbackCopy(wi); mark('share', 'শেয়ার'); }
+            };
+            const chBtn = (ch, ic, label) => `<button type="button" class="btn btn-outline" data-yc-ch="${ch}" style="justify-content:flex-start;gap:6px;text-align:left;">${ic} ${label}<span class="yc-tick small" style="margin-left:auto;"></span></button>`;
+            openModal(`
+                <h3>✅ অনুদান সংরক্ষণ হয়েছে</h3>
+                <p style="margin:8px 0 4px;"><strong>${escapeHtml(name)}</strong> — ${escapeHtml(fmtMoney(e.amount))}${e.method ? ' · ' + escapeHtml(e.method) : ''}</p>
+                <div class="field"><label class="small muted">ধন্যবাদ-বার্তা (চাইলে এডিট করুন)</label><textarea id="yc-msg" rows="6">${escapeHtml(msgInit)}</textarea></div>
+                <label style="display:flex;gap:8px;align-items:center;margin:4px 0 10px;"><input type="checkbox" id="yc-img" checked> 🧾 রিসিপ্টসহ পাঠান <span id="yc-img-st" class="small muted"></span></label>
+                <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">${chBtn('email', '✉️', 'ইমেইল')}${chBtn('whatsapp', '💬', 'হোয়াটসঅ্যাপ')}${chBtn('messenger', '📨', 'মেসেঞ্জার')}${chBtn('share', '📤', 'শেয়ার')}</div>
+                <div class="small muted" style="margin-top:8px;">যে মাধ্যমে পাঠাবেন সেটির টিক উঠবে এবং টেবিলের মেথড কলামে "✓ পাঠানো হয়েছে" নিজে নিজে লেখা হবে।</div>
+                <div class="modal-actions" style="flex-wrap:wrap;gap:8px;margin-top:10px;"><button class="btn btn-outline" id="yc-close">বন্ধ করুন</button><button class="btn btn-outline" id="yc-dl">⬇️ রিসিপ্ট ডাউনলোড</button></div>
+            `, () => {
+                $q('yc-close').onclick = closeModal;
+                $q('yc-img').addEventListener('change', () => { if ($q('yc-img').checked) startImg(); setSt(); });
+                $q('yc-dl').onclick = async () => { if (imgState === 'idle' || imgState === 'error') { imgState = 'idle'; startImg(); } const f = await imgPromise; if (f) download(f); else toast('রিসিপ্ট তৈরি করা যায়নি'); };
+                document.querySelectorAll('[data-yc-ch]').forEach(b => {
+                    b.onclick = async () => {
+                        const ch = b.getAttribute('data-yc-ch');
+                        if ($q('yc-img').checked && imgState === 'loading') { toast('⏳ রিসিপ্ট তৈরি হচ্ছে — একটু অপেক্ষা করে আবার চাপুন'); return; }
+                        if ($q('yc-img').checked && imgState === 'error') { imgState = 'idle'; startImg(); toast('⏳ রিসিপ্ট আবার তৈরি হচ্ছে — একটু পরে চাপুন'); return; }
+                        try { await handlers[ch](); } catch (er) { console.error(er); toast('পাঠানো যায়নি: ' + ((er && er.message) || '')); }
+                    };
+                });
+                startImg();
+            });
+        };
+        window.mfYearlyShare = openYearlyConfirmedModal;
+
         const wireSmcPreview = () => {
             document.getElementById('smc-back').onclick = () => openModal(smcStep1Html(), () => wireSmcStep1());
             document.getElementById('smc-cancel2').onclick = closeModal;
@@ -19420,6 +19922,7 @@ body.dark-mode .btn-outline{border-color:var(--gold-300)!important;color:var(--g
             }
 
             confirmBtn.onclick = () => {
+                if (window.mfLock && !window.mfLock.canSave(smcState.memberId)) { window.mfLock.lostMsg(); return; }
                 const m = memberById(smcState.memberId);
                 let result = smcState.lastResult;
                 if (manualChk.checked) {
@@ -19441,6 +19944,7 @@ body.dark-mode .btn-outline{border-color:var(--gold-300)!important;color:var(--g
                 const date = document.getElementById('smc-date').value || todayISO();
                 const method = document.getElementById('smc-method').value;
                 const collector = document.getElementById('smc-collector').value;
+                if (!window.__mfDupOk && window.mfDup) { const _dd = window.mfDup.find({ memberId: m.id, amounts: [result.receivedTotal].concat(result.perMonth.map(r => r.allocated)), date: date }); if (_dd) { window.mfDup.ask(m.name, date, _dd, () => { window.__mfDupOk = true; try { confirmBtn.onclick(); } finally { window.__mfDupOk = false; } }); return; } }
                 const monthlyAmt = getMemberMonthlyAmount(m);
                 // 🆕 [v16.5.83] একাধিক মাস একসাথে দিলে — সবগুলো এন্ট্রি একই রিসিপ্ট নম্বর পাবে (মাসভিত্তিক টাকা আলাদা থাকে)
                 const _rg = window.mfRnoGroupBegin ? window.mfRnoGroupBegin() : null;
@@ -19501,7 +20005,11 @@ body.dark-mode .btn-outline{border-color:var(--gold-300)!important;color:var(--g
         const openSmartMonthlyCollection = (memberId) => {
             smcState = { memberId: memberId || null, mode: 'multi', months: [], received: '', useAdvance: true, manual: false,
                 lastResult: null, ot: {} };
-            openModal(smcStep1Html(), () => wireSmcStep1());
+            const _go = () => openModal(smcStep1Html(), () => wireSmcStep1());
+            if (memberId && window.mfLock) {   // 🆕 [v16.5.98] আগে থেকে বাছা সদস্য হলে এখনই নাম লক
+                const _m = memberById(memberId);
+                window.mfLock.acquire(memberId, _m ? _m.name : '').then(r => { if (r.ok) _go(); else window.mfLock.deny(r, _m ? _m.name : '', memberId); });
+            } else _go();
         };
 
         const editMonthlyEntry = (id) => {
@@ -19533,6 +20041,7 @@ body.dark-mode .btn-outline{border-color:var(--gold-300)!important;color:var(--g
                 document.getElementById('f-save').onclick = () => {
                     const amount = Number(document.getElementById('e-amount').value) || 0;
                     const newMonth = document.getElementById('e-month').value;
+                    { const _nd = document.getElementById('e-date').value; if (Number(r.amount) !== amount || r.date !== _nd) { if (!window.__mfDupOk && window.mfDup) { const _dd = window.mfDup.find({ memberId: r.memberId, amounts: [amount], date: _nd, skipId: r.id }); if (_dd) { window.mfDup.ask((memberById(r.memberId) || {}).name, _nd, _dd, () => { window.__mfDupOk = true; try { document.getElementById('f-save').onclick(); } finally { window.__mfDupOk = false; } }); return; } } } }
                     r.amount = amount;
                     r.month = newMonth;
                     r.date = document.getElementById('e-date').value;
@@ -19569,13 +20078,15 @@ body.dark-mode .btn-outline{border-color:var(--gold-300)!important;color:var(--g
 
         const openMonthlyQuickForm = () => {
             openModal(monthlyQuickFormHtml(), () => {
-                initMemberPicker('f-member');
+                initMemberPicker('f-member', null, { lock: true });
                 document.getElementById('f-cancel').onclick = closeModal;
                 document.getElementById('f-save').onclick = () => {
                     const memberId = document.getElementById('f-member').value;
                     const amount = Number(document.getElementById('f-amount').value) || 0;
                     if (!memberId) { toast('সদস্য নির্বাচন করুন'); return; }
+                    if (window.mfLock && !window.mfLock.canSave(memberId)) { window.mfLock.lostMsg(); return; }
                     const m = memberById(memberId);
+                    if (!window.__mfDupOk && window.mfDup) { const _dd = window.mfDup.find({ memberId: memberId, amounts: [amount], date: document.getElementById('f-date').value || todayISO(), skipMonthKey: currentMonth }); if (_dd) { window.mfDup.ask(m ? m.name : '', document.getElementById('f-date').value || todayISO(), _dd, () => { window.__mfDupOk = true; try { document.getElementById('f-save').onclick(); } finally { window.__mfDupOk = false; } }); return; } }
                     upsertMonthly(memberId, currentMonth, 'amount', amount);
                     upsertMonthly(memberId, currentMonth, 'date', document.getElementById('f-date').value);
                     upsertMonthly(memberId, currentMonth, 'method', document.getElementById('f-method').value);
@@ -19694,6 +20205,12 @@ body.dark-mode .btn-outline{border-color:var(--gold-300)!important;color:var(--g
                 document.querySelectorAll('#main .custom-col-input').forEach(inp => { inp.disabled = true; });
             }
             document.querySelectorAll('[data-field]').forEach(inp => {
+                inp.addEventListener('change', e => {   // 🆕 [v16.5.99] লক-গার্ড: অন্যের হাতে লক থাকলে বা লক নবায়ন ব্যর্থ হলে সংরক্ষণ হবে না
+                    const _mid = e.target.dataset.member; if (!window.mfLock || !_mid) return;
+                    const _h = window.mfLock.holderOf(_mid), _mm = memberById(_mid);
+                    if (_h) { e.stopImmediatePropagation(); window.mfLock.deny({ holder: _h }, _mm ? _mm.name : '', _mid); renderMain(); return; }
+                    if (!window.mfLock.canSave(_mid)) { e.stopImmediatePropagation(); window.mfLock.lostMsg(); renderMain(); }
+                });
                 inp.addEventListener('change', e => {
                     // 🆕 [মাসিক Edit Mode] change হ্যান্ডলারেও একই গার্ড — disabled attribute কেউ
                     // ডেভ-টুলস দিয়ে সরিয়ে ফেললেও প্রকৃত সেভ-লজিক আটকে যাবে (স্টেপ ১০)
@@ -19778,7 +20295,7 @@ body.dark-mode .btn-outline{border-color:var(--gold-300)!important;color:var(--g
                     mobile: { label: 'মোবাইল', td: (m) => `<td class="muted small">${mobileLink(m.mobile)}</td>` },
                     email: { label: 'ইমেইল', td: (m) => `<td class="muted small">${escapeHtml(m.email || '—')}</td>` },
                     status: { label: 'অবস্থা', td: (m) => `<td><span class="pill ${m.status === 'সক্রিয়' ? 'active' : 'muted'}">${escapeHtml(m.status)}</span></td>` },
-                    actions: { label: 'কার্যক্রম', thClass: 'no-print', td: (m) => `<td class="no-print">${emailButtonHtml(m.id)}</td>` }
+                    actions: { label: 'কার্যক্রম', thClass: 'no-print', td: (m) => `<td class="no-print"><button type="button" class="btn btn-outline btn-sm" data-mdetails="${m.id}" title="সদস্যের বিস্তারিত দেখুন" aria-label="বিস্তারিত">📋</button>${emailButtonHtml(m.id)}</td>` }
                 };
                 const visibleKeys = visibleColumnKeys('yearly-unpaid', window.YEARLY_UNPAID_DEFAULT_COLUMNS);
                 const colConfig = getColumnConfig('yearly-unpaid', window.YEARLY_UNPAID_DEFAULT_COLUMNS);
@@ -19810,7 +20327,7 @@ body.dark-mode .btn-outline{border-color:var(--gold-300)!important;color:var(--g
                     mobile: { label: 'মোবাইল', td: (r) => `<td class="muted small">${mobileLink(r.m.mobile)}</td>` },
                     email: { label: 'ইমেইল', td: (r) => `<td class="muted small">${escapeHtml(r.m.email || '—')}</td>` },
                     total: { label: 'মোট', thClass: 'num', td: (r) => `<td class="num">${fmtMoney(r.total)}</td>` },
-                    actions: { label: 'কার্যক্রম', thClass: 'no-print', td: (r) => `<td class="no-print">${emailButtonHtml(r.m.id)}</td>` }
+                    actions: { label: 'কার্যক্রম', thClass: 'no-print', td: (r) => `<td class="no-print"><button type="button" class="btn btn-outline btn-sm" data-mdetails="${r.m.id}" title="সদস্যের বিস্তারিত দেখুন" aria-label="বিস্তারিত">📋</button>${emailButtonHtml(r.m.id)}</td>` }
                 };
                 const visibleKeys = visibleColumnKeys('yearly-paid', window.YEARLY_PAID_DEFAULT_COLUMNS);
                 const colConfig = getColumnConfig('yearly-paid', window.YEARLY_PAID_DEFAULT_COLUMNS);
@@ -19846,11 +20363,11 @@ body.dark-mode .btn-outline{border-color:var(--gold-300)!important;color:var(--g
                 father: { label: 'পিতা/স্বামী', td: (r, m) => `<td class="muted small">${escapeHtml(m ? m.father : '')}</td>` },
                 mobile: { label: 'মোবাইল', td: (r, m) => `<td class="muted small">${m ? mobileLink(m.mobile) : ''}</td>` },
                 amount: { label: 'পরিমাণ', thClass: 'num', td: (r) => `<td class="num">${fmtMoney(r.amount)}</td>` },
-                method: { label: 'মেথড', td: (r) => `<td class="muted small">${escapeHtml(r.method)}</td>` },
+                method: { label: 'মেথড', td: (r) => `<td class="muted small">${escapeHtml(r.method)}${window.mfSentTag ? window.mfSentTag(r) : ''}</td>` },
                 rno: { label: 'রিসিপ্ট নং', td: (r) => window.mfRno.cell(r, 'yearly') },
                 collector: { label: 'সংগ্রাহক', td: (r) => `<td class="muted small">${escapeHtml(r.collector)}</td>` },
                 remarks: { label: 'মন্তব্য', td: (r) => `<td class="muted small">${escapeHtml(r.remarks)}</td>` },
-                actions: { label: 'কার্যক্রম', thClass: 'no-print', td: (r) => `<td class="no-print"><button class="btn btn-outline btn-sm" data-edit="${r.id}">✎</button>${r.memberId ? emailButtonHtml(r.memberId) : ''}<button class="btn btn-danger btn-sm" data-del="${r.id}">🗑</button></td>` }
+                actions: { label: 'কার্যক্রম', thClass: 'no-print', td: (r) => `<td class="no-print">${r.memberId ? `<button type="button" class="btn btn-outline btn-sm" data-mdetails="${r.memberId}" title="সদস্যের বিস্তারিত দেখুন" aria-label="বিস্তারিত">📋</button>` : ''}<button class="btn btn-outline btn-sm" data-edit="${r.id}">✎</button>${r.memberId ? emailButtonHtml(r.memberId) : ''}<button class="btn btn-danger btn-sm" data-del="${r.id}">🗑</button></td>` }
             };
             const visibleKeys = visibleColumnKeys('main-entries', MAIN_ENTRIES_DEFAULT_COLUMNS);
             const _mainEntriesColConfig = getColumnConfig('main-entries', MAIN_ENTRIES_DEFAULT_COLUMNS);
@@ -19956,7 +20473,7 @@ body.dark-mode .btn-outline{border-color:var(--gold-300)!important;color:var(--g
                 if (!items.length) return;   // নাম আছে কিন্তু কোনো মাসে টাকা নেই — বাদ নয়, শুধু এড়ানো
                 const nId = (idNumber || '').toString().trim(), nName = normalizeNameForMatch(name), nMobile = normalizeMobileForMatch(mobile);
                 let m = null;
-                if (nId) m = state.members.find(x => (x.idNumber || '').toString().trim() === nId);
+                if (nId) m = state.members.find(x => idSame(x.idNumber, nId));
                 if (!m && name && mobile) m = state.members.find(x => normalizeNameForMatch(x.name) === nName && normalizeMobileForMatch(x.mobile) === nMobile);
                 if (!m && name) m = state.members.find(x => normalizeNameForMatch(x.name) === nName);
                 const rowDate = parseImportedDate(dateRaw);
@@ -20057,7 +20574,7 @@ body.dark-mode .btn-outline{border-color:var(--gold-300)!important;color:var(--g
                 const nMobile = normalizeMobileForMatch(mobile);
 
                 let m = null;
-                if (nIdNumber) m = state.members.find(x => (x.idNumber || '').toString().trim() === nIdNumber);
+                if (nIdNumber) m = state.members.find(x => idSame(x.idNumber, nIdNumber));
                 if (!m && name && mobile) m = state.members.find(x =>
                     normalizeNameForMatch(x.name) === nName && normalizeMobileForMatch(x.mobile) === nMobile);
                 if (!m && name) m = state.members.find(x => normalizeNameForMatch(x.name) === nName);
@@ -20089,12 +20606,14 @@ body.dark-mode .btn-outline{border-color:var(--gold-300)!important;color:var(--g
         const openYearlyForm = (entryId) => {
             const r = entryId ? state.yearly.find(x => x.id === entryId) : null;
             openModal(yearlyFormHtml(r), () => {
-                initMemberPicker('f-member');
+                initMemberPicker('f-member', null, { lock: !r });
                 document.getElementById('f-cancel').onclick = closeModal;
                 document.getElementById('f-save').onclick = () => {
                     const memberId = document.getElementById('f-member').value;
                     const amount = Number(document.getElementById('f-amount').value) || 0;
                     if (!memberId) { toast('সদস্য নির্বাচন করুন'); return; }
+                    if (r) { const _nd = document.getElementById('f-date').value || todayISO(); if (Number(r.amount) !== amount || r.date !== _nd) { if (!window.__mfDupOk && window.mfDup) { const _dd = window.mfDup.find({ memberId: memberId, amounts: [amount], date: _nd, skipId: r.id }); if (_dd) { window.mfDup.ask((memberById(memberId) || {}).name, _nd, _dd, () => { window.__mfDupOk = true; try { document.getElementById('f-save').onclick(); } finally { window.__mfDupOk = false; } }); return; } } } }
+                    if (!r) { if (window.mfLock && !window.mfLock.canSave(memberId)) { window.mfLock.lostMsg(); return; } if (!window.__mfDupOk && window.mfDup) { const _dd = window.mfDup.find({ memberId: memberId, amounts: [amount], date: document.getElementById('f-date').value || todayISO() }); if (_dd) { window.mfDup.ask((memberById(memberId) || {}).name, document.getElementById('f-date').value || todayISO(), _dd, () => { window.__mfDupOk = true; try { document.getElementById('f-save').onclick(); } finally { window.__mfDupOk = false; } }); return; } } }
                     const m = memberById(memberId);
                     const data = { memberId, date: document.getElementById('f-date').value || todayISO(), amount,
                         method: document.getElementById('f-method').value, collector: document.getElementById(
@@ -20111,9 +20630,11 @@ body.dark-mode .btn-outline{border-color:var(--gold-300)!important;color:var(--g
                         addActivityLog('add', 'yearly', memberId,
                             `"${m ? m.name : 'অজানা'}" — ${fmtMoney(amount)} বার্ষিক অনুদান যোগ`);
                         toast('নতুন এন্ট্রি যোগ করা হয়েছে');
+                        window.__mfNewYearlyId = ne.id;
                     }
                     closeModal();
                     renderMain();
+                    if (window.__mfNewYearlyId) { const _id = window.__mfNewYearlyId; window.__mfNewYearlyId = null; try { if (window.mfYearlyShare && Number(amount) > 0) window.mfYearlyShare(_id); } catch (er) { console.error(er); } }
                 };
             });
         };
@@ -20160,6 +20681,7 @@ body.dark-mode .btn-outline{border-color:var(--gold-300)!important;color:var(--g
         const openMemberQuickUpdate = (memberId) => {
             const m = memberById(memberId);
             if (!m) return;
+            if (window.mfLock && !window.__mfQuickLocked) { window.mfLock.acquire(memberId, m.name).then(r => { if (r.ok) { window.__mfQuickLocked = true; try { openMemberQuickUpdate(memberId); } finally { window.__mfQuickLocked = false; } } else window.mfLock.deny(r, m.name, memberId); }); return; }
             openModal(memberQuickUpdateFormHtml(m), () => {
                 document.getElementById('f-cancel').onclick = closeModal;
                 // 🆕 [২.২] "দ্রুত অনুদান আপডেট" মোডাল থেকেও "মাসিক সংগ্রহ" উইজার্ড সরাসরি চালু —
@@ -20179,9 +20701,11 @@ body.dark-mode .btn-outline{border-color:var(--gold-300)!important;color:var(--g
                 document.getElementById('f-save').onclick = () => {
                     const amount = Number(amountInput.value) || 0;
                     if (amount <= 0) { toast('সঠিক পরিমাণ লিখুন'); return; }
+                    if (window.mfLock && !window.mfLock.canSave(m.id)) { window.mfLock.lostMsg(); return; }
                     const date = document.getElementById('q-date').value || todayISO();
                     const method = document.getElementById('q-method').value;
                     const collector = document.getElementById('q-collector').value;
+                    if (!window.__mfDupOk && window.mfDup) { const _dd = window.mfDup.find({ memberId: memberId, amounts: [amount], date: date, skipMonthKey: (typeSelect.value === 'monthly' ? document.getElementById('q-month').value : null) }); if (_dd) { window.mfDup.ask(m.name, date, _dd, () => { window.__mfDupOk = true; try { document.getElementById('f-save').onclick(); } finally { window.__mfDupOk = false; } }); return; } }
                     if (typeSelect.value === 'monthly') {
                         const monthKey = document.getElementById('q-month').value;
                         upsertMonthly(memberId, monthKey, 'amount', amount);
@@ -20563,7 +21087,7 @@ body.dark-mode .btn-outline{border-color:var(--gold-300)!important;color:var(--g
         const impDigits = (v) => parseInt(String(v || '').replace(/[০-৯]/g, c => '০১২৩৪৫৬৭৮৯'.indexOf(c)).replace(/\D/g, ''), 10);
         const impMemberFind = (id, name, mobile, father) => {
             const nId = String(id || '').trim(), nName = normalizeNameForMatch(name), nMob = normalizeMobileForMatch(mobile);
-            if (nId) { const m = state.members.find(x => String(x.idNumber || '').trim() === nId); if (m) return { m }; }
+            if (nId) { const m = state.members.find(x => idSame(x.idNumber, nId)); if (m) return { m }; }
             if (father && name) { const m = state.members.find(x => normalizeNameForMatch(x.name) === nName && normalizeNameForMatch(x.father) === normalizeNameForMatch(father)); if (m) return { m }; }
             if (name && mobile) { const m = state.members.find(x => normalizeNameForMatch(x.name) === nName && normalizeMobileForMatch(x.mobile) === nMob); if (m) return { m }; }
             if (name) { const L = state.members.filter(x => normalizeNameForMatch(x.name) === nName); if (L.length === 1) return { m: L[0] }; if (L.length > 1) return { amb: L.length }; }
@@ -20582,7 +21106,7 @@ body.dark-mode .btn-outline{border-color:var(--gold-300)!important;color:var(--g
                     const md = normalizeMobileForMatch(mob); if (mob && (md.length < 10 || md.length > 15)) E.push({ row: rowNo, col: 'মোবাইল নাম্বার', msg: '"' + mob + '" — সংখ্যা ' + md.length + 'টি (১০–১৫টি হতে হবে)' });
                     if (id) {
                         if (seenId[id]) E.push({ row: rowNo, col: 'আইডি নং', msg: '"' + id + '" ফাইলের ' + toBengaliNum(seenId[id]) + ' নং সারিতেও আছে — আইডি অদ্বিতীয় হতে হবে' }); else seenId[id] = rowNo;
-                        const ex = state.members.find(x => String(x.idNumber || '').trim() === id);
+                        const ex = state.members.find(x => idSame(x.idNumber, id));
                         if (ex && name && ex.name !== name) W.push({ row: rowNo, msg: 'আইডি "' + id + '" আগে থেকেই "' + ex.name + '"-এর — নাম বদলে "' + name + '" হবে' });
                     }
                 });
@@ -20711,8 +21235,14 @@ body.dark-mode .btn-outline{border-color:var(--gold-300)!important;color:var(--g
                 };
             });
         };
-        const mfImportFlow = (type, file) => {
+        const mfImportFlow = async (type, file) => {
             const fname = (file && file.name) || 'ফাইল';
+            // 🆕 [v16.5.97] এক্সেল লাইব্রেরি লোড না থাকলে একাধিক সার্ভার থেকে লোড করে তারপর ইমপোর্ট (আগে সরাসরি এরর)
+            if (typeof XLSX === 'undefined') {
+                toast('⏳ এক্সেল লাইব্রেরি লোড হচ্ছে…');
+                const ok = window.mfLoadXlsx ? await window.mfLoadXlsx() : false;
+                if (!ok || typeof XLSX === 'undefined') { impShowErrors(type, fname, [{ row: '—', col: 'ফাইল', msg: 'এক্সেল লাইব্রেরি লোড করা যায়নি — ইন্টারনেট সংযোগ দেখে আবার চেষ্টা করুন (আপনার ফাইলে কোনো সমস্যা নেই)' }], []); return; }
+            }
             const reader = new FileReader();
             reader.onload = (e) => {
                 try {
@@ -20828,8 +21358,8 @@ body.dark-mode .btn-outline{border-color:var(--gold-300)!important;color:var(--g
                 .createdAt || 0));
             let filtered = all;
             if (noticeSearch.trim()) {
-                const q = noticeSearch.trim().toLowerCase();
-                filtered = all.filter(n => (n.title || '').toLowerCase().includes(q) || (n.content || '').toLowerCase()
+                const q = noticeSearch.trim().normalize('NFC').replace(/[\u200c\u200d]/g, '').toLowerCase();
+                filtered = all.filter(n => (n.title || '').normalize('NFC').replace(/[\u200c\u200d]/g, '').toLowerCase().includes(q) || (n.content || '').normalize('NFC').replace(/[\u200c\u200d]/g, '').toLowerCase()
                     .includes(q));
             }
             return `
@@ -21021,8 +21551,8 @@ body.dark-mode .btn-outline{border-color:var(--gold-300)!important;color:var(--g
                 .date || a.createdAt || 0));
             let filtered = all;
             if (announcementSearch.trim()) {
-                const q = announcementSearch.trim().toLowerCase();
-                filtered = all.filter(n => (n.title || '').toLowerCase().includes(q) || (n.content || '').toLowerCase()
+                const q = announcementSearch.trim().normalize('NFC').replace(/[\u200c\u200d]/g, '').toLowerCase();
+                filtered = all.filter(n => (n.title || '').normalize('NFC').replace(/[\u200c\u200d]/g, '').toLowerCase().includes(q) || (n.content || '').normalize('NFC').replace(/[\u200c\u200d]/g, '').toLowerCase()
                     .includes(q));
             }
             return `
@@ -21205,9 +21735,9 @@ body.dark-mode .btn-outline{border-color:var(--gold-300)!important;color:var(--g
             let logs = state.activityLog || [];
             if (logActionFilter !== 'all') logs = logs.filter(l => l.action === logActionFilter);
             if (logTargetFilter !== 'all') logs = logs.filter(l => l.targetType === logTargetFilter);
-            if (logSearch.trim()) { const q = logSearch.trim().toLowerCase();
-                logs = logs.filter(l => (l.description || '').toLowerCase().includes(q) || (l.targetId || '')
-                    .toLowerCase().includes(q) || (l.user || '').toLowerCase().includes(q)); }
+            if (logSearch.trim()) { const q = logSearch.trim().normalize('NFC').replace(/[\u200c\u200d]/g, '').toLowerCase();
+                logs = logs.filter(l => (l.description || '').normalize('NFC').replace(/[\u200c\u200d]/g, '').toLowerCase().includes(q) || (l.targetId || '')
+                    .normalize('NFC').replace(/[\u200c\u200d]/g, '').toLowerCase().includes(q) || (l.user || '').normalize('NFC').replace(/[\u200c\u200d]/g, '').toLowerCase().includes(q)); }
             const total = state.activityLog.length;
             return `
             <div class="section-title">${escapeHtml(getTabLabel('notifications'))}</div>
@@ -21437,8 +21967,9 @@ body.dark-mode .btn-outline{border-color:var(--gold-300)!important;color:var(--g
               <div class="btn-group">
                 <button class="btn btn-primary" id="btn-drive-backup-now">☁️ এখনকার ডেটা Drive-এ রাখুন</button>
                 <label class="btn btn-outline" style="cursor:pointer;display:inline-flex;">📤 .json ফাইল বেছে Drive-এ আপলোড<input type="file" id="drive-backup-file" accept=".json,application/json" style="display:none;"></label>
-                <button class="btn btn-outline" id="btn-drive-backup-list">📋 Drive-এর ব্যাকআপ তালিকা</button>
+                <button class="btn btn-outline" id="btn-drive-backup-list">📋 Drive-এর ব্যাকআপ তালিকা ও ↩️ রিস্টোর</button>
               </div>
+              <label class="small" style="display:flex;gap:8px;align-items:center;margin-top:10px;cursor:pointer;"><input type="checkbox" id="mf-autobk-chk"> 🔁 স্বয়ংক্রিয় সাপ্তাহিক ব্যাকআপ (এডমিন অ্যাপ খুললে, শেষ ব্যাকআপ ৭ দিনের পুরনো হলে নিজে Drive-এ জমা হবে; সর্বশেষ <input type="number" id="mf-autobk-keep" min="1" max="100" style="width:64px;padding:2px 6px;" onclick="event.stopPropagation()"> টি স্বয়ংক্রিয় ফাইল রাখা হয়, পুরনোগুলো ট্র্যাশে যায়)</label>
               <div class="small muted" id="drive-backup-status" style="margin-top:10px;">ফাইলের নামের সাথে তারিখ-সময় যোগ হয়, তাই পুরনো ব্যাকআপ কখনো ঢাকা পড়ে না।</div>
             </div>
             <div class="backup-card" style="min-width:0;overflow-wrap:anywhere;">
@@ -21578,8 +22109,20 @@ body.dark-mode .btn-outline{border-color:var(--gold-300)!important;color:var(--g
             try {
                 toast('⏳ তালিকা আনা হচ্ছে...');
                 const r = await driveCall({ action: 'backup_list' });
-                const rows = (r.files || []).map(f => '<tr><td>' + escapeHtml(f.name) + '</td><td>' + new Date(f.t).toLocaleString('bn-BD') + '</td><td>' + Math.round((f.size || 0) / 1024) + ' KB</td><td><a href="' + escapeHtml(f.url) + '" target="_blank" rel="noopener">খুলুন</a></td></tr>').join('');
-                openModal('<h3>🗄️ Drive-এর ব্যাকআপ (সর্বশেষ ' + (r.files || []).length + '/' + (r.total || 0) + ')</h3>' + (rows ? '<div class="table-wrap"><table><thead><tr><th>ফাইল</th><th>সময়</th><th>সাইজ</th><th></th></tr></thead><tbody>' + rows + '</tbody></table></div>' : '<p class="muted">কোনো ব্যাকআপ নেই।</p>') + '<div class="modal-actions"><button class="btn btn-outline" id="dbl-close">বন্ধ</button></div>', () => { document.getElementById('dbl-close').onclick = closeModal; });
+                const rows = (r.files || []).map(f => '<tr><td>' + escapeHtml(f.name) + '</td><td>' + new Date(f.t).toLocaleString('bn-BD') + '</td><td>' + Math.round((f.size || 0) / 1024) + ' KB</td><td style="white-space:nowrap;"><button type="button" class="btn btn-primary btn-sm" data-drive-restore="' + escapeHtml(f.id) + '" data-name="' + escapeHtml(f.name) + '">↩️ রিস্টোর</button> <a href="' + escapeHtml(f.url) + '" target="_blank" rel="noopener">খুলুন</a></td></tr>').join('');
+                openModal('<h3>🗄️ Drive-এর ব্যাকআপ (সর্বশেষ ' + (r.files || []).length + '/' + (r.total || 0) + ')</h3>' + (rows ? '<div class="table-wrap"><table><thead><tr><th>ফাইল</th><th>সময়</th><th>সাইজ</th><th></th></tr></thead><tbody>' + rows + '</tbody></table></div>' : '<p class="muted">কোনো ব্যাকআপ নেই।</p>') + '<div class="modal-actions"><button class="btn btn-outline" id="dbl-close">বন্ধ</button></div>', () => {
+                    document.getElementById('dbl-close').onclick = closeModal;
+                    // 🆕 [v16.5.96] Drive-এর ব্যাকআপ থেকে সরাসরি রিস্টোর — ফাইল এনে লোকাল-রিস্টোরের একই ধাপে (অংশ বাছাই + ঝুঁকির নিশ্চিতকরণ) যায়
+                    document.querySelectorAll('[data-drive-restore]').forEach(b => b.addEventListener('click', async () => {
+                        const orig = b.textContent; b.disabled = true; b.textContent = '⏳ আনা হচ্ছে...';
+                        try {
+                            const g = await driveCall({ action: 'backup_get', fileId: b.dataset.driveRestore });
+                            const file = new File([g.jsonText], g.name || b.dataset.name || 'drive_backup.json', { type: 'application/json' });
+                            closeModal();
+                            restoreLocalBackup(file);
+                        } catch (e) { b.disabled = false; b.textContent = orig; toast('❌ ' + e.message + (/অজানা অনুরোধ/.test(e.message) ? ' — Code_combined_v16_5_37.gs ডিপ্লয় করুন' : '')); }
+                    }));
+                });
             } catch (e) { toast('❌ ' + e.message); }
         };
         const driveOtherUpload = async (files) => {
@@ -21598,7 +22141,36 @@ body.dark-mode .btn-outline{border-color:var(--gold-300)!important;color:var(--g
             }
             if (window.__mfUploadNote) toast('⚠️ ' + window.__mfUploadNote);
         };
+        // 🆕 [v16.5.99] স্বয়ংক্রিয় সাপ্তাহিক Drive-ব্যাকআপ (বিনামূল্যে, এডমিন অ্যাপ খুললে): Drive-এ শেষ ব্যাকআপ ৭ দিনের পুরনো হলে নতুন একটি জমা হয়।
+        window.mfAutoBackup = (() => {
+            let busy = false; const KEY = 'mf_autobk_off';
+            const isOff = () => { try { return localStorage.getItem(KEY) === '1'; } catch (e) { return false; } };
+            const setOff = (v) => { try { localStorage.setItem(KEY, v ? '1' : '0'); } catch (e) { } };
+            const keepN = () => { const v = Math.round(Number(state && state.settings && state.settings.autoBackupKeep)); return v >= 1 && v <= 100 ? v : 8; };
+            const maybe = async () => {
+                if (busy || isOff() || !state || !state.members || !state.members.length) return;
+                if (!(typeof isAdminUser === 'function' && isAdminUser())) return;
+                if (!IMAGE_UPLOAD_SCRIPT_URL || IMAGE_UPLOAD_SCRIPT_URL.indexOf('PASTE_YOUR') === 0) return;
+                busy = true;
+                try {
+                    try { const last = Number(localStorage.getItem('mf_autobk_try') || 0); if (Date.now() - last < 3600000) return; localStorage.setItem('mf_autobk_try', String(Date.now())); } catch (e) { }
+                    const r = await driveCall({ action: 'backup_list' });
+                    const newest = (r.files || []).reduce((m, f) => Math.max(m, Number(f.t) || 0), 0);
+                    if (newest && Date.now() - newest < 7 * 86400000) return;
+                    const up = await driveCall({ action: 'backup_upload', jsonText: JSON.stringify(state), fileName: 'auto_mahfil_backup', keep: keepN() });
+                    addActivityLog('add', 'backup', '', 'স্বয়ংক্রিয় সাপ্তাহিক ব্যাকআপ Drive-এ জমা: ' + up.name);
+                    toast('☁️ স্বয়ংক্রিয় সাপ্তাহিক ব্যাকআপ Drive-এ জমা হয়েছে');
+                } catch (e) { console.warn('autobackup', e && e.message); }
+                finally { busy = false; }
+            };
+            setTimeout(maybe, 45000); setInterval(maybe, 30 * 60000);
+            return { maybe, isOff, setOff, keepN };
+        })();
         const wireDriveUploads = () => {
+            const _ac = document.getElementById('mf-autobk-chk');
+            const _ak = document.getElementById('mf-autobk-keep');
+            if (_ak) { _ak.value = window.mfAutoBackup.keepN(); _ak.addEventListener('change', () => { let v = Math.round(Number(_ak.value)); if (!(v >= 1)) v = 8; if (v > 100) v = 100; _ak.value = v; state.settings.autoBackupKeep = v; saveState(); toast('✅ স্বয়ংক্রিয় ব্যাকআপ: সর্বশেষ ' + v + 'টি রাখা হবে (পরের স্বয়ংক্রিয় ব্যাকআপে পুরনোগুলো ছাঁটা হবে)'); }); }
+            if (_ac) { _ac.checked = !window.mfAutoBackup.isOff(); _ac.addEventListener('change', () => { window.mfAutoBackup.setOff(!_ac.checked); toast(_ac.checked ? '🔁 স্বয়ংক্রিয় ব্যাকআপ চালু' : '⏸️ স্বয়ংক্রিয় ব্যাকআপ বন্ধ'); }); }
             const b = document.getElementById('btn-drive-backup-now');
             if (b) b.addEventListener('click', () => { b.disabled = true; driveBackupUpload(JSON.stringify(state), 'mahfil_backup').finally(() => { b.disabled = false; }); });
             const fi = document.getElementById('drive-backup-file');
@@ -21934,9 +22506,9 @@ body.dark-mode .btn-outline{border-color:var(--gold-300)!important;color:var(--g
             const activeNow = userList.filter(u => isUserOnline(u.lastActive)).length; // 🆕 বর্তমানে একটিভ
             let filteredUsers = [...userList];
             if (userViewFilter !== 'all') filteredUsers = filteredUsers.filter(u => u.status === userViewFilter);
-            if (userViewSearch.trim()) { const q = userViewSearch.trim().toLowerCase();
-                filteredUsers = filteredUsers.filter(u => (u.email || '').toLowerCase().includes(q) || (u.displayName || '')
-                    .toLowerCase().includes(q)); }
+            if (userViewSearch.trim()) { const q = userViewSearch.trim().normalize('NFC').replace(/[\u200c\u200d]/g, '').toLowerCase();
+                filteredUsers = filteredUsers.filter(u => (u.email || '').normalize('NFC').replace(/[\u200c\u200d]/g, '').toLowerCase().includes(q) || (u.displayName || '')
+                    .normalize('NFC').replace(/[\u200c\u200d]/g, '').toLowerCase().includes(q)); }
             // 🆕 [জয়েন/সক্রিয়তা — আধুনিক সাজানো] 'activity' মোডে: এখন-অনলাইন ইউজাররা সবার উপরে,
             // তারপর যারা অফলাইন কিন্তু সাম্প্রতিক সক্রিয় ছিলেন তারা, একদম শেষে দীর্ঘদিন নিষ্ক্রিয়/কখনো
             // লগইন-না-করা ইউজাররা। প্রতিটা রিয়েল-টাইম আপডেটে (হার্টবিট ইত্যাদি) এই ক্রম নতুন করে হিসাব
@@ -23480,15 +24052,8 @@ body.dark-mode .btn-outline{border-color:var(--gold-300)!important;color:var(--g
             const unread = cdUnreadCount();
             const lastTxt = last ? `<b>${escapeHtml(last.displayName || cdName(last.sender))}:</b> ${last.imageUrl ? '📷 ছবি' : escapeHtml((last.text || '').slice(0, 60))}` : 'এখনো কোনো মেসেজ নেই — প্রথম মেসেজ পাঠান';
             const avs = act.filter(p => p.email !== me).slice(0, 3).map(p => cdAvatar(p.email, cdName(p.email), 24)).join('');
-            return `
-              <span class="cd-dot ${act.length ? '' : 'off'}"></span>
-              <span class="cd-bar-txt">
-                <div class="cd-bar-top">${act.length ? act.length + ' জন অ্যাক্টিভ' : 'গ্রুপ চ্যাট'}</div>
-                <div class="cd-bar-last">${lastTxt}</div>
-              </span>
-              ${avs ? `<span class="cd-bar-avs">${avs}</span>` : ''}
-              ${unread > 0 ? `<span class="cd-badge">${unread > 99 ? '99+' : unread}</span>` : ''}
-              <span class="cd-chev"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 15l6-6 6 6"/></svg></span>`;
+            // 🆕 [v16.5.103] গোল ভাসমান চ্যাট বাটন (AI বটের মতো) — আইকন + অ্যাক্টিভ-ডট + অপঠিত ব্যাজ
+            return `<svg class="cd-fab-ic" viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 11.5a8.4 8.4 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.4 8.4 0 0 1-3.8-.9L3 21l1.9-5.7a8.4 8.4 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.4 8.4 0 0 1 3.8-.9h.5a8.5 8.5 0 0 1 8 8z"/></svg><span class="cd-dot ${act.length ? '' : 'off'}" title="${act.length ? act.length + ' জন অ্যাক্টিভ' : 'গ্রুপ চ্যাট'}"></span>${unread > 0 ? `<span class="cd-badge">${unread > 99 ? '99+' : unread}</span>` : ''}`;
         };
 
         const cdMsgsHtml = () => {
@@ -23662,8 +24227,8 @@ body.dark-mode .btn-outline{border-color:var(--gold-300)!important;color:var(--g
             `, () => {
                 const list = document.getElementById('cd-fw-list');
                 const draw = (q) => {
-                    const qq = (q || '').trim().toLowerCase();
-                    const rows = users.filter(u => !qq || (u.displayName || u.email).toLowerCase().includes(qq));
+                    const qq = (q || '').trim().normalize('NFC').replace(/[\u200c\u200d]/g, '').toLowerCase();
+                    const rows = users.filter(u => !qq || (u.displayName || u.email).normalize('NFC').replace(/[\u200c\u200d]/g, '').toLowerCase().includes(qq));
                     list.innerHTML = rows.length ? rows.map(u => {
                         const nm = u.displayName || u.email.split('@')[0];
                         return `<div class="cd-fw-item" data-fw-email="${escapeHtml(u.email)}">${cdAvatar(u.email, nm, 32)}<span>${escapeHtml(nm)}</span>${isAct(u) ? '<i class="cd-dot" style="margin-left:auto"></i>' : ''}</div>`;
@@ -23901,6 +24466,8 @@ body.dark-mode .btn-outline{border-color:var(--gold-300)!important;color:var(--g
         // renderMain প্রতিবার এই ফাংশন ডাকে — চ্যাট-বারহীন পেজে গেলে খোলা চ্যাট বন্ধ হয়ে যায়
         window.mfCdTab = (tab) => { if (!CHATDOCK_TABS.includes(tab) && _cdOpen) cdClose(); };
         window.mfCdRefresh = () => { try { cdRefresh(); } catch (e) {} };
+        window.mfCdOpen = () => cdOpen(); window.mfCdUnread = () => { try { return cdUnreadCount(); } catch (e) { return 0; } };
+        window.mfSdCfg = () => { try { return (state.settings && state.settings.speedDial) || {}; } catch (e) { return {}; } };
 
         // পেজ আঁকার পর বারটি #main-এর একদম নিচে বসানো হয় (renderMain পুরো #main নতুন করে আঁকে, তাই প্রতিবার)
         const mountChatDock = () => {
@@ -23984,6 +24551,7 @@ body.dark-mode .btn-outline{border-color:var(--gold-300)!important;color:var(--g
             _renderPending = true;
             requestAnimationFrame(() => {
                 _renderPending = false;
+                try { if (window.mfRnoAdopt) window.mfRnoAdopt(); } catch (e) { }   // 🆕 [v16.5.102]
                 const main = document.getElementById('main');
                 if (!main) return;
                 // 🆕 একই ট্যাবে রি-রেন্ডার হলে (এডিট/সেভ/ডিলিট/ফিল্টার/ব্যাকগ্রাউন্ড-সিঙ্ক ইত্যাদি
@@ -24706,7 +25274,8 @@ body.dark-mode .btn-outline{border-color:var(--gold-300)!important;color:var(--g
             updateDoc,
             where,
             arrayUnion,
-            deleteField
+            deleteField,
+            serverTimestamp
         } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
         // 🆕 [পুশ নোটিফিকেশন] Firebase Cloud Messaging — ব্রাউজার থেকে FCM টোকেন সংগ্রহ করতে
         import {
@@ -24739,7 +25308,7 @@ body.dark-mode .btn-outline{border-color:var(--gold-300)!important;color:var(--g
         const db = getFirestore(app);
 
         window._firestore = { collection, addDoc, getDocs, query, orderBy, doc, getDoc, deleteDoc, setDoc, onSnapshot,
-            updateDoc, where, deleteField };
+            updateDoc, where, deleteField, serverTimestamp };
         window._firestoreDb = db;
         window._auth = auth; // 🆕 [ধাপ ১১] AI প্রক্সির জন্য ID টোকেন নিতে
 
@@ -24855,7 +25424,10 @@ body.dark-mode .btn-outline{border-color:var(--gold-300)!important;color:var(--g
         // ⚠️ ব্যবহারকারী "Block/Don't allow" দিলে ব্রাউজার কোনোভাবেই টোকেন দেয় না — তাদের জন্য ব্যানারে চালু করার ধাপ দেখানো হয়।
         window.mfPushCampaignCheck = (data) => {
             try {
-                const at = data && data.pushReqAt; if (!at) return;
+                const at = data && data.pushReqAt;
+                try { window.__mfPushReq = { on: !!at && data.pushReqOn !== false, at: at || '' }; window.dispatchEvent(new Event('mf-pushreq')); } catch (e) { }   // 🆕 [v16.5.101] এডমিনের চালু/বন্ধ সুইচ
+                if (!at) return;
+                if (data.pushReqOn === false) { const _o = document.getElementById('mf-push-banner'); if (_o) _o.remove(); return; }   // অনুরোধ বন্ধ — কাউকে ব্যানার/অনুরোধ নয়
                 const uid = window.currentUser && window.currentUser.uid; if (!uid) return;
                 let seen = ''; try { seen = localStorage.getItem('mf_push_req_seen') || ''; } catch (e) { }
                 if (seen === at) return;
@@ -24868,7 +25440,7 @@ body.dark-mode .btn-outline{border-color:var(--gold-300)!important;color:var(--g
                 const denied = Notification.permission === 'denied';
                 bn.innerHTML = '<div style="font-weight:700;margin-bottom:4px;">🔔 নোটিফিকেশন চালু করুন</div><div id="mf-pb-t" style="white-space:pre-line;">' + (denied ? 'নোটিফিকেশন ব্লক করা আছে। ঠিকানা-বারের 🔒 → Site settings → Notifications → Allow করুন, তারপর নিচের বোতাম চাপুন।' : 'নতুন নোটিশ, চ্যাট ও রিকোয়েস্ট সময়মতো পেতে অনুমতি দিন।') + '</div><div style="display:flex;gap:8px;margin-top:8px;"><button type="button" id="mf-pb-go" style="flex:1;min-height:44px;border:0;border-radius:10px;font-weight:700;background:#fff;color:#0a6b46;">📱 চালু করুন</button><button type="button" id="mf-pb-x" style="min-height:44px;padding:0 14px;border:1px solid #fff;border-radius:10px;background:transparent;color:#fff;">পরে</button></div>';
                 document.body.appendChild(bn);
-                document.getElementById('mf-pb-x').onclick = () => bn.remove();
+                document.getElementById('mf-pb-x').onclick = () => { done(); bn.remove(); };   // 🆕 [v16.5.101] ✕ চাপলে একই অনুরোধ আর ফিরে আসবে না
                 document.getElementById('mf-pb-go').onclick = async () => {
                     const t = document.getElementById('mf-pb-t'); t.textContent = '⏳ ...';
                     try { const r = await window.mfPushEnable(); t.textContent = r.lines.join('\n'); if (r.ok) { done(); setTimeout(() => bn.remove(), 2500); bn.style.background = '#0a8f5b'; } } catch (e) { t.textContent = '❌ ' + (e.message || e); }
@@ -29799,5 +30371,154 @@ document.addEventListener('click',function(e){
   injectQuick(); buildFab(); update();
 })();
 </script>
+<style id="mf-chatfab-css">
+/* 🆕 [v16.5.104] ভাসমান স্পিড-ডায়াল: ক্লিক করলে AI বট · গ্রুপ চ্যাট · হোয়াটসঅ্যাপ · মেসেঞ্জার ওপরে খোলে */
+html #cd-bar-wrap,html #mfai-fab{display:none!important}
+#mf-sd{position:fixed;inset:0;z-index:4990;pointer-events:none}
+#mf-sd.hide{display:none}
+#mf-sd-ov{position:absolute;inset:0;background:rgba(0,0,0,.38);opacity:0;transition:opacity .25s;pointer-events:none}
+#mf-sd.open #mf-sd-ov{opacity:1;pointer-events:auto}
+#mf-sd-main{position:fixed;right:16px;bottom:calc(92px + env(safe-area-inset-bottom,0px));z-index:5001;width:56px;height:56px;border-radius:50%;border:2px solid var(--gold-300,#e8c877);background:var(--emerald-800,#123c3d);color:var(--gold-100,#f7ecd0);box-shadow:0 4px 14px rgba(0,0,0,.35);display:flex;align-items:center;justify-content:center;cursor:pointer;padding:0;pointer-events:auto;transition:transform .15s,background .25s,border-color .25s}
+#mf-sd-main:active{transform:scale(.9)}
+#mf-sd-main svg{width:28px;height:28px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;position:absolute;transition:transform .3s,opacity .25s}
+#mf-sd-main .x{opacity:0;transform:rotate(-90deg) scale(.5)}
+#mf-sd.open #mf-sd-main{background:#111;border-color:#fff;color:#fff}
+#mf-sd.open #mf-sd-main .x{opacity:1;transform:none}
+#mf-sd.open #mf-sd-main .b{opacity:0;transform:rotate(90deg) scale(.5)}
+#mf-sd-badge{position:absolute;top:-6px;left:-6px;min-width:20px;height:20px;line-height:20px;padding:0 5px;border-radius:999px;background:#d93025;color:#fff;font-size:11px;font-weight:700;text-align:center;box-sizing:border-box;border:2px solid #fff}
+#mf-sd.open #mf-sd-badge{display:none}
+#mf-sd-list{position:fixed;right:16px;bottom:calc(92px + 56px + 14px + env(safe-area-inset-bottom,0px));z-index:5000;display:flex;flex-direction:column;gap:14px;align-items:flex-end}
+.mf-sd-it{display:flex;align-items:center;gap:10px;border:0;background:none;padding:0;cursor:pointer;font:inherit;opacity:0;transform:translateY(24px) scale(.6);transform-origin:right bottom;visibility:hidden;pointer-events:none;transition:opacity .22s,transform .3s cubic-bezier(.2,1.3,.4,1),visibility 0s .3s}
+#mf-sd.open .mf-sd-it{opacity:1;transform:none;visibility:visible;pointer-events:auto;transition:opacity .22s,transform .3s cubic-bezier(.2,1.3,.4,1),visibility 0s}
+.mf-sd-lb{background:#fff;color:#123c3d;font-size:13px;font-weight:700;padding:5px 11px;border-radius:9px;box-shadow:0 2px 8px rgba(0,0,0,.25);white-space:nowrap}
+.mf-sd-ic{position:relative;width:54px;height:54px;border-radius:50%;display:flex;align-items:center;justify-content:center;color:#fff;box-shadow:0 4px 14px rgba(0,0,0,.35);flex:none}
+.mf-sd-ic svg{width:27px;height:27px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.mf-sd-ic.ai,.mf-sd-ic.chat{background:var(--emerald-800,#123c3d);border:2px solid var(--gold-300,#e8c877);color:var(--gold-100,#f7ecd0)}
+.mf-sd-ic.tel{background:#e53935}.mf-sd-ic.wa{background:#25d366}.mf-sd-ic.ms{background:#0a7cff}
+.mf-sd-ic .cnt{position:absolute;top:-5px;left:-5px;min-width:19px;height:19px;line-height:19px;padding:0 4px;border-radius:999px;background:#d93025;color:#fff;font-size:11px;font-weight:700;text-align:center;box-sizing:border-box;border:2px solid #fff}
+@media (min-width:821px){#mf-sd-main{bottom:28px}#mf-sd-list{bottom:calc(28px + 56px + 14px)}}
+body:has(#mfai-sheet.on) #mf-sd,body:has(.modal-backdrop) #mf-sd,body:has(.mobile-sidebar.open) #mf-sd,html.mf-kb #mf-sd,html.mf-chatfab-off #mf-sd{display:none}
+@media print{#mf-sd{display:none!important}}
+</style>
+<script id="mf-speeddial">
+/* 🆕 [v16.5.104] ভাসমান স্পিড-ডায়াল (AI বট · গ্রুপ চ্যাট · হোয়াটসঅ্যাপ · মেসেঞ্জার)।
+   কোন বাটন দেখাবে ও লিংক — এডমিন প্যানেলের সেটিংস থেকে ঠিক হয়; ৩-ডট মেনুর সুইচে এই ডিভাইসে পুরোটা লুকানো যায়। */
+(function () {
+  'use strict';
+  var KEY = 'mf_chatfab_off', root = document.documentElement;
+  function $(id) { return document.getElementById(id); }
+  function off() { try { return localStorage.getItem(KEY) === '1'; } catch (e) { return false; } }
+  function apply() { root.classList.toggle('mf-chatfab-off', off()); }
+  function toastMsg(m) { try { window.toast && window.toast(m); } catch (e) { } }
+  function set(v) { try { localStorage.setItem(KEY, v ? '1' : '0'); } catch (e) { } apply(); sync(); if (v) close(); toastMsg(v ? 'ভাসমান বাটন বন্ধ হলো — মেনু থেকে আবার চালু করা যাবে' : 'ভাসমান বাটন চালু হলো'); }
+  function sync() {
+    var it = $('sidebar-action-gchat');
+    if (it) { it.setAttribute('aria-checked', off() ? 'false' : 'true'); var sw = it.querySelector('.pm-switch'); if (sw) sw.classList.toggle('on', !off()); }
+    var a = $('mf-chat-toggle');
+    if (a) { a.classList.toggle('is-on', !off()); var s2 = a.querySelector('.mf-sw'), tx = off() ? 'বন্ধ' : 'চালু'; if (s2 && s2.textContent !== tx) s2.textContent = tx; }
+  }
+  function inject() {
+    var ai = $('mf-ai-toggle'), st = $('sidebar-settings');
+    if ((ai || (st && st.parentNode)) && !$('mf-chat-toggle')) {
+      var it = document.createElement('div'); it.id = 'mf-chat-toggle'; it.className = 'sidebar-item'; it.setAttribute('role', 'button'); it.tabIndex = 0;
+      it.innerHTML = '<span>💬</span><span>ভাসমান বাটন</span><span class="mf-sw"></span>';
+      if (ai) ai.parentNode.insertBefore(it, ai.nextSibling);
+      else { var host = st.closest('.dragres-wrap') || st; host.parentNode.insertBefore(it, host); }
+      it.addEventListener('click', function (e) { e.stopPropagation(); set(!off()); });
+      it.addEventListener('keydown', function (e) { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); set(!off()); } });
+    }
+    sync();
+  }
+  apply();
+  document.addEventListener('click', function (e) { var t = e.target && e.target.closest ? e.target.closest('#sidebar-action-gchat') : null; if (t) { e.preventDefault(); set(!off()); } });
+  document.addEventListener('keydown', function (e) {
+    if ((e.key === 'Enter' || e.key === ' ') && e.target && e.target.id === 'sidebar-action-gchat') { e.preventDefault(); set(!off()); }
+    if (e.key === 'Escape') close();
+  });
+
+  /* ---- লিংক স্বাভাবিক করা ---- */
+  function en(s) { return String(s || '').replace(/[০-৯]/g, function (d) { return '০১২৩৪৫৬৭৮৯'.indexOf(d); }); }
+  function normWa(v) {
+    v = String(v || '').trim(); if (!v) return '';
+    if (/^https?:\/\//i.test(v)) return v;
+    if (/^(wa\.me|api\.whatsapp\.com|chat\.whatsapp\.com|whatsapp\.com)/i.test(v)) return 'https://' + v;
+    var d = en(v).replace(/\D/g, ''); if (d.indexOf('00') === 0) d = d.slice(2);
+    if (d.length === 11 && d.charAt(0) === '0') d = '88' + d; else if (d.length === 10 && d.charAt(0) === '1') d = '880' + d;
+    return d.length >= 8 ? 'https://wa.me/' + d : '';
+  }
+  function normMs(v) {
+    v = String(v || '').trim(); if (!v) return '';
+    if (/^https?:\/\//i.test(v)) return v;
+    if (/^(m\.me|messenger\.com|facebook\.com|fb\.com|fb\.me)/i.test(v)) return 'https://' + v;
+    v = v.replace(/^@/, ''); return /^[\w.\-]+$/.test(v) ? 'https://m.me/' + v : '';
+  }
+  function normTel(v) {
+    v = String(v || '').trim(); if (!v) return '';
+    var plus = v.charAt(0) === '+', d = en(v).replace(/\D/g, ''); if (d.length < 5) return '';
+    if (plus) return '+' + d; if (d.indexOf('00') === 0) return '+' + d.slice(2);
+    if (d.length === 11 && d.charAt(0) === '0') return '+88' + d; if (d.indexOf('880') === 0) return '+' + d; return d;
+  }
+  window.mfSdNorm = { wa: normWa, ms: normMs, tel: normTel };
+
+  var IC = {
+    main: '<svg class="b" viewBox="0 0 24 24"><path d="M21 11.5a8.4 8.4 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.4 8.4 0 0 1-3.8-.9L3 21l1.9-5.7a8.4 8.4 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.4 8.4 0 0 1 3.8-.9h.5a8.5 8.5 0 0 1 8 8z"/><path d="M8.5 11h7M8.5 14h4"/></svg><svg class="x" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18"/></svg>',
+    ai: '<svg viewBox="0 0 24 24"><rect x="5" y="8" width="14" height="10" rx="3"/><path d="M12 8V5M9 13h.01M15 13h.01M3 12v3M21 12v3"/></svg>',
+    chat: '<svg viewBox="0 0 24 24"><path d="M17 20v-1a4 4 0 0 0-4-4H7a4 4 0 0 0-4 4v1"/><circle cx="10" cy="8" r="3.5"/><path d="M21 20v-1a4 4 0 0 0-3-3.9M15.5 4.6a3.5 3.5 0 0 1 0 6.8"/></svg>',
+    wa: '<svg viewBox="0 0 24 24"><path d="M3 21l1.6-4.6A8.5 8.5 0 1 1 8 19.6z"/><path d="M9 9c0 3 3 6 6 6l1-1.5-2-1-1 .8c-.8-.4-1.6-1.2-2-2l.8-1-1-2z"/></svg>',
+    tel: '<svg viewBox="0 0 24 24"><path d="M5 4h4l2 5-2.5 1.5a11 11 0 0 0 5 5L15 13l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 6a2 2 0 0 1 2-2z"/></svg>',
+    ms: '<svg viewBox="0 0 24 24"><path d="M12 3a9 9 0 0 0-9 8.7c0 2.4 1 4.6 2.7 6.1V21l3-1.7c.9.3 2 .4 3.3.4a9 9 0 0 0 0-18z"/><path d="M7.5 13.5l3-3 2 2 3.5-3"/></svg>'
+  };
+  function cfg() { try { return (window.mfSdCfg && window.mfSdCfg()) || {}; } catch (e) { return {}; } }
+  function items() {
+    var c = cfg(), r = [], fab = $('mfai-fab');
+    if (c.ai !== 0 && fab && fab.classList.contains('on') && !root.classList.contains('mf-ai-off') && !root.classList.contains('mf-bot-off'))
+      r.push({ k: 'ai', lb: 'AI সহকারী', run: function () { fab.click(); } });
+    var tel = c.telOn !== 0 && normTel(c.tel); if (tel) r.push({ k: 'tel', lb: 'কল করুন', run: function () { window.location.href = 'tel:' + tel; } });
+    var ms = c.msOn !== 0 && normMs(c.ms); if (ms) r.push({ k: 'ms', lb: 'মেসেঞ্জার', run: function () { window.open(ms, '_blank', 'noopener'); } });
+    var wa = c.waOn !== 0 && normWa(c.wa); if (wa) r.push({ k: 'wa', lb: 'হোয়াটসঅ্যাপ', run: function () { window.open(wa, '_blank', 'noopener'); } });
+    if (c.chat !== 0 && window.mfCdOpen) r.push({ k: 'chat', lb: 'গ্রুপ চ্যাট', run: function () { window.mfCdOpen(); } });
+    return r;
+  }
+  var box, list, main, badge, sig = '', cur = [];
+  function unread() { try { return window.mfCdUnread ? (window.mfCdUnread() | 0) : 0; } catch (e) { return 0; } }
+  function build() {
+    if (box && document.body.contains(box)) return;
+    box = document.createElement('div'); box.id = 'mf-sd'; box.className = 'no-print hide';
+    box.innerHTML = '<div id="mf-sd-ov"></div><div id="mf-sd-list"></div><button type="button" id="mf-sd-main" aria-label="দ্রুত যোগাযোগ বাটন" aria-expanded="false">' + IC.main + '<span id="mf-sd-badge" hidden></span></button>';
+    document.body.appendChild(box);
+    list = $('mf-sd-list'); main = $('mf-sd-main'); badge = $('mf-sd-badge');
+    main.addEventListener('click', function (e) { e.stopPropagation(); box.classList.contains('open') ? close() : open(); });
+    $('mf-sd-ov').addEventListener('click', close);
+  }
+  function open() { render(true); box.classList.add('open'); main.setAttribute('aria-expanded', 'true'); }
+  function close() { if (!box) return; box.classList.remove('open'); main && main.setAttribute('aria-expanded', 'false'); }
+  window.mfSdClose = close;
+  function render(force) {
+    cur = items();
+    var n = unread(), s = cur.map(function (i) { return i.k; }).join(',') + '|' + n;
+    if (!force && s === sig) return; sig = s;
+    list.innerHTML = '';
+    // নিচ থেকে ওপরে একে একে খোলার জন্য: সবচেয়ে নিচেরটির দেরি কম
+    cur.forEach(function (it, idx) {
+      var b = document.createElement('button'); b.type = 'button'; b.className = 'mf-sd-it'; b.setAttribute('data-sd', it.k);
+      var delay = (cur.length - 1 - idx) * 55;
+      b.style.transitionDelay = delay + 'ms,' + delay + 'ms,0s';
+      b.innerHTML = '<span class="mf-sd-lb">' + it.lb + '</span><span class="mf-sd-ic ' + it.k + '">' + IC[it.k] + (it.k === 'chat' && n > 0 ? '<span class="cnt">' + (n > 99 ? '99+' : n) + '</span>' : '') + '</span>';
+      b.addEventListener('click', function (e) { e.stopPropagation(); close(); setTimeout(function () { try { it.run(); } catch (er) { console.error(er); } }, 180); });
+      list.appendChild(b);
+    });
+    badge.hidden = !(n > 0 && cur.some(function (i) { return i.k === 'chat'; })); badge.textContent = n > 99 ? '99+' : String(n);
+  }
+  function tick() {
+    if (!document.body) return; build(); render(false);
+    box.classList.toggle('hide', !cur.length);
+    if (!cur.length) close();
+  }
+  function start() { new MutationObserver(inject).observe(document.body, { childList: true, subtree: true }); inject(); tick(); setInterval(tick, 1200); }
+  if (document.body) start(); else document.addEventListener('DOMContentLoaded', start);
+  window.mfChatFab = { off: off, set: set };
+})();
+</script>
+
 </body>
 </html>
