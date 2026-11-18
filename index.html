@@ -4902,8 +4902,58 @@ body.dark-mode .btn-outline{border-color:var(--gold-300)!important;color:var(--g
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-title" content="ফান্ড কালেক্ট এডমিন">
+<style id="mf-splash-css">
+#mf-splash{position:fixed;inset:0;z-index:2147483000;background:#fff;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:22px;transition:opacity .45s ease,transform .45s ease}
+#mf-splash.out{opacity:0;transform:scale(1.05);pointer-events:none}
+#mf-splash .sp-logo{width:min(62vw,230px);height:min(62vw,230px);object-fit:contain;animation:mfSpIn 1s ease-out both}
+#mf-splash .sp-name{font:700 14px/1.4 system-ui,'Noto Sans Bengali',sans-serif;color:#0c4230;opacity:0;animation:mfSpIn .8s .7s ease-out both}
+#mf-splash .sp-bar{width:120px;height:4px;border-radius:4px;background:#e4e0d2;overflow:hidden}
+#mf-splash .sp-bar i{display:block;height:100%;width:40%;background:#0c4230;border-radius:4px;animation:mfSpLd 1.6s .4s ease-in-out infinite}
+@keyframes mfSpIn{from{opacity:0;transform:scale(.85)}to{opacity:1;transform:none}}
+@keyframes mfSpLd{0%{margin-left:-40%}100%{margin-left:100%}}
+@media (prefers-reduced-motion:reduce){#mf-splash .sp-logo,#mf-splash .sp-name,#mf-splash .sp-bar i{animation:none;opacity:1}#mf-splash{transition:opacity .2s}}
+@media print{#mf-splash{display:none!important}}
+</style>
 </head>
 <body>
+<!-- 🆕 [v16.5.113] অ্যাপ খোলার স্প্ল্যাশ (লোগো ধীরে ফোটে)। ছবি = icon.png; লেখা/চালু-বন্ধ/সময় = splash.json (দুটোই এই ফাইলের পাশে) -->
+<div id="mf-splash" aria-hidden="true"><img class="sp-logo" src="icon.png" alt="" onerror="this.style.display='none'"><div class="sp-name">তহবিল ব্যবস্থাপনা</div><div class="sp-bar"><i></i></div></div>
+<script id="mf-splash-js">
+(function () {
+  'use strict';
+  var el = document.getElementById('mf-splash'); if (!el) return;
+  var cfg = { enabled: true, text: 'তহবিল ব্যবস্থাপনা', image: 'icon.png', minMs: 800, maxMs: 6000 }, LS = 'mf_splash_cfg', t0 = Date.now(), over = false;
+  function apply(j) {
+    if (!j || typeof j !== 'object') return;
+    if (typeof j.enabled === 'boolean') cfg.enabled = j.enabled;
+    if (typeof j.text === 'string') cfg.text = j.text;
+    if (typeof j.image === 'string' && j.image) cfg.image = j.image;
+    if (+j.minMs >= 0) cfg.minMs = +j.minMs; if (+j.maxMs > 0) cfg.maxMs = +j.maxMs;
+    var n = el.querySelector('.sp-name'); if (n) { n.textContent = cfg.text; n.style.display = cfg.text ? '' : 'none'; }
+    var im = el.querySelector('.sp-logo'); if (im && im.getAttribute('src') !== cfg.image) { im.style.display = ''; im.setAttribute('src', cfg.image); }
+    if (!cfg.enabled) finish(true);
+  }
+  function finish(now) {
+    if (over) return; over = true;
+    var go = function () { el.classList.add('out'); setTimeout(function () { if (el.parentNode) el.parentNode.removeChild(el); var s = document.getElementById('mf-splash-css'); if (s && s.parentNode) s.parentNode.removeChild(s); }, 520); };
+    if (now) { if (el.parentNode) el.parentNode.removeChild(el); return; }
+    go();
+  }
+  try { apply(JSON.parse(localStorage.getItem(LS) || 'null')); } catch (e) { }
+  try { fetch('splash.json', { cache: 'no-cache' }).then(function (r) { return r.ok ? r.json() : null; }).then(function (j) { if (j) { apply(j); try { localStorage.setItem(LS, JSON.stringify(j)); } catch (e) { } } }).catch(function () { }); } catch (e) { }
+  function ready() {
+    if (window.currentUser === undefined) return false;               // লগইন-যাচাই এখনো শেষ হয়নি
+    if (!window.currentUser) return true;                              // লগইন করা নেই — লগইন-ফর্ম দেখানো যাবে
+    var g = document.getElementById('auth-gate'), m = document.getElementById('main');
+    return !g || g.classList.contains('hidden') || (m && m.children.length > 0);
+  }
+  var iv = setInterval(function () {
+    if (over) { clearInterval(iv); return; }
+    var dt = Date.now() - t0;
+    if ((ready() && dt >= cfg.minMs) || dt >= cfg.maxMs) { clearInterval(iv); finish(false); }
+  }, 120);
+})();
+</script>
     <!-- 🆕 এডমিন লগইন গেট -->
     <div id="auth-gate" class="auth-gate">
       <div class="auth-gate-box">
