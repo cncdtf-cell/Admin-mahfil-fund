@@ -5673,7 +5673,9 @@ body.dark-mode .btn-outline{border-color:var(--gold-300)!important;color:var(--g
         //  ইউটিলিটি ফাংশন
         // ======================================================================
         const uid = () => Math.random().toString(36).slice(2, 10) + Date.now().toString(36).slice(-4);
-        const fmtMoney = n => '৳' + (Number(n) || 0).toLocaleString('en-IN', { maximumFractionDigits: 0 });
+        const mfDigitsBn = () => { try { return ((typeof state !== 'undefined' && state && state.settings && state.settings.digitStyle) || 'bn') !== 'en'; } catch (e) { return true; } };   // 🆕 [v16.5.115] টাকার অঙ্ক: ডিফল্ট বাংলা (সেটিংসে বদলানো যায়)
+        const fmtMoney = n => { const s = '৳' + (Number(n) || 0).toLocaleString('en-IN', { maximumFractionDigits: 0 }); return mfDigitsBn() ? s.replace(/[0-9]/g, d => '০১২৩৪৫৬৭৮৯'.charAt(+d)) : s; };
+        window.mfDigitsBn = mfDigitsBn;
         const fmtDate = d => { if (!d) return ''; try { return window.mfFmtDate ? window.mfFmtDate(d) : String(d); } catch (e) { return d; } };
         const todayISO = () => new Date().toISOString().slice(0, 10);
         // 🆕 প্রেজেন্স/একটিভ-স্ট্যাটাস: এই সময়ের (মিলিসেকেন্ড) মধ্যে হার্টবিট পেলে "এখন সক্রিয়" ধরা হবে
@@ -6502,8 +6504,9 @@ body.dark-mode .btn-outline{border-color:var(--gold-300)!important;color:var(--g
                 user: window.currentUser ? window.currentUser.email : 'স্থানীয় ব্যবহারকারী'
             };
             state.activityLog.unshift(log);
-            if (state.activityLog.length > 500) state.activityLog = state.activityLog.slice(0, 500);
+            { const _hc = (window.mfLogArch ? window.mfLogArch.hardCap() : 500); if (state.activityLog.length > _hc) state.activityLog = state.activityLog.slice(0, _hc); }   // 🆕 [v16.5.118] সীমা সেটিংস থেকে; উপচে পড়া অংশ আগে Drive-এ আর্কাইভ হয়
             saveState();
+            try { if (window.mfLogArch) window.mfLogArch.nudge(); } catch (e) { }
         };
 
         // 🆕 [v16.5.107] নোটিফিকেশন/লগের পেশাদার লেখা: আইডি, সদস্যের নাম, মাধ্যম, রিসিপ্ট নম্বর, কাজটি যিনি করেছেন
@@ -6598,13 +6601,14 @@ body.dark-mode .btn-outline{border-color:var(--gold-300)!important;color:var(--g
             if (key === 'notices') return (state.notices || []).filter(n => new Date(n.createdAt || 0).getTime() > marker).length;
             if (key === 'notifications') return (state.activityLog || []).filter(l => new Date(l.timestamp || 0).getTime() > marker).length;
             if (key === 'chat') return (state.chat || []).filter(c => new Date(c.timestamp || 0).getTime() > marker).length;
-            if (key === 'users') return userRequestsCache.filter(r => r.status === 'pending' && new Date(r.createdAt || 0).getTime() > marker).length;
+            if (key === 'users') return (window.mfConvUnreadCount ? window.mfConvUnreadCount() : 0) + (window.mfInboxUnread ? window.mfInboxUnread() : 0);
             return 0;
         };
         // 🆕 বর্তমানে সক্রিয় ট্যাব যদি এই ৪টির একটি হয়, তবে সেটাকে সাথে সাথেই "দেখা হয়েছে" হিসেবে চিহ্নিত করা হয়
         // (WhatsApp-এ কোনো চ্যাট খোলা অবস্থায় নতুন মেসেজ এলে ব্যাজ যেমন বাড়ে না, ঠিক তেমন)
         const refreshReadStateForActiveTab = () => {
             if (['notices', 'notifications', 'chat', 'users'].includes(currentTab)) markTabRead(currentTab);
+            try { if (window.mfNewMark) window.mfNewMark(currentTab); } catch (e) { }
         };
 
         const getActionIcon = a => ({ add: '➕', edit: '✏️', delete: '🗑', email: '✉️' } [a] || '📌');
@@ -8217,6 +8221,8 @@ body.dark-mode .btn-outline{border-color:var(--gold-300)!important;color:var(--g
             </div>
             <div style="border-bottom:1px dashed var(--line);padding-bottom:12px;margin-bottom:12px;">
               <label style="margin-bottom:10px;">📅 মাসের ক্রম ও নাম কাস্টমাইজ করুন</label>
+                              <label class="small muted" style="display:block;margin:4px 0 4px;">🔢 টাকার অঙ্ক কোন ধরনে দেখাবে (সব প্যানেলে)</label>
+                <select id="s-digit-style" style="margin-bottom:10px;"><option value="bn" ${(s.digitStyle || 'bn') !== 'en' ? 'selected' : ''}>বাংলা (৳৩০,১৭৫)</option><option value="en" ${s.digitStyle === 'en' ? 'selected' : ''}>ইংরেজি (৳30,175)</option></select>
               <div class="field" style="margin-bottom:10px;">
                 <label class="small muted">অর্থবছর / মাসিক তালিকা কোন মাস থেকে শুরু হবে</label>
                 <select id="s-start-month">
@@ -8354,6 +8360,7 @@ body.dark-mode .btn-outline{border-color:var(--gold-300)!important;color:var(--g
                         footerText: document.getElementById('s-footer-text').value,
                         animationsEnabled: document.getElementById('s-anim-enabled') ? document.getElementById('s-anim-enabled').checked : true,
                         startMonth: document.getElementById('s-start-month').value,
+                        digitStyle: (document.getElementById('s-digit-style') || {}).value === 'en' ? 'en' : 'bn',
                         tabLabels: tl,
                         tabSubs: ts,
                         monthNames: mn,
@@ -8489,6 +8496,8 @@ body.dark-mode .btn-outline{border-color:var(--gold-300)!important;color:var(--g
                         footerText: document.getElementById('s-footer-text').value.trim() || CONFIG.DEFAULT_SETTINGS.footerText,
                         animationsEnabled: document.getElementById('s-anim-enabled') ? document.getElementById('s-anim-enabled').checked : true,
                         startMonth: newStartMonth,
+                        digitStyle: (document.getElementById('s-digit-style') || {}).value === 'en' ? 'en' : 'bn',   // 🆕 [v16.5.115]
+                        labelsAt: Date.now(),   // 🆕 [v16.5.119] ইউজার প্যানেলে "নতুন সম্পাদনা জেতে" নিয়মের জন্য
                         tabLabels: tl,
                         tabSubs: ts,
                         monthNames: mn,
@@ -10463,7 +10472,7 @@ body.dark-mode .btn-outline{border-color:var(--gold-300)!important;color:var(--g
                 <div style="display:flex;align-items:center;gap:12px;">
                   <div style="width:42px;height:42px;border-radius:50%;background:var(--gold-500);display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0;">💰</div>
                   <div>
-                    <div style="font-size:12.5px;color:var(--gold-100);opacity:.85;letter-spacing:.3px;">সর্বমোট অনুদান &nbsp;•&nbsp; ${members.length} জন</div>
+                    <div style="font-size:12.5px;color:var(--gold-100);opacity:.85;letter-spacing:.3px;">সর্বমোট অনুদান &nbsp;•&nbsp; ${toBengaliNum(members.length)} জন</div>
                     <div style="font-family:var(--font-display);font-size:24px;font-weight:700;color:#fff;line-height:1.3;">${fmtMoney(sum)}</div>
                   </div>
                 </div>
@@ -11221,6 +11230,7 @@ body.dark-mode .btn-outline{border-color:var(--gold-300)!important;color:var(--g
             document.getElementById('user-layout-preview-save').onclick = () => {
                 if (!pendingUserLayoutDraft) { toast('কোনো নতুন পরিবর্তন নেই'); return; }
                 state.settings.userLayout = pendingUserLayoutDraft;
+                state.settings.userLayoutAt = Date.now();   // 🆕 [v16.5.119]
                 saveState();
                 pendingUserLayoutDraft = null;
                 selectedUserPresetId = '';
@@ -11532,7 +11542,7 @@ body.dark-mode .btn-outline{border-color:var(--gold-300)!important;color:var(--g
                     if (!fields.length) { toast('কমপক্ষে একটি অনুমতি বাছুন'); return; }
                     if (typeof window._firestore === 'undefined') { toast('Firebase সংযুক্ত নেই'); return; }
                     const _lines = uids.map(id => { const x = userList.find(u => u.uid === id); return (x?.email || id) + ': ' + fields.join(', ') + ' → ' + (give ? 'চালু' : 'বন্ধ'); });
-                    const _g = await window.mfDanger.gate({ action: 'perm_bulk', title: 'গণ অনুমতি-পরিবর্তন', message: `${uids.length} জন ইউজারের ${fields.length}টি অনুমতি ${give ? 'দেওয়া' : 'তোলা'} হবে।`, details: _lines, target: `${uids.length} ইউজার`, level: 'high', confirmLabel: 'প্রয়োগ করুন' });
+                    const _g = await window.mfDanger.gate({ action: 'perm_bulk', title: 'গণ অনুমতি-পরিবর্তন', message: `${toBengaliNum(uids.length)} জন ইউজারের ${toBengaliNum(fields.length)}টি অনুমতি ${give ? 'দেওয়া' : 'তোলা'} হবে।`, details: _lines, target: `${uids.length} ইউজার`, level: 'high', confirmLabel: 'প্রয়োগ করুন' });
                     if (!_g.ok) return;
                     const btn = document.getElementById('pb-apply');
                     btn.disabled = true; btn.textContent = 'প্রয়োগ হচ্ছে...';
@@ -12253,7 +12263,9 @@ body.dark-mode .btn-outline{border-color:var(--gold-300)!important;color:var(--g
                 data,
                 status: 'pending',
                 createdAt: new Date().toISOString(),
+                thread: [], lastAt: new Date().toISOString(), lastBy: 'user',
             };
+            if (userRequestsCache.filter(x => x.email === req.email && window.mfIsOpenReq(x)).length >= 5) { toast('⚠️ আপনার ৫টি রিকোয়েস্ট এখনো অপেক্ষমান — আগেরগুলোর উত্তরের পর নতুন পাঠান'); throw new Error('limit'); }
             try {
                 if (typeof window._firestore === 'undefined') {
                     req.id = uid();
@@ -12265,6 +12277,7 @@ body.dark-mode .btn-outline{border-color:var(--gold-300)!important;color:var(--g
                 const docRef = await addDoc(collection(window._firestoreDb, 'requests'), req);
                 req.id = docRef.id;
                 userRequestsCache.unshift(req);
+                try { window.mfInboxSend({ to: 'admin', type: 'request', title: '📨 ' + (req.displayName || req.email) + ' — নতুন রিকোয়েস্ট', body: window.mfReqType(type).replace(/&[a-z#0-9]+;/g, '') + (typeof data === 'string' ? ': ' + data.slice(0, 120) : ''), ref: 'requests:' + docRef.id, tab: 'users' }); } catch (e) { }
             } catch (e) { console.error(e);
                 toast('রিকোয়েস্ট পাঠাতে সমস্যা'); throw e; }
         };
@@ -12279,6 +12292,7 @@ body.dark-mode .btn-outline{border-color:var(--gold-300)!important;color:var(--g
                 reply: null,
                 repliedAt: null,
                 repliedBy: null,
+                thread: [], lastAt: new Date().toISOString(), lastBy: 'user',
             };
             try {
                 if (typeof window._firestore === 'undefined') {
@@ -12291,6 +12305,7 @@ body.dark-mode .btn-outline{border-color:var(--gold-300)!important;color:var(--g
                 const docRef = await addDoc(collection(window._firestoreDb, 'comments'), cmt);
                 cmt.id = docRef.id;
                 userCommentsCache.unshift(cmt);
+                try { window.mfInboxSend({ to: 'admin', type: 'comment', title: '💬 ' + (cmt.displayName || cmt.email) + ' — নতুন কমেন্ট', body: String(text).slice(0, 160), ref: 'comments:' + docRef.id, tab: 'users' }); } catch (e) { }
             } catch (e) { console.error(e);
                 toast('কমেন্ট পোস্ট করতে সমস্যা'); throw e; }
         };
@@ -12373,11 +12388,14 @@ body.dark-mode .btn-outline{border-color:var(--gold-300)!important;color:var(--g
                     // সেকেন্ডারি এডমিন নির্ভুলভাবে ভেতরে ঢুকতে পারেন)
                     if (window.currentUser && isAdminUser()) {
                         if (userList.length === 0) loadUsersFromFirestore();
-                        watchUsersRealtime();
+                        if (typeof window.watchUsersRealtime === 'function') window.watchUsersRealtime();
                         startRequestsCommentsListener(); // 🆕 [ধাপ ৫]
                     }
-                    if (window.currentUser && _lastOwnUserStatus !== null) {
-                        evaluateOwnGateStatus(window.currentUser, _lastOwnUserStatus);
+                    if (window.currentUser &&
+                        typeof window.getLastOwnUserStatus === 'function' &&
+                        typeof window.evaluateOwnGateStatus === 'function') {
+                        const ownStatus = window.getLastOwnUserStatus();
+                        if (ownStatus !== null) window.evaluateOwnGateStatus(window.currentUser, ownStatus);
                     }
                     if (currentTab === 'users') renderMain();
                 }, () => {});
@@ -12546,13 +12564,14 @@ body.dark-mode .btn-outline{border-color:var(--gold-300)!important;color:var(--g
             el.type = 'file';
             el.id = 'chat-image-input-global';
             el.accept = 'image/*';
+            el.multiple = true;
             el.style.cssText = 'position:fixed;left:-9999px;top:0;width:1px;height:1px;opacity:0;';
             el.addEventListener('change', () => {
-                const file = el.files && el.files[0];
+                const files = Array.from(el.files || []);
                 el.value = '';
-                if (!file) { _chatImgLog('ফাইল-পিকার বন্ধ হয়েছে, কোনো ছবি নির্বাচিত হয়নি'); return; }
-                _chatImgLog('change ইভেন্ট এসেছে, লক্ষ্য =', _chatImagePickTarget);
-                if (_chatImagePickTarget === 'dm') sendDmImage(file); else sendChatImage(file);
+                if (!files.length) { _chatImgLog('ফাইল-পিকার বন্ধ হয়েছে, কোনো ছবি নির্বাচিত হয়নি'); return; }
+                _chatImgLog('change ইভেন্ট এসেছে, লক্ষ্য =', _chatImagePickTarget, 'ছবির সংখ্যা =', files.length);
+                if (_chatImagePickTarget === 'dm') sendDmImages(files); else sendChatImages(files);
             });
             document.body.appendChild(el);
             return el;
@@ -12579,19 +12598,29 @@ body.dark-mode .btn-outline{border-color:var(--gold-300)!important;color:var(--g
             return null;
         };
 
-        const sendChatImage = async (file) => {
-            const err = validateChatImageFile(file);
-            if (err) { toast('❌ ' + err); return; }
+        const sendChatImages = async (files) => {
+            const list = Array.isArray(files) ? files : (files ? [files] : []);
+            if (!list.length) return;
+            if (list.length > 10) { toast('❌ একসাথে সর্বোচ্চ ১০টি ছবি পাঠানো যাবে'); return; }
+            for (const file of list) {
+                const err = validateChatImageFile(file);
+                if (err) { toast('❌ ' + err); return; }
+            }
             const user = window.currentUser;
             if (!user) { toast('মেসেজ পাঠাতে লগইন করুন');
                 openLoginModal(); return; }
             const displayName = getProfileDisplayName(user.email, user.displayName);
-            toast('📤 ছবি পাঠানো হচ্ছে...');
+            toast(list.length === 1 ? '📤 ছবি পাঠানো হচ্ছে...' : `📤 ${toBengaliNum(list.length)}টি ছবি পাঠানো হচ্ছে...`);
             try {
                 _chatImgLog('আপলোড শুরু (Apps Script-এ পাঠানো হচ্ছে)');
-                const imageUrl = await uploadImageToDrive(file, chatImageFileTag(displayName), '', '', null, '', 'chat');
-                _chatImgLog('Drive থেকে URL এলো:', imageUrl);
-                const msg = { id: uid(), text: '', imageUrl, sender: user.email, displayName, timestamp: new Date()
+                const imageUrls = [];
+                for (let i = 0; i < list.length; i++) {
+                    const u = await uploadImageToDrive(list[i], chatImageFileTag(displayName) + (list.length > 1 ? '_' + (i + 1) : ''), '', '', null, '', 'chat');
+                    if (u) imageUrls.push(u);
+                }
+                if (!imageUrls.length) throw new Error('কোনো ছবির URL পাওয়া যায়নি');
+                _chatImgLog('Drive থেকে URL এলো:', imageUrls);
+                const msg = { id: uid(), text: '', imageUrl: imageUrls[0], imageUrls, sender: user.email, displayName, timestamp: new Date()
                         .toISOString() };
                 state.chat.push(msg);
                 saveState();
@@ -12877,7 +12906,7 @@ body.dark-mode .btn-outline{border-color:var(--gold-300)!important;color:var(--g
             if (typingNames.length === 1) typingHtml =
                 `<span class="typing-indicator">✍️ ${escapeHtml(typingNames[0])} লিখছেন<span class="typing-dots"><span></span><span></span><span></span></span></span>`;
             else if (typingNames.length > 1) typingHtml =
-                `<span class="typing-indicator">✍️ ${typingNames.length} জন লিখছেন<span class="typing-dots"><span></span><span></span><span></span></span></span>`;
+                `<span class="typing-indicator">✍️ ${toBengaliNum(typingNames.length)} জন লিখছেন<span class="typing-dots"><span></span><span></span><span></span></span></span>`;
 
             // 🆕 [চ্যাট রিডিজাইন] শুধু সংখ্যা না, সক্রিয় সদস্যদের ছবির স্ট্রিপ উপরে দেখানো —
             // নিজেকে বাদে বাকি সবার প্রোফাইলে ট্যাপ করলে সরাসরি DM শুরু হয়
@@ -13422,19 +13451,29 @@ body.dark-mode .btn-outline{border-color:var(--gold-300)!important;color:var(--g
         };
 
         // 🆕 DM-এও ছবি পাঠানো — গ্রুপ চ্যাটের sendChatImage-এর অনুরূপ, একই নামকরণ প্যাটার্ন
-        const sendDmImage = async (file) => {
-            const err = validateChatImageFile(file);
-            if (err) { toast('❌ ' + err); return; }
+        const sendDmImages = async (files) => {
+            const list = Array.isArray(files) ? files : (files ? [files] : []);
+            if (!list.length) return;
+            if (list.length > 10) { toast('❌ একসাথে সর্বোচ্চ ১০টি ছবি পাঠানো যাবে'); return; }
+            for (const file of list) {
+                const err = validateChatImageFile(file);
+                if (err) { toast('❌ ' + err); return; }
+            }
             if (!dmCurrentThreadId || !window.currentUser) return;
             const displayName = getProfileDisplayName(window.currentUser.email, window.currentUser.displayName);
-            toast('📤 ছবি পাঠানো হচ্ছে...');
+            toast(list.length === 1 ? '📤 ছবি পাঠানো হচ্ছে...' : `📤 ${toBengaliNum(list.length)}টি ছবি পাঠানো হচ্ছে...`);
             try {
                 _chatImgLog('আপলোড শুরু (Apps Script-এ পাঠানো হচ্ছে)');
-                const imageUrl = await uploadImageToDrive(file, chatImageFileTag(displayName), '', '', null, '', 'chat');
-                _chatImgLog('Drive থেকে URL এলো:', imageUrl);
+                const imageUrls = [];
+                for (let i = 0; i < list.length; i++) {
+                    const u = await uploadImageToDrive(list[i], chatImageFileTag(displayName) + (list.length > 1 ? '_' + (i + 1) : ''), '', '', null, '', 'chat');
+                    if (u) imageUrls.push(u);
+                }
+                if (!imageUrls.length) throw new Error('কোনো ছবির URL পাওয়া যায়নি');
+                _chatImgLog('Drive থেকে URL এলো:', imageUrls);
                 const { collection, addDoc, doc, setDoc } = window._firestore;
                 await addDoc(collection(window._firestoreDb, 'dm_threads', dmCurrentThreadId, 'messages'), {
-                    sender: window.currentUser.email, senderName: displayName, text: '', imageUrl, timestamp: new Date()
+                    sender: window.currentUser.email, senderName: displayName, text: '', imageUrl: imageUrls[0], imageUrls, timestamp: new Date()
                         .toISOString(), ...dmxReplyPayload()
                 });
                 dmxClearReply();
@@ -13492,6 +13531,9 @@ body.dark-mode .btn-outline{border-color:var(--gold-300)!important;color:var(--g
                 <option value="password_change">পাসওয়ার্ড পরিবর্তন</option>
                 <option value="email_change">ইমেইল পরিবর্তন</option>
                 <option value="account_activation">অ্যাকাউন্ট সক্রিয়করণ</option>
+                <option value="wrong_entry">ভুল এন্ট্রি সংশোধন</option>
+                <option value="missing_entry">টাকা দিয়েছি, কিন্তু এন্ট্রি নেই</option>
+                <option value="info_change">তথ্য পরিবর্তন</option>
                 <option value="other">অন্যান্য</option>
               </select>
             </div>
@@ -13848,7 +13890,7 @@ body.dark-mode .btn-outline{border-color:var(--gold-300)!important;color:var(--g
             <div id="mf-live-card" class="no-print"></div>
             <div class="grid cols-3" style="margin-bottom:22px;">
               <div class="card stat-card income"><div class="ico">৳</div><div class="label">মোট তহবিল সংগ্রহ ${fl}</div><div class="value">${fmtMoney(coll)}</div><div class="sub">মাসিক ${fmtMoney(mTot)} + বার্ষিক ${fmtMoney(yTot)}</div></div>
-              <div class="card stat-card expense"><div class="ico">−</div><div class="label">মোট ব্যয় ${fl}</div><div class="value">${fmtMoney(exp)}</div><div class="sub">${ef.length} টি খরচের এন্ট্রি</div></div>
+              <div class="card stat-card expense"><div class="ico">−</div><div class="label">মোট ব্যয় ${fl}</div><div class="value">${fmtMoney(exp)}</div><div class="sub">${toBengaliNum(ef.length)} টি খরচের এন্ট্রি</div></div>
               <div class="card stat-card"><div class="ico">✓</div><div class="label">বর্তমান তহবিল ${fl}</div><div class="value" style="color:${bal >= 0 ? 'var(--emerald-700)' : 'var(--maroon-600)'}">${fmtMoney(bal)}</div><div class="sub">নিবন্ধিত: ${totalMembers} জন · সক্রিয়: ${activeMembers} জন</div></div>
             </div>
             <div class="grid cols-2">
@@ -14054,11 +14096,17 @@ body.dark-mode .btn-outline{border-color:var(--gold-300)!important;color:var(--g
             // rows: [{ c: { colId: আগে-থেকে-escape-করা html }, hl: bool }]
             window.rcRenderTable = (cfg, key, rows, o) => {
                 o = o || {};
-                const cols = cfg.tables[key].cols.filter(c => c.show); if (!cols.length) return '';
+                let cols = cfg.tables[key].cols.filter(c => c.show); if (!cols.length) return '';
                 const ts = cfg.tableStyle, fs = (o.fs || cfg.fontSize) + ts.fsDelta, pad = ts.pad;
-                const cell = 'white-space:normal !important;max-width:none !important;overflow:visible !important;text-overflow:clip !important;word-break:break-word;';
+                const cell = 'white-space:normal !important;max-width:none !important;overflow:visible !important;text-overflow:clip !important;overflow-wrap:break-word;word-break:normal;';
                 const bd = ts.border === 'grid' ? 'border:1px solid #cfc6aa;' : ts.border === 'line' ? 'border-bottom:1px solid #e6dfc9;' : '';
                 const thBd = ts.border === 'grid' ? 'border:1px solid #cfc6aa;' : ts.border === 'line' ? 'border-bottom:1.5px solid #bbb;' : '';
+                // 🔧[v16.5.119] প্রস্থ সেট না থাকলে ব্রাউজারের auto-layout "খাত" কলাম সরু করে লেখা ভেঙে দিত — তাই ডিফল্ট শতকরা প্রস্থ
+                if (!cols.some(c => c.width > 0) && cols.length >= 2) {
+                    const wt = cols.map(c => (c.id === 'item' || c.id === 'month') ? 40 : c.id === 'amount' ? 20 : 0);
+                    const rest = 100 - wt.reduce((a, b) => a + b, 0), zeros = wt.filter(x => !x).length;
+                    cols = cols.map((c, i) => Object.assign({}, c, { width: wt[i] || Math.floor(rest / Math.max(1, zeros)) }));
+                }
                 const anyW = cols.some(c => c.width > 0);
                 const colgroup = '<colgroup>' + cols.map(c => c.width > 0 ? `<col style="width:${c.width}%">` : '<col>').join('') + '</colgroup>';
                 const th = cols.map(c => `<th style="text-align:${c.align};padding:${pad}px ${pad + 2}px;${thBd}${ts.headBg ? 'background:' + ts.headBg + ';' : ''}${ts.headColor ? 'color:' + ts.headColor + ';' : ''}${cell}">${escapeHtml(c.label)}</th>`).join('');
@@ -14394,7 +14442,7 @@ body.dark-mode .btn-outline{border-color:var(--gold-300)!important;color:var(--g
             const total = memberTotal(m.id);
             const count = memberDonationCount(m.id);
             // রিসিপ্টের টেবিলে লেখা কাটা/... হবে না — সাধারণ এক্সপোর্ট-CSS-এর nowrap/ellipsis এখানে বাতিল
-            const cellStyle = 'white-space:normal !important;max-width:none !important;overflow:visible !important;text-overflow:clip !important;word-break:break-word;';
+            const cellStyle = 'white-space:normal !important;max-width:none !important;overflow:visible !important;text-overflow:clip !important;overflow-wrap:break-word;word-break:normal;';
             const fs = cfg.fontSize;
             const stRows = [
                 ...monthlyRows.map(r => ({ c: { item: 'মাসিক — ' + escapeHtml((typeof txnMonthLabel === 'function' ? txnMonthLabel(r.month) : r.month) || r.month || ''), date: fmtDate(r.date), amount: fmtMoney(r.amount) } })),
@@ -14419,7 +14467,7 @@ body.dark-mode .btn-outline{border-color:var(--gold-300)!important;color:var(--g
                     ${cfg.showMobile && m.mobile ? `<div><strong>মোবাইল:</strong> ${escapeHtml(m.mobile)}</div>` : ''}
                   </div>
                   ${stTable}
-                  ${cfg.showTotal ? `<div class="pill active" style="font-size:${fs}px;padding:10px 18px;display:inline-block;">মোট অনুদান: ${fmtMoney(total)} &nbsp;·&nbsp; মোট ${count} বার</div>` : ''}
+                  ${cfg.showTotal ? `<div class="pill active" style="font-size:${fs}px;padding:10px 18px;display:inline-block;">মোট অনুদান: ${fmtMoney(total)} &nbsp;·&nbsp; মোট ${toBengaliNum(count)} বার</div>` : ''}
                   ${cfg.showThanks && cfg.thanks ? `<div style="margin-top:20px;font-size:${Math.max(11, fs - 0.5)}px;line-height:1.9;color:var(--ink,#2c2620);white-space:pre-wrap;">${escapeHtml(cfg.thanks)}</div>` : ''}
                   ${cfg.extra ? `<div style="margin-top:14px;padding-top:10px;border-top:1px dashed #cdbf9b;font-size:${Math.max(11, fs - 1)}px;line-height:1.8;white-space:pre-wrap;">${escapeHtml(cfg.extra)}</div>` : ''}
                 </div>
@@ -14536,7 +14584,7 @@ body.dark-mode .btn-outline{border-color:var(--gold-300)!important;color:var(--g
             const markHtml = cfg.showLogo ? await logoMarkHtmlAsync(s) : '';
             const time = new Date().toLocaleString('bn-BD', { year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit' });
             const fs = cfg.fontSize;
-            const cell = 'white-space:normal !important;max-width:none !important;overflow:visible !important;text-overflow:clip !important;word-break:break-word;';
+            const cell = 'white-space:normal !important;max-width:none !important;overflow:visible !important;text-overflow:clip !important;overflow-wrap:break-word;word-break:normal;';
             const td = (v, x) => `<td style="padding:6px 8px;border-bottom:1px solid #e6dfc9;${cell}${x || ''}">${v}</td>`;
             const th = (v, x) => `<th style="text-align:left;border-bottom:1px solid #ccc;padding:6px 8px;${cell}${x || ''}">${v}</th>`;
             const kv = (label, val) => (val === undefined || val === null || val === '') ? '' : `<tr>${td(escapeHtml(label), 'color:#6b6350;width:' + cfg.tableStyle.kvWidth + '%;')}${td('<strong>' + escapeHtml(val) + '</strong>')}</tr>`;
@@ -15322,6 +15370,269 @@ body.dark-mode .btn-outline{border-color:var(--gold-300)!important;color:var(--g
         const notifySet = (entryId, via, at) => { const m = rnoMapW(); if (!m.notified || typeof m.notified !== 'object') m.notified = {}; const vs = Array.isArray(via) ? via.filter(Boolean) : [via || 'ইমেইল']; m.notified[entryId] = { via: vs.join(', '), vias: vs, at: at || new Date().toISOString() }; try { saveState(); } catch (e) { } };
         // 🆕 [v16.5.79] একাধিক মাধ্যম জমা হয় (ইমেইল + হোয়াটসঅ্যাপ…) — আগেরগুলো মুছে না
         const notifyAdd = (entryId, via, at) => { const m = rnoMapW(); if (!m.notified || typeof m.notified !== 'object') m.notified = {}; const old = viasOf(m.notified[entryId]); const vs = old.indexOf(via) >= 0 ? old : old.concat([via]); m.notified[entryId] = { via: vs.join(', '), vias: vs, at: at || new Date().toISOString() }; try { saveState(); } catch (e) { } };
+        // ======================================================================
+        //  🆕 [v16.5.117] ইনবক্স (দুই দিকের নোটিফিকেশন) + রিকোয়েস্ট/কমেন্ট কথোপকথন + মেনুর লাল "নতুন" সংখ্যা + "পাঠানো" চিহ্ন (sent_marks)
+        //  দুই প্যানেলে হুবহু একই কোড (PANEL = 'a')
+        // ======================================================================
+        (() => {
+            const PANEL = 'a';
+            const lc = s => String(s || '').trim().toLowerCase();
+            const me = () => (window.currentUser && window.currentUser.email) ? lc(window.currentUser.email) : '';
+            const isAdm = () => { try { return !!isAdminUser(); } catch (e) { return false; } };
+            const FS = () => (typeof window._firestore !== 'undefined' && window._firestoreDb) ? window._firestore : null;
+            const bn = n => { try { return toBengaliNum(n); } catch (e) { return String(n); } };
+            const esc = s => escapeHtml(String(s == null ? '' : s));
+            const myName = () => { try { const u = (typeof userList !== 'undefined' ? userList : []).find(x => lc(x.email) === me()); return (u && u.displayName) || (window.currentUser && window.currentUser.displayName) || me().split('@')[0]; } catch (e) { return me().split('@')[0]; } };
+            const ls = { g: (k, d) => { try { const v = localStorage.getItem(k); return v == null ? d : v; } catch (e) { return d; } }, s: (k, v) => { try { localStorage.setItem(k, v); } catch (e) { } } };
+            const bell = () => { if (PANEL !== 'a') return; try { const b = document.getElementById('btn-notify'); if (!b) return; let d = b.querySelector('.mf-bell-dot'); const n = window.mfInboxUnread ? window.mfInboxUnread() : 0; if (n > 0) { if (!d) { d = document.createElement('span'); d.className = 'mf-bell-dot'; d.style.cssText = 'position:absolute;top:2px;right:2px;min-width:16px;height:16px;padding:0 3px;border-radius:999px;background:#d32f2f;color:#fff;font-size:9.5px;font-weight:700;display:flex;align-items:center;justify-content:center;line-height:1;'; b.appendChild(d); } d.textContent = n > 99 ? '99+' : bn(n); } else if (d) d.remove(); } catch (e) { } };
+            const rerender = () => { try { renderTabs(); } catch (e) { } try { if (currentTab === 'users') renderMain(); } catch (e) { } bell(); };
+            const ago = (iso) => { try { const d = (Date.now() - new Date(iso).getTime()) / 60000; if (d < 1) return 'এইমাত্র'; if (d < 60) return bn(Math.floor(d)) + ' মিনিট আগে'; if (d < 1440) return bn(Math.floor(d / 60)) + ' ঘণ্টা আগে'; return bn(Math.floor(d / 1440)) + ' দিন আগে'; } catch (e) { return ''; } };
+
+            // ---------- ১) ইনবক্স: পাঠানো (অফলাইনে কিউতে থাকে) ----------
+            const QK = 'mf_ibx_q_' + PANEL;
+            const qGet = () => { try { return JSON.parse(ls.g(QK, '[]')) || []; } catch (e) { return []; } };
+            const qSet = a => ls.s(QK, JSON.stringify(a.slice(-50)));
+            const rawSend = async (it) => { const F = FS(); await F.addDoc(F.collection(window._firestoreDb, 'inbox'), it); };
+            const flushQ = async () => {
+                if (!FS() || !me()) return;
+                const q = qGet(); if (!q.length) return;
+                qSet([]);
+                for (const it of q) { if (lc(it.from) !== me()) continue; try { await rawSend(it); } catch (e) { qSet(qGet().concat([it])); } }
+            };
+            window.mfInboxSend = async (o) => {
+                try {
+                    if (!me()) return false;
+                    const to = o.to === 'admin' ? 'admin' : lc(o.to); if (!to) return false;
+                    const it = { to, from: me(), fromName: myName(), type: o.type || 'info', title: String(o.title || '').slice(0, 120), body: String(o.body || '').slice(0, 600), ref: o.ref || '', tab: o.tab || '', at: new Date().toISOString(), pushed: false };
+                    if (!FS()) { qSet(qGet().concat([it])); return false; }
+                    try { await rawSend(it); return true; } catch (e) { qSet(qGet().concat([it])); return false; }
+                } catch (e) { return false; }
+            };
+            window.addEventListener('online', () => { try { flushQ(); } catch (e) { } });
+
+            // ---------- ২) ইনবক্স: গ্রহণ ----------
+            let _ibxUnsub = null, _ibx = [], _ibxFirst = true;
+            const SEEN = () => 'mf_ibx_seen_' + PANEL + '_' + me();
+            const ibxSeen = () => ls.g(SEEN(), '');
+            window.mfInboxUnread = () => { const s = ibxSeen(); return _ibx.filter(x => String(x.at) > s && lc(x.from) !== me()).length; };
+            window.mfInboxStart = () => {
+                try {
+                    const F = FS(); if (_ibxUnsub || !F || !me()) return;
+                    if (PANEL === 'a' && !isAdm()) return;
+                    flushQ();
+                    if (!ibxSeen()) ls.s(SEEN(), new Date().toISOString());
+                    const to = isAdm() ? 'admin' : me();
+                    _ibxUnsub = F.onSnapshot(F.query(F.collection(window._firestoreDb, 'inbox'), F.where('to', '==', to)), snap => {
+                        const arr = []; snap.forEach(d => arr.push(Object.assign({ id: d.id }, d.data())));
+                        arr.sort((a, b) => String(b.at).localeCompare(String(a.at)));
+                        const prev = new Set(_ibx.map(x => x.id));
+                        const fresh = _ibxFirst ? [] : arr.filter(x => !prev.has(x.id) && lc(x.from) !== me());
+                        _ibx = arr; _ibxFirst = false;
+                        fresh.slice(0, 3).forEach(x => { try { toast('🔔 ' + x.title); } catch (e) { } });
+                        rerender();
+                    }, () => { });
+                } catch (e) { }
+            };
+            window.mfInboxStop = () => { try { if (_ibxUnsub) _ibxUnsub(); } catch (e) { } _ibxUnsub = null; _ibx = []; _ibxFirst = true; };
+            window.mfInboxOpen = () => {
+                const seenBefore = ibxSeen();
+                const items = _ibx.slice(0, 60);
+                const row = x => { const un = String(x.at) > seenBefore && lc(x.from) !== me(); return `<div data-ibx-go="${esc(x.ref || '')}|${esc(x.tab || '')}" style="padding:10px;border-bottom:1px solid #e5e5e5;cursor:pointer;${un ? 'background:#fff3f3;' : ''}"><div style="display:flex;justify-content:space-between;gap:8px;"><strong>${un ? '<span style="color:#d32f2f;">● </span>' : ''}${esc(x.title)}</strong><span class="small muted" style="white-space:nowrap;">${esc(ago(x.at))}</span></div>${x.body ? `<div class="small" style="margin-top:3px;white-space:pre-line;">${esc(x.body)}</div>` : ''}</div>`; };
+                openModal(`<h3 style="margin:0 0 8px;">🔔 ইনবক্স</h3><div style="max-height:60vh;overflow:auto;">${items.length ? items.map(row).join('') : '<div class="small muted" style="padding:16px;text-align:center;">কোনো নোটিফিকেশন নেই।</div>'}</div><div style="text-align:right;margin-top:10px;"><button type="button" class="btn btn-outline" id="ibx-close">বন্ধ করুন</button></div>`, (m) => {
+                    const root = (m && m.querySelector) ? m : document;
+                    const c = root.querySelector('#ibx-close') || document.getElementById('ibx-close'); if (c) c.onclick = closeModal;
+                    root.querySelectorAll('[data-ibx-go]').forEach(el => el.addEventListener('click', () => {
+                        const [ref, tab] = el.getAttribute('data-ibx-go').split('|'); closeModal();
+                        if (ref && ref.indexOf(':') > 0) { const [k, id] = ref.split(':'); try { if (window.goToTab) window.goToTab('users'); } catch (e) { } setTimeout(() => window.mfConvOpen(k, id), 150); }
+                        else if (tab) { try { window.goToTab(tab); } catch (e) { } }
+                    }));
+                });
+                const newest = _ibx.length ? String(_ibx[0].at) : '';
+                const now = new Date().toISOString(); ls.s(SEEN(), newest > now ? newest : now);
+                rerender();
+            };
+
+            // ---------- ৩) রিকোয়েস্ট/কমেন্ট কথোপকথন ----------
+            const REQ_TYPES = { password_change: '🔑 পাসওয়ার্ড পরিবর্তন', email_change: '✉️ ইমেইল পরিবর্তন', account_activation: '✅ অ্যাকাউন্ট সক্রিয়করণ', wrong_entry: '✏️ ভুল এন্ট্রি সংশোধন', missing_entry: '💰 টাকা দিয়েছি, এন্ট্রি নেই', info_change: '👤 তথ্য পরিবর্তন', other: '📝 অন্যান্য' };
+            window.mfReqType = t => REQ_TYPES[t] || esc(t);
+            const ST = { pending: ['🆕 নতুন', '#b26a00'], seen: ['👁 দেখা হয়েছে', '#1565c0'], processing: ['⏳ প্রক্রিয়াধীন', '#6a1b9a'], approved: ['✅ সম্পন্ন', '#2e7d32'], denied: ['❌ বাতিল', '#c62828'] };
+            window.mfIsOpenReq = r => ['pending', 'seen', 'processing'].indexOf((r && r.status) || 'pending') >= 0;
+            window.mfStatusChip = r => { const s = ST[(r && r.status) || 'pending'] || ST.pending; return `<span style="display:inline-block;padding:1px 8px;border-radius:999px;font-size:11px;font-weight:700;color:#fff;background:${s[1]};">${s[0]}</span>`; };
+            const listOf = k => k === 'requests' ? userRequestsCache : userCommentsCache;
+            const convOf = (k, it) => {
+                const out = [{ by: 'user', name: it.displayName || it.email, text: k === 'requests' ? (it.data || '') : (it.text || ''), at: it.createdAt }];
+                let th = Array.isArray(it.thread) ? it.thread : [];
+                if (!th.length && k === 'comments' && it.reply) th = [{ by: 'admin', name: 'অ্যাডমিন', text: it.reply, at: it.repliedAt }];
+                return out.concat(th);
+            };
+            const lastOther = (k, it, adm) => {   // অন্য পক্ষের সর্বশেষ কার্যক্রমের সময়
+                let t = '';
+                convOf(k, it).forEach(m => { if ((m.by === 'admin') !== adm && String(m.at || '') > t) t = String(m.at || ''); });
+                if (!adm && it.respondedAt && String(it.respondedAt) > t) t = String(it.respondedAt);
+                return t;
+            };
+            const CV = () => 'mf_cv_seen_' + PANEL + '_' + me();
+            const cvGet = () => { try { return JSON.parse(ls.g(CV(), '{}')) || {}; } catch (e) { return {}; } };
+            const BASE = () => { const k = 'mf_cv_base_' + PANEL + '_' + me(); let b = ls.g(k, ''); if (!b) { b = new Date().toISOString(); ls.s(k, b); } return b; };
+            const convUnread = (k, it) => { const adm = isAdm(); const lo = lastOther(k, it, adm); if (!lo) return false; const s = cvGet()[k + ':' + it.id] || BASE(); return lo > s; };
+            window.mfConvDot = (k, it) => convUnread(k, it) ? '<span style="display:inline-block;min-width:8px;height:8px;border-radius:50%;background:#d32f2f;margin-left:4px;vertical-align:middle;"></span>' : '';
+            window.mfConvAge = (it) => { try { if (!window.mfIsOpenReq(it)) return ''; const d = (Date.now() - new Date(it.createdAt).getTime()) / 86400000; return d >= 3 ? ` <span style="color:#d32f2f;font-weight:700;font-size:11px;">⏰ ${bn(Math.floor(d))} দিন ধরে অপেক্ষমান</span>` : ''; } catch (e) { return ''; } };
+            const markSeen = (k, it) => { const o = cvGet(); const lo = lastOther(k, it, isAdm()); o[k + ':' + it.id] = lo > new Date().toISOString() ? lo : new Date().toISOString(); ls.s(CV(), JSON.stringify(o)); };
+            window.mfConvUnreadCount = () => {
+                try {
+                    if (!me()) return 0; const adm = isAdm(); let mk = 0; try { mk = readMarkers.users ? new Date(readMarkers.users).getTime() : 0; } catch (e) { }
+                    const mks = new Date(mk).toISOString(), seen = cvGet(), base = BASE(); let n = 0;
+                    ['requests', 'comments'].forEach(k => listOf(k).forEach(it => { const lo = lastOther(k, it, adm); if (!lo) return; const s = seen[k + ':' + it.id] || base; if (lo > s && lo > mks) n++; }));
+                    return n;
+                } catch (e) { return 0; }
+            };
+            const seedThread = (k, it) => { const th = Array.isArray(it.thread) ? it.thread.slice() : []; if (!th.length && k === 'comments' && it.reply) th.push({ by: 'admin', name: 'অ্যাডমিন', text: it.reply, at: it.repliedAt || it.createdAt }); return th; };
+            const itemLabel = (k, it) => k === 'requests' ? window.mfReqType(it.type) : '💬 কমেন্ট';
+            window.mfThreadAdd = async (k, id, text, extra) => {
+                const it = listOf(k).find(x => x.id === id); if (!it) throw new Error('পাওয়া যায়নি');
+                const adm = isAdm(), now = new Date().toISOString();
+                const th = seedThread(k, it); th.push(Object.assign({ by: adm ? 'admin' : 'user', name: myName(), text: String(text).slice(0, 1000), at: now }, extra || {}));
+                const patch = { thread: th, lastAt: now, lastBy: adm ? 'admin' : 'user' };
+                if (adm && k === 'comments') { patch.reply = String(text).slice(0, 1000); patch.repliedAt = now; patch.repliedBy = me(); }
+                if (extra && extra.patch) { Object.assign(patch, extra.patch); delete th[th.length - 1].patch; }
+                const F = FS(); if (!F) throw new Error('Firebase নেই');
+                await F.updateDoc(F.doc(window._firestoreDb, k, id), patch);
+                Object.assign(it, patch);
+                if (adm) window.mfInboxSend({ to: it.email, type: 'reply', title: (extra && extra.title) || ('💬 ' + itemLabel(k, it) + ' — অ্যাডমিনের বার্তা'), body: String(text).slice(0, 200), ref: k + ':' + id, tab: 'users' });
+                else window.mfInboxSend({ to: 'admin', type: 'reply', title: '💬 ' + myName() + ' — নতুন বার্তা (' + itemLabel(k, it) + ')', body: String(text).slice(0, 200), ref: k + ':' + id, tab: 'users' });
+            };
+            window.mfSetStatus = async (k, id, status, note) => {
+                const it = listOf(k).find(x => x.id === id); if (!it || !isAdm()) return;
+                const now = new Date().toISOString(), lbl = ST[status][0], th = seedThread(k, it);
+                if (status !== 'seen' || note) th.push({ by: 'admin', name: myName(), text: '[' + lbl + ']' + (note ? ' ' + note : ''), at: now, kind: 'status', status });
+                const patch = { status, respondedAt: now, respondedBy: me(), statusNote: note || '', thread: th, lastAt: now, lastBy: 'admin' };
+                const F = FS(); if (!F) throw new Error('Firebase নেই');
+                await F.updateDoc(F.doc(window._firestoreDb, k, id), patch);
+                Object.assign(it, patch);
+                window.mfInboxSend({ to: it.email, type: 'status', title: itemLabel(k, it) + ' — ' + lbl, body: note || '', ref: k + ':' + id, tab: 'users' });
+            };
+            const CANNED = ['আপনার অনুরোধটি পেয়েছি, দেখছি।', 'এন্ট্রিটি সংশোধন করা হয়েছে।', 'অনুগ্রহ করে মোবাইল নম্বরসহ আরও তথ্য দিন।', 'ধন্যবাদ, বিষয়টি সমাধান হয়েছে।'];
+            window.mfConvOpen = (k, id) => {
+                const it = listOf(k).find(x => x.id === id); if (!it) { toast('পাওয়া যায়নি'); return; }
+                const adm = isAdm();
+                if (adm && k === 'requests' && (it.status || 'pending') === 'pending') { window.mfSetStatus(k, id, 'seen').then(rerender).catch(() => { }); }
+                const bubbles = () => { const cur = listOf(k).find(x => x.id === id) || it; return convOf(k, cur).map(m => { const mine = (m.by === 'admin') === adm; const st = m.kind === 'status'; return `<div style="display:flex;justify-content:${st ? 'center' : (mine ? 'flex-end' : 'flex-start')};margin:6px 0;"><div style="max-width:82%;padding:7px 11px;border-radius:12px;${st ? 'background:#eee;font-size:12px;' : (mine ? 'background:#dcf8c6;' : 'background:#fff;border:1px solid #ddd;')}"><div class="small muted" style="font-size:10.5px;">${m.by === 'admin' ? '👑 ' : ''}${esc(m.name || '')} · ${esc(ago(m.at))}</div><div style="white-space:pre-line;">${esc(m.text)}</div></div></div>`; }).join(''); };
+                const head = () => { const cur = listOf(k).find(x => x.id === id) || it; return `<div style="display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap;"><strong>${esc(itemLabel(k, cur))}</strong>${k === 'requests' ? window.mfStatusChip(cur) : ''}</div><div class="small muted">${esc(cur.displayName || '')} · ${esc(cur.email || '')} · ${esc(fmtDate(cur.createdAt))}</div>`; };
+                const admBar = (adm && k === 'requests') ? `<div style="display:flex;gap:6px;flex-wrap:wrap;margin:8px 0;"><button type="button" class="btn btn-outline btn-sm" data-cv-st="processing">⏳ প্রক্রিয়াধীন</button><button type="button" class="btn btn-success btn-sm" data-cv-st="approved">✅ সম্পন্ন</button><button type="button" class="btn btn-danger btn-sm" data-cv-st="denied">❌ বাতিল (কারণসহ)</button></div>` : '';
+                const canned = adm ? `<div style="display:flex;gap:5px;flex-wrap:wrap;margin:6px 0;">${CANNED.map((c, i) => `<button type="button" class="btn btn-outline btn-sm" data-cv-can="${i}" style="font-size:11px;">${esc(c.slice(0, 22))}…</button>`).join('')}</div>` : '';
+                openModal(`<h3 style="margin:0 0 6px;">💬 কথোপকথন</h3><div id="mf-cv-head">${head()}</div>${admBar}<div id="mf-conv-body" style="max-height:44vh;overflow:auto;background:#f4f4f0;padding:8px;border-radius:8px;margin:8px 0;">${bubbles()}</div>${canned}<textarea id="mf-cv-text" rows="2" placeholder="বার্তা লিখুন..." style="width:100%;"></textarea><div style="display:flex;justify-content:space-between;margin-top:8px;"><button type="button" class="btn btn-outline" id="mf-cv-close">বন্ধ করুন</button><button type="button" class="btn btn-primary" id="mf-cv-send">📤 পাঠান</button></div>`, (m) => {
+                    const root = (m && m.querySelector) ? m : document, $ = s => root.querySelector(s) || document.querySelector(s);
+                    const paint = () => { const b = $('#mf-conv-body'); if (!b) return false; const sig = JSON.stringify((listOf(k).find(x => x.id === id) || {}).thread || []) + ((listOf(k).find(x => x.id === id) || {}).status || ''); if (sig !== paint.sig) { paint.sig = sig; b.innerHTML = bubbles(); $('#mf-cv-head').innerHTML = head(); b.scrollTop = b.scrollHeight; } return true; };
+                    paint.sig = ''; paint(); markSeen(k, it); setTimeout(rerender, 50);
+                    const iv = setInterval(() => { if (!paint()) clearInterval(iv); else markSeen(k, listOf(k).find(x => x.id === id) || it); }, 1500);
+                    $('#mf-cv-close').onclick = () => { clearInterval(iv); closeModal(); rerender(); };
+                    const send = async (text) => { text = String(text || '').trim(); if (!text) { toast('বার্তা লিখুন'); return; } try { await window.mfThreadAdd(k, id, text); $('#mf-cv-text').value = ''; paint(); toast('✅ পাঠানো হয়েছে'); } catch (e) { toast('❌ পাঠানো যায়নি — ' + (e.message || e)); } };
+                    $('#mf-cv-send').onclick = () => send($('#mf-cv-text').value);
+                    root.querySelectorAll('[data-cv-can]').forEach(b => b.onclick = () => { $('#mf-cv-text').value = CANNED[+b.getAttribute('data-cv-can')]; });
+                    root.querySelectorAll('[data-cv-st]').forEach(b => b.onclick = async () => {
+                        const st = b.getAttribute('data-cv-st'); let note = $('#mf-cv-text').value.trim();
+                        if (st === 'denied' && !note) { toast('বাতিলের কারণ নিচের ঘরে লিখুন'); return; }
+                        try { await window.mfSetStatus(k, id, st, note); $('#mf-cv-text').value = ''; paint(); rerender(); toast('✅ অবস্থা হালনাগাদ'); } catch (e) { toast('❌ ' + (e.message || e)); }
+                    });
+                });
+            };
+            document.addEventListener('click', ev => { const b = ev.target.closest && ev.target.closest('[data-conv]'); if (!b) return; const [k, id] = b.getAttribute('data-conv').split(':'); window.mfConvOpen(k, id); });
+
+            // ---------- ৪) মেনুর লাল "নতুন" সংখ্যা (এন্ট্রির আঙুলের ছাপ ধরে, ডিভাইস-ভিত্তিক) ----------
+            const NB = () => 'mf_nb_v1_' + PANEL + '_' + me();
+            const h32 = s => { let h = 5381; for (let i = 0; i < s.length; i++) h = ((h << 5) + h + s.charCodeAt(i)) | 0; return (h >>> 0).toString(36); };
+            const fpOf = (key) => {
+                const my = me(), out = [];
+                const amt = r => Number(r && r.amount) || 0;
+                const own = r => r && lc(r.addedByEmail) === my;
+                const add = (id, extra) => out.push(h32(String(id) + ':' + extra));
+                const S = (typeof state !== 'undefined' && state) || {};
+                if (key === 'monthly') (S.monthly || []).forEach(r => { if (r && amt(r) > 0 && !own(r)) add(r.id, amt(r)); });
+                else if (key === 'yearly') (S.yearly || []).forEach(r => { if (r && !own(r)) add(r.id, amt(r)); });
+                else if (key === 'expenses') (S.expenses || []).forEach(r => { if (r && !own(r)) add(r.id, amt(r)); });
+                else if (key === 'members') (S.members || []).forEach(m => { if (m) add(m.id, (m.name || '') + (m.idNumber || '')); });
+                else if (key === 'announcements') (S.announcements || []).forEach(a => { if (a) add(a.id, (a.title || '') + (a.createdAt || '')); });
+                else if (key === 'donations') {
+                    let mm = null; try { mm = (typeof findMyMemberRecord === 'function') ? findMyMemberRecord() : null; } catch (e) { }
+                    if (mm) { (S.monthly || []).forEach(r => { if (r && r.memberId === mm.id && amt(r) > 0 && !own(r)) add(r.id, amt(r)); }); (S.yearly || []).forEach(r => { if (r && r.memberId === mm.id && !own(r)) add(r.id, amt(r)); }); }
+                }
+                return out;
+            };
+            const NBK = ['monthly', 'yearly', 'expenses', 'members', 'announcements', 'donations'];
+            let _nbSeen = null;
+            const nbLoad = () => { if (_nbSeen) return _nbSeen; try { _nbSeen = JSON.parse(ls.g(NB(), 'null')); } catch (e) { _nbSeen = null; } return _nbSeen; };
+            const dataReady = () => { try { return ((state.members || []).length + (state.monthly || []).length + (state.yearly || []).length) > 0; } catch (e) { return false; } };
+            const nbSave = () => ls.s(NB(), JSON.stringify(_nbSeen));
+            const nbEnsure = () => {
+                if (!me() || !dataReady()) return false;
+                if (!nbLoad()) { _nbSeen = {}; NBK.forEach(k => { _nbSeen[k] = fpOf(k); }); nbSave(); }
+                return true;
+            };
+            window.mfNewCount = (key) => {
+                try {
+                    if (NBK.indexOf(key) < 0 || !nbEnsure()) return 0;
+                    const seen = new Set(_nbSeen[key] || []); let n = 0; fpOf(key).forEach(f => { if (!seen.has(f)) n++; }); return n;
+                } catch (e) { return 0; }
+            };
+            window.mfNewMark = (key) => { try { if (NBK.indexOf(key) < 0 || !nbEnsure()) return; _nbSeen[key] = fpOf(key); nbSave(); } catch (e) { } };
+            window.mfNewTotal = () => { let n = 0; NBK.forEach(k => { n += window.mfNewCount(k); }); return n; };
+            window.mfNewBadge = (key, cls) => { const n = window.mfNewCount(key); return n > 0 ? `<span class="${cls || 'notice-count-badge'} mf-newb" style="background:#d32f2f;color:#fff;">${bn(n > 99 ? 99 : n)}${n > 99 ? '+' : ''}</span>` : ''; };
+
+            // ---------- ৫) "পাঠানো" চিহ্ন: sent_marks ----------
+            let _smUnsub = null, _smCache = {}, _smSaveT = null;
+            const rnoW = () => { if (!state.settings) state.settings = {}; const m = state.settings.receiptNoMap = (state.settings.receiptNoMap && typeof state.settings.receiptNoMap === 'object') ? state.settings.receiptNoMap : {}; if (!m.notified || typeof m.notified !== 'object') m.notified = {}; return m; };
+            const viasOf = (nt) => (nt && Array.isArray(nt.vias) && nt.vias.length) ? nt.vias : String((nt && nt.via) || '').split(/\s*,\s*/).filter(Boolean);
+            window.mfSentApply = () => {
+                try {
+                    const ids = Object.keys(_smCache); if (!ids.length) return false;
+                    const m = rnoW(); let ch = false;
+                    ids.forEach(id => { const c = _smCache[id], old = viasOf(m.notified[id]); const add = (c.vias || []).filter(v => old.indexOf(v) < 0); if (!add.length && m.notified[id]) return; const vs = old.concat(add); m.notified[id] = { via: vs.join(', '), vias: vs, at: (m.notified[id] && m.notified[id].at) || c.at || new Date().toISOString() }; ch = true; });
+                    if (ch && isAdm()) { clearTimeout(_smSaveT); _smSaveT = setTimeout(() => { try { saveState(); } catch (e) { } }, 1500); }
+                    return ch;
+                } catch (e) { return false; }
+            };
+            window.mfSentPublish = async (ids, via) => {
+                try {
+                    const F = FS(); if (!F || !me() || isAdm()) return;
+                    const m = rnoW(), upd = {};
+                    (Array.isArray(ids) ? ids : [ids]).forEach(id => { if (!id) return; const vs = viasOf(m.notified[id]); if (vs.indexOf(via) < 0) vs.push(via); upd[id] = { vias: vs, at: new Date().toISOString() }; _smCache[id] = upd[id]; });
+                    if (!Object.keys(upd).length) return;
+                    await F.setDoc(F.doc(window._firestoreDb, 'sent_marks', me()), { m: upd, email: me(), updatedAt: new Date().toISOString() }, { merge: true });
+                } catch (e) { console.error('sent_marks', e); }
+            };
+            window.mfSentStart = () => {
+                try {
+                    const F = FS(); if (_smUnsub || !F || !me()) return;
+                    _smUnsub = F.onSnapshot(F.collection(window._firestoreDb, 'sent_marks'), snap => {
+                        const c = {}; snap.forEach(d => { const mm = (d.data() || {}).m || {}; Object.keys(mm).forEach(id => { const o = c[id] || { vias: [], at: mm[id].at }; (mm[id].vias || []).forEach(v => { if (o.vias.indexOf(v) < 0) o.vias.push(v); }); c[id] = o; }); });
+                        _smCache = c; if (window.mfSentApply()) { try { renderMain(); } catch (e) { } }
+                    }, () => { });
+                } catch (e) { }
+            };
+
+            // ---------- ৬) এন্ট্রি-সারাংশ → এডমিনের ইনবক্সে ----------
+            window.mfEntrySummary = (ops, okMsg) => {
+                try {
+                    if (isAdm() || !me()) return;
+                    let n = 0, total = 0, names = [], kinds = {};
+                    const take = (k, arr) => (arr || []).forEach(it => { if (!it) return; const a = Number(it.amount) || 0; if ((k === 'monthly' || k === 'yearly' || k === 'expenses') && a > 0) { n++; total += a; kinds[k] = (kinds[k] || 0) + 1; } else if (k !== 'monthly' && k !== 'yearly' && k !== 'expenses') { n++; kinds[k] = (kinds[k] || 0) + 1; } });
+                    Object.keys(ops.append || {}).forEach(k => take(k, ops.append[k])); Object.keys(ops.upsert || {}).forEach(k => take(k, ops.upsert[k]));
+                    (ops.log || []).slice(0, 6).forEach(l => { const t = l && (l.desc || l.description || l.text); if (t) names.push('• ' + String(t).slice(0, 110)); });
+                    if (!n && !names.length) return;
+                    const KN = { monthly: 'মাসিক', yearly: 'এককালীন', expenses: 'ব্যয়', notices: 'নোটিশ', announcements: 'ঘোষণা' };
+                    const kt = Object.keys(kinds).map(k => (KN[k] || k) + ' ' + bn(kinds[k]) + 'টি').join(', ');
+                    window.mfInboxSend({ to: 'admin', type: 'entry', title: '💰 ' + myName() + ' — ' + bn(n || names.length) + 'টি এন্ট্রি' + (total ? ' · মোট ' + fmtMoney(total) : ''), body: (kt ? kt + '\n' : '') + names.join('\n'), tab: 'monthly' });
+                } catch (e) { }
+            };
+
+            document.addEventListener('click', ev => { if (ev.target.closest && ev.target.closest('[data-ibx-open]')) window.mfInboxOpen(); });
+
+            // ---------- শুরু ----------
+            window.mfV117Start = () => { try { window.mfInboxStart(); window.mfSentStart(); } catch (e) { } };
+            setTimeout(() => { if (window.currentUser) window.mfV117Start(); }, 2500);
+            setInterval(() => { if (window.currentUser && !_ibxUnsub) window.mfV117Start(); }, 5000);
+        })();
+
         window.mfNotifyAdd = (ids, via) => { (Array.isArray(ids) ? ids : [ids]).forEach(id => { if (id) notifyAdd(id, via); }); try { renderMain(); } catch (e) { } };
         const notifyClear = (entryId) => { const m = rnoMapW(); if (m.notified) delete m.notified[entryId]; try { saveState(); } catch (e) { } };
         window.mfRnoGroupBegin = () => { window.mfRnoGroup = { no: null, ids: [] }; return window.mfRnoGroup; };
@@ -16424,7 +16735,7 @@ body.dark-mode .btn-outline{border-color:var(--gold-300)!important;color:var(--g
                     </div>
                   </div>
                   <div class="hub-card"><div class="small muted" style="font-weight:700;margin-bottom:6px;">${ic('list', 15)}এ পর্যন্ত জারি</div>
-                    ${series.length ? series.slice(-12).map(x => `<div style="font-size:13px;">${escapeHtml(x.k.replace('|', ' · ') || '—')}: শেষ নম্বর <b>${escapeHtml(String(x.n))}</b></div>`).join('') + `<div class="small muted" style="margin-top:4px;">মোট জারি: ${Object.keys(mp.assigned).length}টি রিসিপ্ট নম্বর। সব দেখতে "৯. রিসিপ্ট রেজিস্টার"।</div>` : '<div class="small muted">এখনও কোনো ক্রমিক নম্বর জারি হয়নি।</div>'}</div>`;
+                    ${series.length ? series.slice(-12).map(x => `<div style="font-size:13px;">${escapeHtml(x.k.replace('|', ' · ') || '—')}: শেষ নম্বর <b>${escapeHtml(String(x.n))}</b></div>`).join('') + `<div class="small muted" style="margin-top:4px;">মোট জারি: ${toBengaliNum(Object.keys(mp.assigned).length)}টি রিসিপ্ট নম্বর। সব দেখতে "৯. রিসিপ্ট রেজিস্টার"।</div>` : '<div class="small muted">এখনও কোনো ক্রমিক নম্বর জারি হয়নি।</div>'}</div>`;
                 mfDeEmoji(R.rno);
                 const q = (id) => R.rno.querySelector('#' + id);
                 const draft = () => {
@@ -17315,7 +17626,7 @@ body.dark-mode .btn-outline{border-color:var(--gold-300)!important;color:var(--g
             </div>
             `}
             <div class="pill active" style="font-size:12.5px;padding:7px 14px;margin-bottom:0;display:inline-block;">
-              মোট: ${totalM} জন · সক্রিয়: ${activeM} জন · দেখানো: ${filtered.length} জন
+              মোট: ${totalM} জন · সক্রিয়: ${activeM} জন · দেখানো: ${toBengaliNum(filtered.length)} জন
             </div>
             <div class="no-print" style="display:flex;justify-content:flex-end;gap:8px;margin-top:8px;margin-bottom:0;flex-wrap:wrap;">${columnSettingsButtonHtml('members')}<button class="btn btn-outline btn-sm" id="btn-members-list-jpg" title="বর্তমানে দেখানো (সার্চ/ফিল্টার করা) সদস্য তালিকা JPG করুন">🖼️ তালিকা JPG</button><button class="btn btn-outline btn-sm" id="btn-members-list-print" title="বর্তমানে দেখানো সদস্য তালিকা প্রিন্ট করুন">🖨️ তালিকা প্রিন্ট</button>${exportSettingsButtonHtml('members-list')}</div>
             </div>
@@ -17825,7 +18136,7 @@ body.dark-mode .btn-outline{border-color:var(--gold-300)!important;color:var(--g
             ];
             downloadStyledExcel(aoa, {
                 sheetName: 'নির্বাচিত সদস্যবৃন্দ',
-                fileName: `নির্বাচিত-সদস্যবৃন্দ-${members.length}জন-${dateStr}.xlsx`,
+                fileName: `নির্বাচিত-সদস্যবৃন্দ-${toBengaliNum(members.length)}জন-${dateStr}.xlsx`,
                 colWidths: [{ wch: 6 }, { wch: 24 }, { wch: 26 }, { wch: 16 }, { wch: 16 }, { wch: 12 }],
                 dataRowCount: members.length,
                 hasTotalRow: false
@@ -17995,7 +18306,7 @@ body.dark-mode .btn-outline{border-color:var(--gold-300)!important;color:var(--g
                     <div class="em-name">${escapeHtml(s.name)}</div>
                     <div class="em-sub">${escapeHtml(s.address)}</div>
                     <div class="em-sub">${escapeHtml(s.contact)}</div>
-                    <div class="em-footer">✅ নির্বাচিত সদস্যবৃন্দ (${members.length} জন) &nbsp;•&nbsp; এক্সপোর্ট: ${time}</div>
+                    <div class="em-footer">✅ নির্বাচিত সদস্যবৃন্দ (${toBengaliNum(members.length)} জন) &nbsp;•&nbsp; এক্সপোর্ট: ${time}</div>
                   </div>
                 </div>
                 <div class="export-main">${selectedMembersTableHtml(members)}${exportGrandTotalHtml('selected-members', members)}</div>
@@ -18006,7 +18317,7 @@ body.dark-mode .btn-outline{border-color:var(--gold-300)!important;color:var(--g
                 const dd = String(now.getDate()).padStart(2, '0');
                 const mm = String(now.getMonth() + 1).padStart(2, '0');
                 const yyyy = now.getFullYear();
-                link.download = sanitizeFileName(`নির্বাচিত-সদস্যবৃন্দ-${members.length}জন-${dd}-${mm}-${yyyy}`) + '.jpg';
+                link.download = sanitizeFileName(`নির্বাচিত-সদস্যবৃন্দ-${toBengaliNum(members.length)}জন-${dd}-${mm}-${yyyy}`) + '.jpg';
                 link.href = canvas.toDataURL('image/jpeg', 0.95);
                 link.click();
                 toast('নির্বাচিত সদস্যদের জেপিজি ডাউনলোড হয়েছে');
@@ -18039,7 +18350,7 @@ body.dark-mode .btn-outline{border-color:var(--gold-300)!important;color:var(--g
                   <div class="em-sub">${escapeHtml(s.contact)}</div>
                 </div>
               </div>
-              <h2 style="font-family:var(--font-display);margin:0 0 12px;">নির্বাচিত সদস্যবৃন্দ (${members.length} জন)</h2>
+              <h2 style="font-family:var(--font-display);margin:0 0 12px;">নির্বাচিত সদস্যবৃন্দ (${toBengaliNum(members.length)} জন)</h2>
               ${selectedMembersTableHtml(members)}${exportGrandTotalHtml('selected-members', members)}
             `;
             document.body.appendChild(area);
@@ -18096,7 +18407,7 @@ body.dark-mode .btn-outline{border-color:var(--gold-300)!important;color:var(--g
                     <div class="em-name">${escapeHtml(s.name)}</div>
                     <div class="em-sub">${escapeHtml(s.address)}</div>
                     <div class="em-sub">${escapeHtml(s.contact)}</div>
-                    <div class="em-footer">📋 সদস্য তালিকা (${members.length} জন) &nbsp;•&nbsp; এক্সপোর্ট: ${time}</div>
+                    <div class="em-footer">📋 সদস্য তালিকা (${toBengaliNum(members.length)} জন) &nbsp;•&nbsp; এক্সপোর্ট: ${time}</div>
                   </div>
                 </div>
                 <div class="export-main">${selectedMembersTableHtml(members, 'members-list')}${exportGrandTotalHtml('members-list', members)}</div>
@@ -18107,7 +18418,7 @@ body.dark-mode .btn-outline{border-color:var(--gold-300)!important;color:var(--g
                 const dd = String(now.getDate()).padStart(2, '0');
                 const mm = String(now.getMonth() + 1).padStart(2, '0');
                 const yyyy = now.getFullYear();
-                link.download = sanitizeFileName(`সদস্য-তালিকা-${members.length}জন-${dd}-${mm}-${yyyy}`) + '.jpg';
+                link.download = sanitizeFileName(`সদস্য-তালিকা-${toBengaliNum(members.length)}জন-${dd}-${mm}-${yyyy}`) + '.jpg';
                 link.href = canvas.toDataURL('image/jpeg', 0.95);
                 link.click();
                 toast('সদস্য তালিকার জেপিজি ডাউনলোড হয়েছে');
@@ -18139,7 +18450,7 @@ body.dark-mode .btn-outline{border-color:var(--gold-300)!important;color:var(--g
                   <div class="em-sub">${escapeHtml(s.contact)}</div>
                 </div>
               </div>
-              <h2 style="font-family:var(--font-display);margin:0 0 12px;">📋 সদস্য তালিকা (${members.length} জন)</h2>
+              <h2 style="font-family:var(--font-display);margin:0 0 12px;">📋 সদস্য তালিকা (${toBengaliNum(members.length)} জন)</h2>
               ${selectedMembersTableHtml(members, 'members-list')}${exportGrandTotalHtml('members-list', members)}
             `;
             document.body.appendChild(area);
@@ -18237,12 +18548,12 @@ body.dark-mode .btn-outline{border-color:var(--gold-300)!important;color:var(--g
               ${exportDue > 0 ? `<div style="margin-bottom:18px;font-size:12.5px;color:var(--maroon-600);font-weight:700;">🔴 বকেয়া: ${fmtMoney(exportDue)} <span class="muted" style="font-weight:400;">(সর্বমোট অনুদানে যোগ করা হয়নি)</span></div>` : ''}
 
               <div style="margin-bottom:18px;">
-                <strong style="font-size:13.5px;color:var(--emerald-900);">📅 মাসিক অনুদান (${monthly.length} টি)</strong>
-                ${monthly.length ? `<div style="border:1px solid var(--line);border-radius:8px;overflow:hidden;margin-top:7px;"><table style="width:100%;border-collapse:collapse;font-size:12px;"><thead><tr><th style="${thMonth}">মাস</th><th style="${thN}">পরিমাণ</th><th style="${th}">মেথড</th><th style="${th}">সংগ্রাহক</th></tr></thead><tbody>${monthly.map((r,i)=>`<tr style="${rowBg(i)}"><td style="${tdMonth}">${escapeHtml(r.month)}</td><td style="${tdAmount}">${fmtMoney(r.amount)}</td><td style="${tdMethod}">${methodBadge(r.method)}</td><td style="${tdCollector}">${escapeHtml(r.collector||'—')}</td></tr>`).join('')}</tbody><tfoot><tr style="background:var(--gold-100);"><td style="${tdBase}font-weight:800;color:var(--emerald-900);" colspan="1">মোট</td><td style="${tdBase}text-align:right;font-weight:800;color:var(--emerald-900);font-size:13.5px;">${fmtMoney(monthlyTotal)}</td><td style="${tdBase}" colspan="2"></td></tr></tfoot></table></div>` : '<div class="small muted" style="margin-top:6px;">কোনো মাসিক অনুদান নেই।</div>'}
+                <strong style="font-size:13.5px;color:var(--emerald-900);">📅 মাসিক অনুদান (${toBengaliNum(monthly.length)} টি)</strong>
+                ${monthly.length ? `<div style="border:1px solid var(--line);border-radius:8px;overflow:hidden;margin-top:7px;"><table style="width:100%;border-collapse:collapse;font-size:12px;"><thead><tr><th style="${thMonth}">মাস</th><th style="${thN}">পরিমাণ</th><th style="${th}">মেথড</th><th style="${th}">সংগ্রাহক</th></tr></thead><tbody>${monthly.map((r,i)=>`<tr style="${rowBg(i)}"><td style="${tdMonth}">${escapeHtml(txnMonthLabel(r.month))}</td><td style="${tdAmount}">${fmtMoney(r.amount)}</td><td style="${tdMethod}">${methodBadge(r.method)}</td><td style="${tdCollector}">${escapeHtml(r.collector||'—')}</td></tr>`).join('')}</tbody><tfoot><tr style="background:var(--gold-100);"><td style="${tdBase}font-weight:800;color:var(--emerald-900);" colspan="1">মোট</td><td style="${tdBase}text-align:right;font-weight:800;color:var(--emerald-900);font-size:13.5px;">${fmtMoney(monthlyTotal)}</td><td style="${tdBase}" colspan="2"></td></tr></tfoot></table></div>` : '<div class="small muted" style="margin-top:6px;">কোনো মাসিক অনুদান নেই।</div>'}
               </div>
 
               <div>
-                <strong style="font-size:13.5px;color:var(--emerald-900);">🗓️ বার্ষিক অনুদান (${yearly.length} টি)</strong>
+                <strong style="font-size:13.5px;color:var(--emerald-900);">🗓️ বার্ষিক অনুদান (${toBengaliNum(yearly.length)} টি)</strong>
                 ${yearly.length ? `<div style="border:1px solid var(--line);border-radius:8px;overflow:hidden;margin-top:7px;"><table style="width:100%;border-collapse:collapse;font-size:12px;"><thead><tr><th style="${thDate}">তারিখ</th><th style="${thN}">পরিমাণ</th><th style="${th}">মেথড</th><th style="${th}">সংগ্রাহক</th><th style="${th}">মন্তব্য</th></tr></thead><tbody>${yearly.map((r,i)=>`<tr style="${rowBg(i)}"><td style="${tdDate}">${fmtDate(r.date)}</td><td style="${tdAmount}">${fmtMoney(r.amount)}</td><td style="${tdMethod}">${methodBadge(r.method)}</td><td style="${tdCollector}">${escapeHtml(r.collector||'—')}</td><td style="${tdBase}color:var(--ink);">${escapeHtml(r.remarks||'—')}</td></tr>`).join('')}</tbody><tfoot><tr style="background:var(--gold-100);"><td style="${tdBase}font-weight:800;color:var(--emerald-900);">মোট</td><td style="${tdBase}text-align:right;font-weight:800;color:var(--emerald-900);font-size:13.5px;">${fmtMoney(yearlyTotal)}</td><td style="${tdBase}" colspan="3"></td></tr></tfoot></table></div>` : '<div class="small muted" style="margin-top:6px;">কোনো বার্ষিক অনুদান নেই।</div>'}
               </div>
             `;
@@ -18353,7 +18664,7 @@ body.dark-mode .btn-outline{border-color:var(--gold-300)!important;color:var(--g
             return `<table style="min-width:0;" data-mf-tid="${escapeHtml(tableId)}"><thead><tr>${theadHtml}</tr></thead><tbody>${bodyHtml}</tbody></table>`;
         };
         window.MEMBER_DETAILS_MONTHLY_CELLS = {
-            month: { label: 'মাস', td: (r) => `<td>${escapeHtml(r.month)}</td>` },
+            month: { label: 'মাস', td: (r) => `<td>${escapeHtml(txnMonthLabel(r.month))}</td>` },
             amount: { label: 'পরিমাণ', thClass: 'num', td: (r) => `<td class="num">${fmtMoney(r.amount)}</td>` },
             method: { label: 'মেথড', td: (r) => `<td class="muted">${escapeHtml(r.method)}${window.mfSentTag ? window.mfSentTag(r) : ''}</td>` },
             rno: { label: 'রিসিপ্ট নং', td: (r) => window.mfRno.cell(r) },
@@ -18587,14 +18898,14 @@ body.dark-mode .btn-outline{border-color:var(--gold-300)!important;color:var(--g
             </div>
             <div style="margin-bottom:12px;">
               <div class="no-print" style="display:flex;justify-content:space-between;align-items:center;">
-                <strong>মাসিক অনুদান (${monthly.length} টি)</strong>
+                <strong>মাসিক অনুদান (${toBengaliNum(monthly.length)} টি)</strong>
                 <button class="btn btn-outline btn-sm no-print" id="btn-col-settings-member-details-monthly" title="কলাম দেখাও/লুকাও, নাম বদলাও (বার্ষিক টেবিলের সাথে শেয়ার্ড)">⚙️</button>
               </div>
               ${monthly.length ? `<div class="table-wrap" style="border:none;max-height:280px;overflow-y:auto;">${memberDetailsSubTableHtml('member-details-monthly-yearly', window.MEMBER_DETAILS_MONTHLY_YEARLY_DEFAULT_COLUMNS, window.MEMBER_DETAILS_MONTHLY_CELLS, monthly, monthlyActionsHtml)}</div>` : '<div class="small muted">কোনো মাসিক অনুদান নেই।</div>'}
             </div>
             <div style="margin-bottom:12px;">
               <div class="no-print" style="display:flex;justify-content:space-between;align-items:center;">
-                <strong>বার্ষিক অনুদান (${yearly.length} টি)</strong>
+                <strong>বার্ষিক অনুদান (${toBengaliNum(yearly.length)} টি)</strong>
                 <button class="btn btn-outline btn-sm no-print" id="btn-col-settings-member-details-yearly" title="কলাম দেখাও/লুকাও, নাম বদলাও (মাসিক টেবিলের সাথে শেয়ার্ড)">⚙️</button>
               </div>
               ${yearly.length ? `<div class="table-wrap" style="border:none;max-height:280px;overflow-y:auto;">${memberDetailsSubTableHtml('member-details-monthly-yearly', window.MEMBER_DETAILS_MONTHLY_YEARLY_DEFAULT_COLUMNS, window.MEMBER_DETAILS_YEARLY_CELLS, yearly, yearlyActionsHtml)}</div>` : '<div class="small muted">কোনো বার্ষিক অনুদান নেই।</div>'}
@@ -18923,7 +19234,7 @@ body.dark-mode .btn-outline{border-color:var(--gold-300)!important;color:var(--g
                     mobile: `<td class="muted small">${m ? mobileLink(m.mobile) : ''}</td>`,
                     email: `<td class="muted small">${m ? escapeHtml(m.email || '—') : '—'}</td>`,
                     amount: `<td class="num">${fmtMoney(r.amount)}</td>`,
-                    month: `<td>${escapeHtml(r.month)}</td>`,
+                    month: `<td>${escapeHtml(txnMonthLabel(r.month))}</td>`,
                     date: `<td>${fmtDate(r.date)}</td>`,
                     method: `<td class="muted small">${escapeHtml(r.method)}${window.mfSentTag ? window.mfSentTag(r) : ''}</td>`,
                     rno: window.mfRno.cell(r, 'monthly'),
@@ -19005,7 +19316,7 @@ body.dark-mode .btn-outline{border-color:var(--gold-300)!important;color:var(--g
             }
 
             const overrideNotice = filtered ?
-                `<div class="filter-override-notice">🔍 <strong>ফিল্টার সক্রিয়:</strong> মাস নির্বাচন অগ্রাহ্য — ${fmtDate(range.start)} থেকে ${fmtDate(range.end)} পর্যন্ত <strong>সকল মাসের</strong> অনুদান দেখানো হচ্ছে। <span class="badge">${data.length} টি এন্ট্রি</span></div>` :
+                `<div class="filter-override-notice">🔍 <strong>ফিল্টার সক্রিয়:</strong> মাস নির্বাচন অগ্রাহ্য — ${fmtDate(range.start)} থেকে ${fmtDate(range.end)} পর্যন্ত <strong>সকল মাসের</strong> অনুদান দেখানো হচ্ছে। <span class="badge">${toBengaliNum(data.length)} টি এন্ট্রি</span></div>` :
                 '';
 
             return `
@@ -21090,7 +21401,7 @@ body.dark-mode .btn-outline{border-color:var(--gold-300)!important;color:var(--g
                   ${state.categories.map(c => `<option value="${c.id}" ${c.id === expenseFilterCat ? 'selected' : ''}>${escapeHtml(c.name)}</option>`).join('')}
                 </select>
                 ${amountSortBtnHtml('expenses', 'পরিমাণ')}
-                <span class="small muted">দেখানো: ${rows.length} টি</span>
+                <span class="small muted">দেখানো: ${toBengaliNum(rows.length)} টি</span>
               </div>
               <button class="btn btn-outline" id="btn-manage-cats">🏷️ ক্যাটাগরি পরিচালনা</button>
               ${dragResizeWrap('add-expense', withVisibility('btn-add-expense', `<button class="btn btn-primary" id="btn-add-expense">${editableLabel('btn:add-expense', getButtonLabel('add-expense'))}</button>`))}
@@ -21438,7 +21749,13 @@ body.dark-mode .btn-outline{border-color:var(--gold-300)!important;color:var(--g
         const impDry = (type, rows) => {
             const snap = JSON.stringify({ members: state.members, monthly: state.monthly, yearly: state.yearly, expenses: state.expenses });
             try { return IMP_RUN[type](rows); }
-            finally { const o = JSON.parse(snap); state.members = o.members; state.monthly = o.monthly; state.yearly = o.yearly; state.expenses = o.expenses; }
+            finally {
+                const o = JSON.parse(snap);
+                state.members = o.members;
+                state.monthly = o.monthly;
+                state.yearly = o.yearly;
+                state.expenses = o.expenses;
+            }
         };
         const impEsc = (s) => escapeHtml(String(s == null ? '' : s));
         const impCopyText = (type, fname, E, W) => 'ইমপোর্ট ত্রুটি — ' + IMP_META[type].label + ' — ফাইল: ' + fname + '\n' + E.map(x => 'সারি ' + x.row + (x.col ? ' · ' + x.col : '') + ': ' + x.msg).join('\n') + (W.length ? '\n\nসতর্কতা:\n' + W.map(x => 'সারি ' + x.row + ': ' + x.msg).join('\n') : '');
@@ -21620,7 +21937,7 @@ body.dark-mode .btn-outline{border-color:var(--gold-300)!important;color:var(--g
               ${searchBoxHtml('notice-search', 'শিরোনাম বা বিবরণে খুঁজুন...', noticeSearch, filtered.length)}
               ${dragResizeWrap('add-notice', withVisibility('btn-add-notice', `<button class="btn btn-primary" id="btn-add-notice">${editableLabel('btn:add-notice', getButtonLabel('add-notice'))}</button>`))}
             </div>
-            <div class="notice-toolbar-summary"><span class="count-pill">📬 মোট ${all.length} টি নোটিশ</span>${filtered.length !== all.length ? `<span class="muted small">(দেখানো ${filtered.length} টি)</span>` : ''}</div>
+            <div class="notice-toolbar-summary"><span class="count-pill">📬 মোট ${toBengaliNum(all.length)} টি নোটিশ</span>${filtered.length !== all.length ? `<span class="muted small">(দেখানো ${toBengaliNum(filtered.length)} টি)</span>` : ''}</div>
             <div class="notice-list">
               ${filtered.length ? filtered.map((n, idx) => {
                 const isOpen = openNoticeId === n.id;
@@ -21813,7 +22130,7 @@ body.dark-mode .btn-outline{border-color:var(--gold-300)!important;color:var(--g
               ${searchBoxHtml('announcement-search', 'শিরোনাম বা বিবরণে খুঁজুন...', announcementSearch, filtered.length)}
               ${dragResizeWrap('add-announcement', withVisibility('btn-add-announcement', `<button class="btn btn-primary" id="btn-add-announcement">${editableLabel('btn:add-announcement', getButtonLabel('add-announcement'))}</button>`))}
             </div>
-            <div class="notice-toolbar-summary"><span class="count-pill">📣 মোট ${all.length} টি ঘোষণা</span>${filtered.length !== all.length ? `<span class="muted small">(দেখানো ${filtered.length} টি)</span>` : ''}</div>
+            <div class="notice-toolbar-summary"><span class="count-pill">📣 মোট ${toBengaliNum(all.length)} টি ঘোষণা</span>${filtered.length !== all.length ? `<span class="muted small">(দেখানো ${toBengaliNum(filtered.length)} টি)</span>` : ''}</div>
             <div class="notice-list announcement-list">
               ${filtered.length ? filtered.map((n, idx) => {
                 const isOpen = openAnnouncementId === n.id;
@@ -22022,7 +22339,7 @@ body.dark-mode .btn-outline{border-color:var(--gold-300)!important;color:var(--g
                 </select>
               </div>
             </div>
-            <div class="notice-toolbar-summary"><span class="count-pill">📋 মোট ${total} টি লগ</span><button class="btn btn-outline btn-sm no-print" id="btn-unsent-list" title="গত ৪৫ দিনে চাঁদা নেওয়া হয়েছে কিন্তু বার্তা/রিসিপ্ট পাঠানো হয়নি এমন তালিকা">📤 পাঠানো বাকি</button>${logs.length !== total ? `<span class="muted small">(দেখানো ${logs.length} টি)</span>` : ''}${total > 0 ? `<button class="btn btn-outline btn-sm no-print" id="btn-clear-logs" style="margin-left:auto;">🗑 সকল লগ মুছুন</button>` : ''}</div>
+            <div class="notice-toolbar-summary"><span class="count-pill">📋 মোট ${total} টি লগ</span><button class="btn btn-outline btn-sm no-print" id="btn-unsent-list" title="গত ৪৫ দিনে চাঁদা নেওয়া হয়েছে কিন্তু বার্তা/রিসিপ্ট পাঠানো হয়নি এমন তালিকা">📤 পাঠানো বাকি</button>${logs.length !== total ? `<span class="muted small">(দেখানো ${toBengaliNum(logs.length)} টি)</span>` : ''}${total > 0 ? `<button class="btn btn-outline btn-sm no-print" id="btn-clear-logs" style="margin-left:auto;">🗑 সকল লগ মুছুন</button>` : ''}</div>
             <div class="log-list">
               ${logs.length ? logs.map(l => {
                 const _C = window.mfLog.card(l);
@@ -22232,6 +22549,21 @@ body.dark-mode .btn-outline{border-color:var(--gold-300)!important;color:var(--g
               <div class="small muted" id="drive-backup-status" style="margin-top:10px;">ফাইলের নামের সাথে তারিখ-সময় যোগ হয়, তাই পুরনো ব্যাকআপ কখনো ঢাকা পড়ে না।</div>
             </div>
             <div class="backup-card" style="min-width:0;overflow-wrap:anywhere;">
+              <h4>📚 লগ আর্কাইভ ও মেয়াদ</h4>
+              <p class="sub">পুরনো অ্যাক্টিভিটি লগ Drive-এর <b>"মাহফিল লগ আর্কাইভ"</b> ফোল্ডারে ফাইল হয়ে যায় (ফাইলের নামে কত তারিখ-সময় থেকে কত তারিখ-সময়); মূল ডক ছোট থাকে।</p>
+              <div style="display:flex;gap:10px;flex-wrap:wrap;align-items:center;">
+                <label class="small">লগ রাখার মেয়াদ (দিন, সর্বনিম্ন ৪৫) <input type="number" id="mf-la-days" min="45" max="3650" style="width:90px;"></label>
+                <label class="small">অ্যাপে সর্বোচ্চ লগ (টি) <input type="number" id="mf-la-cap" min="300" max="5000" style="width:90px;"></label>
+              </div>
+              <label class="small" style="display:flex;gap:8px;align-items:center;margin-top:8px;cursor:pointer;"><input type="checkbox" id="mf-la-auto"> 🔁 স্বয়ংক্রিয় আর্কাইভ (এডমিন অ্যাপ খুললে, সপ্তাহে একবার বা সীমা ছাড়ালে)</label>
+              <div class="btn-group" style="margin-top:8px;">
+                <button class="btn btn-primary" id="mf-la-now">📚 এখনই আর্কাইভ (প্রিভিউসহ)</button>
+                <button class="btn btn-outline" id="mf-la-list">📂 আর্কাইভ তালিকা ও দেখা</button>
+              </div>
+              <div class="small" id="mf-la-info" style="margin-top:10px;"></div>
+              <div class="small muted" id="mf-la-status" style="margin-top:6px;">Drive-এ জমা ও আকার-যাচাই না হলে কোনো লগ মোছা হয় না। (Apps Script v16.5.40 লাগবে)</div>
+            </div>
+            <div class="backup-card" style="min-width:0;overflow-wrap:anywhere;">
               <h4>🖼️ অন্যান্য ছবি আপলোড (Drive)</h4>
               <p class="sub">যেকোনো ছবি (একসাথে একাধিক) Drive-এর "অন্যান্য" ফোল্ডারে জমা হবে; লিংক কপি করে যেকোনো জায়গায় ব্যবহার করুন।</p>
               <div class="btn-group">
@@ -22330,7 +22662,7 @@ body.dark-mode .btn-outline{border-color:var(--gold-300)!important;color:var(--g
                         document.getElementById('lb-restore').onclick = () => {
                             const selectedKeys = Array.from(document.querySelectorAll('.lb-restore-chk:checked')).map(c => c.value);
                             if (!selectedKeys.length) { toast('❌ অন্তত একটি অংশ নির্বাচন করুন'); return; }
-                            confirmDelete(`নির্বাচিত ${selectedKeys.length} টি অংশ রিস্টোর করা হবে (বাকি অংশ অক্ষত থাকবে)। নিশ্চিত?`, () => {
+                            confirmDelete(`নির্বাচিত ${toBengaliNum(selectedKeys.length)} টি অংশ রিস্টোর করা হবে (বাকি অংশ অক্ষত থাকবে)। নিশ্চিত?`, () => {
                                 selectedKeys.forEach(k => { state[k] = data[k]; });
                                 saveState();
                                 addActivityLog('add', 'backup', '', `লোকাল ব্যাকআপ রিস্টোর (নির্বাচিত: ${selectedKeys.map(k => BACKUP_PART_LABELS[k] || k).join(', ')})`);
@@ -22425,7 +22757,167 @@ body.dark-mode .btn-outline{border-color:var(--gold-300)!important;color:var(--g
             setTimeout(maybe, 45000); setInterval(maybe, 30 * 60000);
             return { maybe, isOff, setOff, keepN };
         })();
+        // ======================================================================
+        //  🆕 [v16.5.118] লগ-আর্কাইভ: মেয়াদ-পেরোনো (বা সীমা-ছাড়ানো) অ্যাক্টিভিটি লগ Drive-এর "মাহফিল লগ আর্কাইভ" ফোল্ডারে (JSON+CSV)।
+        //  ফাইলের নামে কত তারিখ-সময় থেকে কত তারিখ-সময় আছে। Drive-এ সফল ও আকার-যাচাই (verified) না হলে মূল ডক থেকে কিছুই সরে না।
+        //  Apps Script v16.5.40 (log_archive_put/list/get) লাগবে। শুধু এডমিন।
+        // ======================================================================
+        window.mfLogArch = (() => {
+            const S = () => (state.settings = state.settings || {});
+            const keepDays = () => { const v = Math.round(Number(S().logKeepDays)); return v >= 45 && v <= 3650 ? v : 90; };
+            const capN = () => { const v = Math.round(Number(S().logKeepMax)); return v >= 300 && v <= 5000 ? v : 1000; };
+            const autoOn = () => S().logAutoArchive !== false;
+            const hardCap = () => capN() + 500;
+            const ts = l => Date.parse((l && l.timestamp) || '') || 0;
+            const bnd = n => { try { return toBengaliNum(n); } catch (e) { return String(n); } };
+            const dt = t => { try { return new Date(t).toLocaleString('bn-BD', { year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit' }); } catch (e) { return ''; } };
+            const urlOk = () => !!IMAGE_UPLOAD_SCRIPT_URL && IMAGE_UPLOAD_SCRIPT_URL.indexOf('PASTE_YOUR') !== 0;
+            let busy = false, nudgeT = null;
+            const csvCell = v => '"' + String(v == null ? '' : v).replace(/"/g, '""') + '"';
+            const toCsv = (arr) => ['সময়,ব্যবহারকারী,কাজ,ধরন,আইডি,বিবরণ'].concat(arr.map(l => [dt(ts(l)), l.user, l.action, l.targetType, l.targetId, l.description].map(csvCell).join(','))).join('\r\n');
+            const pick = () => {
+                const logs = (state.activityLog || []).filter(l => l && l.id);
+                const cutoff = Date.now() - keepDays() * 864e5;
+                const old = logs.filter(l => { const t = ts(l); return t && t < cutoff; });
+                const oldSet = new Set(old.map(l => l.id));
+                const rest = logs.filter(l => !oldSet.has(l.id));
+                let over = [];
+                if (rest.length > capN()) over = rest.slice().sort((a, b) => ts(a) - ts(b)).slice(0, rest.length - capN());
+                const all = old.concat(over).sort((a, b) => ts(a) - ts(b));
+                return { all, old: old.length, over: over.length };
+            };
+            // কাটার আগে "পাঠানো" তথ্য স্থায়ী জায়গায় (receiptNoMap.notified) তুলে রাখা — নইলে পুরনো এন্ট্রি আবার "পাঠানো বাকি" হয়ে যেত
+            const freeze = (logs) => {
+                try {
+                    const m = (state.settings && state.settings.receiptNoMap) || null; if (!m) return 0;
+                    const byNo = {}; Object.keys(m.assigned || {}).forEach(id => { const n = m.assigned[id]; (byNo[n] = byNo[n] || []).push(id); });
+                    const ids = [];
+                    logs.forEach(l => {
+                        if (!l || l.action !== 'email') return; const ex = l.extra || {}; let a = Array.isArray(ex.entryIds) ? ex.entryIds.slice() : [];
+                        if (ex.ref && byNo[ex.ref]) a = a.concat(byNo[ex.ref]);
+                        a.forEach(id => { if (id && !(m.notified && m.notified[id])) ids.push(id); });
+                    });
+                    const u = Array.from(new Set(ids));
+                    if (u.length && window.mfNotifyAdd) window.mfNotifyAdd(u, 'ইমেইল');
+                    return u.length;
+                } catch (e) { return 0; }
+            };
+            const chunk = (arr) => { const out = []; let cur = [], sz = 0; arr.forEach(l => { const s = JSON.stringify(l).length; if (cur.length && (sz + s > 2.5e6 || cur.length >= 4000)) { out.push(cur); cur = []; sz = 0; } cur.push(l); sz += s; }); if (cur.length) out.push(cur); return out; };
+            const doIt = async (c, silent) => {
+                busy = true; const done = [], files = [], st = document.getElementById('mf-la-status');
+                const say = (t) => { if (st) st.innerHTML = t; };
+                let err = null;
+                try {
+                    const chs = chunk(c.all);
+                    for (let i = 0; i < chs.length; i++) {
+                        say('⏳ Drive-এ আর্কাইভ হচ্ছে… (' + bnd(i + 1) + '/' + bnd(chs.length) + ')');
+                        const r = await driveCall({ action: 'log_archive_put', kind: 'activity', jsonText: JSON.stringify(chs[i]), csvText: toCsv(chs[i]) });
+                        if (!r.verified || Number(r.count) !== chs[i].length) throw new Error('Drive-এর যাচাই মেলেনি — কিছু মোছা হয়নি');
+                        chs[i].forEach(l => done.push(l.id)); files.push(r);
+                    }
+                } catch (e) { err = e; }
+                if (done.length) {
+                    const del = new Set(done), gone = (state.activityLog || []).filter(l => del.has(l.id));
+                    const frozen = freeze(gone);
+                    state.activityLog = (state.activityLog || []).filter(l => !del.has(l.id));
+                    S().logLastArchiveAt = new Date().toISOString();
+                    const fr = files.length ? files[0].from : '', to = files.length ? files[files.length - 1].to : '';
+                    addActivityLog('add', 'backup', '', 'লগ আর্কাইভ: ' + done.length + 'টি লগ Drive-এর "মাহফিল লগ আর্কাইভ" ফোল্ডারে জমা (' + dt(fr) + ' → ' + dt(to) + ') — ' + files.map(f => f.name).join(', '), { archived: done.length, frozen: frozen });
+                }
+                busy = false;
+                try { wireStatus(); } catch (e) { }
+                if (err) { say('❌ ' + escapeHtml(err.message || err) + (done.length ? ' (আংশিক: ' + bnd(done.length) + 'টি জমা হয়েছে)' : ' — কিছু মোছা হয়নি')); toast('❌ আর্কাইভ: ' + (err.message || err)); }
+                else { say('✅ ' + bnd(done.length) + 'টি লগ আর্কাইভ হয়েছে: <b>' + files.map(f => escapeHtml(f.name)).join('</b>, <b>') + '</b>'); toast('📚 ' + bnd(done.length) + 'টি পুরনো লগ Drive-এ আর্কাইভ হয়েছে'); }
+                try { renderMain(); } catch (e) { }
+            };
+            const run = (manual) => {
+                if (busy) { if (manual) toast('আরেকটি আর্কাইভ চলছে'); return; }
+                if (!(typeof isAdminUser === 'function' && isAdminUser())) return;
+                if (!urlOk()) { if (manual) toast('Apps Script URL সেট করা নেই'); return; }
+                const c = pick();
+                if (!c.all.length) { if (manual) toast('আর্কাইভ করার মতো পুরনো লগ নেই'); return; }
+                if (!manual) return doIt(c, true);
+                const a = c.all[0], b = c.all[c.all.length - 1];
+                openModal('<h3 style="margin:0 0 8px;">📚 লগ আর্কাইভ — প্রিভিউ</h3>'
+                    + '<div style="line-height:1.8;">আর্কাইভ হবে: <b>' + bnd(c.all.length) + 'টি</b> লগ<br>সময়সীমা: <b>' + escapeHtml(dt(ts(a))) + '</b> থেকে <b>' + escapeHtml(dt(ts(b))) + '</b> পর্যন্ত<br>'
+                    + '<span class="small muted">কারণ: মেয়াদ (' + bnd(keepDays()) + ' দিন) পেরিয়েছে ' + bnd(c.old) + 'টি' + (c.over ? ' · সীমা (' + bnd(capN()) + 'টি) ছাড়িয়েছে ' + bnd(c.over) + 'টি' : '') + '</span></div>'
+                    + '<div class="small muted" style="margin-top:8px;">Drive-এ জমা হয়ে আকার মিললে তবেই এই লগগুলো অ্যাপ থেকে সরবে। ফাইল: JSON + CSV, ফোল্ডার: মাহফিল লগ আর্কাইভ।</div>'
+                    + '<div style="display:flex;justify-content:flex-end;gap:8px;margin-top:12px;"><button type="button" class="btn btn-outline" id="la-no">বাতিল</button><button type="button" class="btn btn-primary" id="la-yes">📚 আর্কাইভ করুন</button></div>', () => {
+                    document.getElementById('la-no').onclick = closeModal;
+                    document.getElementById('la-yes').onclick = () => { closeModal(); doIt(c, false); };
+                });
+            };
+            const auto = () => {
+                try {
+                    if (busy || !autoOn() || !urlOk() || !(typeof isAdminUser === 'function' && isAdminUser()) || !state || !state.members || !state.members.length) return;
+                    const last = Number(localStorage.getItem('mf_larch_try') || 0); if (Date.now() - last < 3600000) return;
+                    const c = pick(); if (!c.all.length) return;
+                    const la = Date.parse(S().logLastArchiveAt || '') || 0;
+                    if (c.over > 0 || c.all.length >= 200 || Date.now() - la > 7 * 864e5) { localStorage.setItem('mf_larch_try', String(Date.now())); run(false); }
+                } catch (e) { }
+            };
+            const nudge = () => { try { if (!autoOn() || nudgeT || (state.activityLog || []).length <= capN() + 50) return; nudgeT = setTimeout(() => { nudgeT = null; auto(); }, 20000); } catch (e) { } };
+            setTimeout(auto, 70000); setInterval(auto, 6 * 3600000);
+
+            const wireStatus = () => {
+                const el = document.getElementById('mf-la-info'); if (!el) return;
+                const logs = state.activityLog || [], c = pick();
+                let oldest = 0; logs.forEach(l => { const t = ts(l); if (t && (!oldest || t < oldest)) oldest = t; });
+                const lb = (() => { try { return new TextEncoder().encode(JSON.stringify(logs)).length; } catch (e) { return 0; } })();
+                let tb = 0; try { const o = Object.assign({}, state); delete o.chat; tb = new TextEncoder().encode(JSON.stringify(o)).length; } catch (e) { }
+                const la = S().logLastArchiveAt;
+                el.innerHTML = '📋 বর্তমান লগ: <b>' + bnd(logs.length) + 'টি</b> (≈' + bnd(Math.round(lb / 1024)) + ' KB' + (tb ? ', মূল ডকের ' + bnd(Math.round(lb * 100 / tb)) + '%' : '') + ')'
+                    + (oldest ? ' · সবচেয়ে পুরনো: ' + escapeHtml(dt(oldest)) : '') + '<br>📚 এখন আর্কাইভ-যোগ্য: <b>' + bnd(c.all.length) + 'টি</b> · শেষ আর্কাইভ: ' + (la ? escapeHtml(dt(Date.parse(la))) : 'এখনো হয়নি');
+            };
+            const showFile = async (id, name) => {
+                try {
+                    toast('⏳ ফাইল আনা হচ্ছে...');
+                    const g = await driveCall({ action: 'log_archive_get', fileId: id }); let arr = []; try { arr = JSON.parse(g.jsonText); } catch (e) { }
+                    const rows = arr.slice(0, 400).map(l => '<tr><td style="white-space:nowrap;">' + escapeHtml(dt(ts(l) || Date.parse(l.t || ''))) + '</td><td>' + escapeHtml(l.user || l.email || '') + '</td><td style="white-space:normal;">' + escapeHtml(l.description || ((l.a || '') + ' ' + (l.m || '') + ' ' + (l.d || ''))) + '</td></tr>').join('');
+                    openModal('<h3 style="margin:0 0 6px;">📄 ' + escapeHtml(name) + '</h3><div class="small muted">মোট ' + bnd(arr.length) + 'টি' + (arr.length > 400 ? ' (প্রথম ৪০০টি দেখানো হলো — পুরোটা নামিয়ে নিন)' : '') + '</div><div class="table-wrap" style="max-height:55vh;overflow:auto;"><table style="min-width:0;"><thead><tr><th>সময়</th><th>কে</th><th>বিবরণ</th></tr></thead><tbody>' + rows + '</tbody></table></div><div style="display:flex;justify-content:space-between;margin-top:10px;"><button type="button" class="btn btn-outline" id="lav-dl">⬇️ JSON নামান</button><button type="button" class="btn btn-outline" id="lav-x">বন্ধ করুন</button></div>', () => {
+                        document.getElementById('lav-x').onclick = closeModal;
+                        document.getElementById('lav-dl').onclick = () => { const a = document.createElement('a'); a.href = URL.createObjectURL(new Blob([g.jsonText], { type: 'application/json' })); a.download = g.name || name; document.body.appendChild(a); a.click(); setTimeout(() => { URL.revokeObjectURL(a.href); a.remove(); }, 500); };
+                    });
+                } catch (e) { toast('❌ ' + e.message); }
+            };
+            const listFiles = async () => {
+                try {
+                    toast('⏳ তালিকা আনা হচ্ছে...');
+                    const r = await driveCall({ action: 'log_archive_list' });
+                    const rows = (r.files || []).map(f => '<tr><td style="white-space:normal;word-break:break-all;">' + escapeHtml(f.name) + '</td><td>' + bnd(Math.round((f.size || 0) / 1024)) + ' KB</td><td style="white-space:nowrap;"><button type="button" class="btn btn-outline btn-sm" data-la-view="' + escapeHtml(f.id) + '" data-n="' + escapeHtml(f.name) + '">👁 দেখুন</button> <a class="btn btn-outline btn-sm" href="' + escapeHtml(f.url) + '" target="_blank" rel="noopener">Drive</a></td></tr>').join('');
+                    openModal('<h3 style="margin:0 0 6px;">📂 ' + escapeHtml(r.folder || 'মাহফিল লগ আর্কাইভ') + ' (' + bnd((r.files || []).length) + '/' + bnd(r.total || 0) + ')</h3>' + (rows ? '<div class="table-wrap" style="max-height:55vh;overflow:auto;"><table style="min-width:0;"><thead><tr><th>ফাইল (তারিখ থেকে–পর্যন্ত নামে)</th><th>আকার</th><th></th></tr></thead><tbody>' + rows + '</tbody></table></div>' : '<div class="muted" style="padding:14px;">এখনো কোনো আর্কাইভ-ফাইল নেই।</div>') + '<div style="text-align:right;margin-top:10px;"><button type="button" class="btn btn-outline" id="lal-x">বন্ধ করুন</button></div>', () => {
+                        document.getElementById('lal-x').onclick = closeModal;
+                        document.querySelectorAll('[data-la-view]').forEach(b => b.addEventListener('click', () => { closeModal(); setTimeout(() => showFile(b.dataset.laView, b.dataset.n), 80); }));
+                    });
+                } catch (e) { toast('❌ ' + e.message + (/অজানা অনুরোধ|অজানা action/.test(String(e.message)) ? ' — Code_combined_v16_5_40.gs ডিপ্লয় করুন' : '')); }
+            };
+            const wire = () => {
+                const kd = document.getElementById('mf-la-days'), cp = document.getElementById('mf-la-cap'), au = document.getElementById('mf-la-auto');
+                if (!kd) return;
+                kd.value = keepDays(); cp.value = capN(); au.checked = autoOn();
+                const save = () => { let d = Math.round(Number(kd.value)), c = Math.round(Number(cp.value)); if (!(d >= 45)) d = 45; if (d > 3650) d = 3650; if (!(c >= 300)) c = 300; if (c > 5000) c = 5000; kd.value = d; cp.value = c; S().logKeepDays = d; S().logKeepMax = c; S().logAutoArchive = !!au.checked; saveState(); wireStatus(); toast('✅ লগ-মেয়াদ সেভ হয়েছে'); };
+                kd.addEventListener('change', save); cp.addEventListener('change', save); au.addEventListener('change', save);
+                document.getElementById('mf-la-now').onclick = () => run(true);
+                document.getElementById('mf-la-list').onclick = listFiles;
+                wireStatus();
+            };
+            const putAudit = async (evs) => {
+                if (!urlOk() || !evs || !evs.length) return null;
+                const out = [];
+                for (let i = 0; i < evs.length; i += 4000) {
+                    const part = evs.slice(i, i + 4000);
+                    const csv = ['সময়,ইউজার,কাজ,মডিউল,বস্তু,ফল,বিবরণ,উৎস'].concat(part.map(e => [e.t, e.email, e.a, e.m, e.e, e.o, e.d, e.p].map(csvCell).join(','))).join('\r\n');
+                    const r = await driveCall({ action: 'log_archive_put', kind: 'audit', jsonText: JSON.stringify(part), csvText: csv });
+                    if (!r.verified || Number(r.count) !== part.length) throw new Error('Drive-এর যাচাই মেলেনি');
+                    out.push(r);
+                }
+                return out;
+            };
+            return { run, auto, nudge, wire, hardCap, putAudit, pick };
+        })();
+
         const wireDriveUploads = () => {
+            try { window.mfLogArch.wire(); } catch (e) { }
             const _ac = document.getElementById('mf-autobk-chk');
             const _ak = document.getElementById('mf-autobk-keep');
             if (_ak) { _ak.value = window.mfAutoBackup.keepN(); _ak.addEventListener('change', () => { let v = Math.round(Number(_ak.value)); if (!(v >= 1)) v = 8; if (v > 100) v = 100; _ak.value = v; state.settings.autoBackupKeep = v; saveState(); toast('✅ স্বয়ংক্রিয় ব্যাকআপ: সর্বশেষ ' + v + 'টি রাখা হবে (পরের স্বয়ংক্রিয় ব্যাকআপে পুরনোগুলো ছাঁটা হবে)'); }); }
@@ -22531,7 +23023,7 @@ body.dark-mode .btn-outline{border-color:var(--gold-300)!important;color:var(--g
         const uaPermTriggerHtml = (u) => {
             const on = UA_PERMS.filter(p => uaPermIsOn(u, p)).length;
             const _pend = !!(u.exportPermRequestedAt && !u.canExportPrint);
-            const tip = `${UA_INFO.perms.label}: ${UA_PERMS.length} টির মধ্যে ${on} টি চালু` + (_pend ? ' • 🙋 এক্সপোর্ট অনুমতির অনুরোধ আছে' : '');
+            const tip = `${UA_INFO.perms.label}: ${toBengaliNum(UA_PERMS.length)} টির মধ্যে ${on} টি চালু` + (_pend ? ' • 🙋 এক্সপোর্ট অনুমতির অনুরোধ আছে' : '');
             return `<button type="button" class="ua-ico perm ua-perm-trigger" aria-haspopup="menu" aria-expanded="false" data-ua-tip="${escapeHtml(tip)}" aria-label="${escapeHtml(tip)}"><span aria-hidden="true">${UA_INFO.perms.icon}</span><span class="ua-badge" aria-hidden="true">${on}${_pend ? '🙋' : ''}</span></button>`;
         };
         const uaPermMenuHtml = (u) => {
@@ -22752,8 +23244,8 @@ body.dark-mode .btn-outline{border-color:var(--gold-300)!important;color:var(--g
                 </div>
               </div>
               <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;">
-                <div class="card"><h4 style="font-family:var(--font-display);color:var(--emerald-900);margin:0 0 10px;">📨 রিকোয়েস্ট (${myReqs.length})</h4>${myReqs.length ? myReqs.slice(0,10).map(r => `<div class="req-item" style="margin-bottom:6px;"><div class="req-info"><div class="req-user">${escapeHtml(r.type)}</div><div class="req-detail">${escapeHtml(r.data || '')}</div><div class="req-time">${fmtDate(r.createdAt)} • <span class="req-badge ${r.status}">${r.status === 'pending' ? 'অপেক্ষমান' : r.status === 'approved' ? 'অনুমোদিত' : 'বাতিল'}</span></div></div></div>`).join('') : '<div class="small muted">কোনো রিকোয়েস্ট নেই।</div>'}${myReqs.length > 10 ? `<div class="small muted">আরও ${myReqs.length - 10} টি...</div>` : ''}</div>
-                <div class="card"><h4 style="font-family:var(--font-display);color:var(--emerald-900);margin:0 0 10px;">💬 কমেন্ট (${myCmts.length})</h4>${myCmts.length ? myCmts.slice(0,10).map(c => `<div class="comment-item user-cmt" style="margin-bottom:6px;"><div class="cmt-header"><span class="cmt-user">${escapeHtml(c.displayName || c.email)}</span><span class="cmt-time">${fmtDate(c.createdAt)}</span></div><div class="cmt-text">${escapeHtml(c.text)}</div>${c.reply ? `<div class="cmt-reply"><span class="reply-from">অ্যাডমিন:</span> ${escapeHtml(c.reply)}</div>` : ''}</div>`).join('') : '<div class="small muted">কোনো কমেন্ট নেই।</div>'}${myCmts.length > 10 ? `<div class="small muted">আরও ${myCmts.length - 10} টি...</div>` : ''}</div>
+                <div class="card"><h4 style="font-family:var(--font-display);color:var(--emerald-900);margin:0 0 10px;">📨 রিকোয়েস্ট (${myReqs.length})</h4>${myReqs.length ? myReqs.slice(0,10).map(r => `<div class="req-item" style="margin-bottom:6px;"><div class="req-info"><div class="req-user">${window.mfReqType(r.type)}</div><div class="req-detail">${escapeHtml(r.data || '')}</div><div class="req-time">${fmtDate(r.createdAt)} • ${window.mfStatusChip(r)}</div><div style="margin-top:4px;"><button class="btn btn-outline btn-sm" data-conv="requests:${r.id}">💬 কথোপকথন${window.mfConvDot('requests', r)}</button></div></div></div>`).join('') : '<div class="small muted">কোনো রিকোয়েস্ট নেই।</div>'}${myReqs.length > 10 ? `<div class="small muted">আরও ${myReqs.length - 10} টি...</div>` : ''}</div>
+                <div class="card"><h4 style="font-family:var(--font-display);color:var(--emerald-900);margin:0 0 10px;">💬 কমেন্ট (${myCmts.length})</h4>${myCmts.length ? myCmts.slice(0,10).map(c => `<div class="comment-item user-cmt" style="margin-bottom:6px;"><div class="cmt-header"><span class="cmt-user">${escapeHtml(c.displayName || c.email)}</span><span class="cmt-time">${fmtDate(c.createdAt)}</span></div><div class="cmt-text">${escapeHtml(c.text)}</div>${c.reply ? `<div class="cmt-reply"><span class="reply-from">অ্যাডমিন:</span> ${escapeHtml(c.reply)}</div>` : ''}<div style="margin-top:4px;"><button class="btn btn-outline btn-sm" data-conv="comments:${c.id}">💬 কথোপকথন${window.mfConvDot('comments', c)}</button></div></div>`).join('') : '<div class="small muted">কোনো কমেন্ট নেই।</div>'}${myCmts.length > 10 ? `<div class="small muted">আরও ${myCmts.length - 10} টি...</div>` : ''}</div>
               </div>
             `;
             }
@@ -22785,7 +23277,7 @@ body.dark-mode .btn-outline{border-color:var(--gold-300)!important;color:var(--g
                 const bCreated = b.createdAt ? new Date(b.createdAt).getTime() : 0;
                 return bCreated - aCreated;
             });
-            const pendingReqs = userRequestsCache.filter(r => r.status === 'pending');
+            const pendingReqs = userRequestsCache.filter(r => window.mfIsOpenReq(r));
             const allCmts = userCommentsCache;
 
             let content = '';
@@ -22802,7 +23294,7 @@ body.dark-mode .btn-outline{border-color:var(--gold-300)!important;color:var(--g
                   </select>
                   <!-- 🆕 জয়েন/সক্রিয়তা কলাম অনুযায়ী সাজানোর টগল — 'activity': একটিভরা উপরে, 'joined': জয়েনের ক্রম -->
                   <button class="btn btn-outline btn-sm" id="user-sort-toggle" title="ক্লিক করে সাজানোর ধরন বদলান">${userSortMode === 'activity' ? '🟢 সাজানো: সক্রিয় আগে' : '🕒 সাজানো: জয়েনের ক্রম'}</button>
-                  <span class="small muted">${filteredUsers.length} টি ইউজার</span>
+                  <span class="small muted">${toBengaliNum(filteredUsers.length)} টি ইউজার</span>
                   <button class="btn btn-outline btn-sm no-print" id="btn-mf-sync" title="সদস্য ↔ ইউজারের কমন তথ্য মেলান (আইডি, নাম, মোবাইল, পিতা, দায়িত্ব, ছবি)">🔗 সব সিঙ্ক করুন</button>
                   <!-- 🆕 [Registration] নতুন ইউজার/পার্সোনাল ইউজার নিবন্ধন বাটন -->
                   <button class="btn btn-primary btn-sm" id="btn-open-register-user">➕ নতুন ইউজার নিবন্ধন</button>
@@ -22867,17 +23359,17 @@ body.dark-mode .btn-outline{border-color:var(--gold-300)!important;color:var(--g
             `;
             } else if (userViewTab === 'requests') {
                 content = `
-              <div style="margin-bottom:12px;"><span class="pill active" style="background:${pendingReqs.length ? 'var(--maroon-100)' : 'var(--gold-100)'};color:${pendingReqs.length ? 'var(--maroon-600)' : 'var(--emerald-700)'};">📨 পেন্ডিং: ${pendingReqs.length} টি</span><span class="small muted" style="margin-left:12px;">মোট: ${userRequestsCache.length} টি</span></div>
-              <div style="margin-bottom:16px;"><strong>⏳ অপেক্ষমান</strong>${pendingReqs.length ? pendingReqs.map(r => `<div class="req-item"><div class="req-info"><div class="req-user">${escapeHtml(r.email)} — <strong>${escapeHtml(r.type)}</strong></div><div class="req-detail">${escapeHtml(r.data || '')}</div><div class="req-time">📅 ${fmtDate(r.createdAt)}</div></div><div class="req-actions"><button class="btn btn-success btn-sm" data-req-approve="${r.id}">✅ অনুমোদন</button><button class="btn btn-danger btn-sm" data-req-deny="${r.id}">❌ বাতিল</button><button class="btn btn-outline btn-sm" data-req-edit="${r.id}">✎ সম্পাদনা</button><button class="btn btn-danger btn-sm" data-req-delete="${r.id}">🗑 মুছুন</button></div></div>`).join('') : '<div class="small muted">কোনো পেন্ডিং রিকোয়েস্ট নেই।</div>'}
+              <div style="margin-bottom:12px;"><span class="pill active" style="background:${pendingReqs.length ? 'var(--maroon-100)' : 'var(--gold-100)'};color:${pendingReqs.length ? 'var(--maroon-600)' : 'var(--emerald-700)'};">📨 পেন্ডিং: ${toBengaliNum(pendingReqs.length)} টি</span><span class="small muted" style="margin-left:12px;">মোট: ${toBengaliNum(userRequestsCache.length)} টি</span></div>
+              <div style="margin-bottom:16px;"><strong>⏳ অপেক্ষমান</strong>${pendingReqs.length ? pendingReqs.map(r => `<div class="req-item"><div class="req-info"><div class="req-user">${escapeHtml(r.email)} — <strong>${window.mfReqType(r.type)}</strong> ${window.mfStatusChip(r)}${window.mfConvAge(r)}${window.mfConvDot('requests', r)}</div><div class="req-detail">${escapeHtml(r.data || '')}</div><div class="req-time">📅 ${fmtDate(r.createdAt)}</div></div><div class="req-actions"><button class="btn btn-success btn-sm" data-req-approve="${r.id}">✅ অনুমোদন</button><button class="btn btn-danger btn-sm" data-req-deny="${r.id}">❌ বাতিল</button><button class="btn btn-primary btn-sm" data-conv="requests:${r.id}">💬 কথোপকথন${window.mfConvDot('requests', r)}</button><button class="btn btn-outline btn-sm" data-req-edit="${r.id}">✎ সম্পাদনা</button><button class="btn btn-danger btn-sm" data-req-delete="${r.id}">🗑 মুছুন</button></div></div>`).join('') : '<div class="small muted">কোনো পেন্ডিং রিকোয়েস্ট নেই।</div>'}
               </div>
-              <div><strong>📜 ইতিহাস</strong>${userRequestsCache.filter(r => r.status !== 'pending').slice(0,30).length ? userRequestsCache.filter(r => r.status !== 'pending').slice(0,30).map(r => `<div class="req-item" style="opacity:0.8;"><div class="req-info"><div class="req-user">${escapeHtml(r.email)} — ${escapeHtml(r.type)} <span class="req-badge ${r.status}">${r.status === 'approved' ? 'অনুমোদিত' : 'বাতিল'}</span></div><div class="req-detail">${escapeHtml(r.data || '')}</div><div class="req-time">${fmtDate(r.createdAt)}</div></div><div class="req-actions"><button class="btn btn-outline btn-sm" data-req-edit="${r.id}">✎ সম্পাদনা</button><button class="btn btn-danger btn-sm" data-req-delete="${r.id}">🗑 মুছুন</button></div></div>`).join('') : '<div class="small muted">কোনো ইতিহাস নেই।</div>'}
+              <div><strong>📜 ইতিহাস</strong>${userRequestsCache.filter(r => !window.mfIsOpenReq(r)).slice(0,30).length ? userRequestsCache.filter(r => !window.mfIsOpenReq(r)).slice(0,30).map(r => `<div class="req-item" style="opacity:0.8;"><div class="req-info"><div class="req-user">${escapeHtml(r.email)} — ${window.mfReqType(r.type)} ${window.mfStatusChip(r)}</div><div class="req-detail">${escapeHtml(r.data || '')}</div><div class="req-time">${fmtDate(r.createdAt)}</div></div><div class="req-actions"><button class="btn btn-primary btn-sm" data-conv="requests:${r.id}">💬 কথোপকথন${window.mfConvDot('requests', r)}</button><button class="btn btn-outline btn-sm" data-req-edit="${r.id}">✎ সম্পাদনা</button><button class="btn btn-danger btn-sm" data-req-delete="${r.id}">🗑 মুছুন</button></div></div>`).join('') : '<div class="small muted">কোনো ইতিহাস নেই।</div>'}
               </div>
             `;
             } else if (userViewTab === 'comments') {
                 const sorted = [...allCmts].sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
                 content = `
-              <div class="small muted" style="margin-bottom:12px;">মোট ${sorted.length} টি কমেন্ট</div>
-              ${sorted.length ? sorted.map(c => `<div class="comment-item ${c.isAdminReply ? 'admin-cmt' : 'user-cmt'}"><div class="cmt-header"><span class="cmt-user">${escapeHtml(c.displayName || c.email)} ${c.isAdminReply ? '👑' : ''}</span><span class="cmt-time">${fmtDate(c.createdAt)}</span></div><div class="cmt-text">${escapeHtml(c.text)}</div>${c.reply ? `<div class="cmt-reply"><span class="reply-from">অ্যাডমিন:</span> ${escapeHtml(c.reply)}</div>` : `<div style="margin-top:10px;"><input type="text" id="reply-input-${c.id}" placeholder="উত্তর দিন..." style="width:70%;display:inline-block;padding:6px 10px;font-size:12px;"><button class="btn btn-primary btn-sm" data-reply-comment="${c.id}">উত্তর দিন</button></div>`}<div style="margin-top:8px;display:flex;gap:6px;"><button class="btn btn-outline btn-sm" data-cmt-edit="${c.id}">✎ সম্পাদনা</button><button class="btn btn-danger btn-sm" data-cmt-delete="${c.id}">🗑 মুছুন</button></div></div>`).join('') : `<div class="empty-state"><div class="em">💬</div>কোনো কমেন্ট নেই।</div>`}
+              <div class="small muted" style="margin-bottom:12px;">মোট ${toBengaliNum(sorted.length)} টি কমেন্ট</div>
+              ${sorted.length ? sorted.map(c => `<div class="comment-item ${c.isAdminReply ? 'admin-cmt' : 'user-cmt'}"><div class="cmt-header"><span class="cmt-user">${escapeHtml(c.displayName || c.email)} ${c.isAdminReply ? '👑' : ''}</span><span class="cmt-time">${fmtDate(c.createdAt)}</span></div><div class="cmt-text">${escapeHtml(c.text)}</div>${c.reply ? `<div class="cmt-reply"><span class="reply-from">অ্যাডমিন:</span> ${escapeHtml(c.reply)}</div>` : `<div style="margin-top:10px;"><input type="text" id="reply-input-${c.id}" placeholder="উত্তর দিন..." style="width:70%;display:inline-block;padding:6px 10px;font-size:12px;"><button class="btn btn-primary btn-sm" data-reply-comment="${c.id}">উত্তর দিন</button></div>`}<div style="margin-top:8px;display:flex;gap:6px;"><button class="btn btn-primary btn-sm" data-conv="comments:${c.id}">💬 কথোপকথন${window.mfConvDot('comments', c)}</button><button class="btn btn-outline btn-sm" data-cmt-edit="${c.id}">✎ সম্পাদনা</button><button class="btn btn-danger btn-sm" data-cmt-delete="${c.id}">🗑 মুছুন</button></div></div>`).join('') : `<div class="empty-state"><div class="em">💬</div>কোনো কমেন্ট নেই।</div>`}
             `;
             } else if (userViewTab === 'admins') {
                 // 🆕 একাধিক এডমিন ইমেইল ব্যবস্থাপনা — কতজন এডমিন যোগ হয়েছে তা দেখা, যোগ/সম্পাদনা/মুছে ফেলা
@@ -22890,7 +23382,7 @@ body.dark-mode .btn-outline{border-color:var(--gold-300)!important;color:var(--g
                 <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;">
                   <div>
                     <h4 style="font-family:var(--font-display);color:var(--emerald-900);margin:0 0 4px;">👑 এডমিন তালিকা</h4>
-                    <p class="small muted" style="margin:0;">মোট ${adminEmailsList.length + 1} জন এডমিন (১ জন প্রধান এডমিন + ${adminEmailsList.length} জন যোগ করা)</p>
+                    <p class="small muted" style="margin:0;">মোট ${adminEmailsList.length + 1} জন এডমিন (১ জন প্রধান এডমিন + ${toBengaliNum(adminEmailsList.length)} জন যোগ করা)</p>
                   </div>
                   <button class="btn btn-primary btn-sm" id="add-admin-email-btn">➕ নতুন এডমিন যোগ করুন</button>
                 </div>
@@ -22970,11 +23462,12 @@ body.dark-mode .btn-outline{border-color:var(--gold-300)!important;color:var(--g
               <div class="card stat-card"><div class="ico">👥</div><div class="label">মোট ইউজার</div><div class="value">${totalUsers}</div><div class="sub">সক্রিয়: ${active} · পেন্ডিং: ${pending} · ব্লক: ${blocked}</div></div>
               <div class="card stat-card" style="border-color:var(--emerald-500);"><div class="ico">🟢</div><div class="label">বর্তমানে একটিভ</div><div class="value" style="color:var(--emerald-700);">${activeNow}</div><div class="sub">এই মুহূর্তে অনলাইনে আছেন</div></div>
               <div class="card stat-card" style="border-color:${pendingReqs.length ? 'var(--gold-500)' : 'var(--line)'};"><div class="ico">📨</div><div class="label">পেন্ডিং রিকোয়েস্ট</div><div class="value" style="color:${pendingReqs.length ? 'var(--maroon-600)' : 'var(--emerald-700)'};">${pendingReqs.length}</div><div class="sub">${pendingReqs.length ? 'অনুমোদনের অপেক্ষায়' : 'কোনো পেন্ডিং নেই'}</div></div>
-              <div class="card stat-card"><div class="ico">💬</div><div class="label">মোট কমেন্ট</div><div class="value">${allCmts.length}</div><div class="sub">${allCmts.filter(c => c.reply).length} টি উত্তর দেওয়া হয়েছে</div></div>
+              <div class="card stat-card"><div class="ico">💬</div><div class="label">মোট কমেন্ট</div><div class="value">${allCmts.length}</div><div class="sub">${toBengaliNum(allCmts.filter(c => c.reply).length)} টি উত্তর দেওয়া হয়েছে</div></div>
             </div>
             <div class="toolbar no-print" style="margin-bottom:8px;">
               <div style="display:flex;gap:6px;flex-wrap:wrap;">
                 <button class="btn ${userViewTab === 'users' ? 'btn-primary' : 'btn-outline'} btn-sm" data-utab="users">👥 ইউজার</button>
+                <button class="btn btn-outline btn-sm" data-ibx-open="1">🔔 ইনবক্স</button>
                 <button class="btn ${userViewTab === 'requests' ? 'btn-primary' : 'btn-outline'} btn-sm" data-utab="requests">📨 রিকোয়েস্ট ${pendingReqs.length ? `(${pendingReqs.length})` : ''}</button>
                 <button class="btn ${userViewTab === 'comments' ? 'btn-primary' : 'btn-outline'} btn-sm" data-utab="comments">💬 কমেন্ট</button>
                 <button class="btn ${userViewTab === 'admins' ? 'btn-primary' : 'btn-outline'} btn-sm" data-utab="admins">👑 এডমিন (${adminEmailsList.length + 1})</button>
@@ -23203,12 +23696,12 @@ body.dark-mode .btn-outline{border-color:var(--gold-300)!important;color:var(--g
                 });
             }));
             document.querySelectorAll('[data-req-approve]').forEach(b => b.addEventListener('click', async () => {
-                await updateRequestStatus(b.dataset.reqApprove, 'approved');
+                await window.mfSetStatus('requests', b.dataset.reqApprove, 'approved');
                 toast('✅ রিকোয়েস্ট অনুমোদিত');
                 loadUsersFromFirestore();
             }));
             document.querySelectorAll('[data-req-deny]').forEach(b => b.addEventListener('click', async () => {
-                await updateRequestStatus(b.dataset.reqDeny, 'denied');
+                { const _why = window.prompt('বাতিলের কারণ লিখুন (ইউজার দেখতে পাবে):', ''); if (_why === null) return; await window.mfSetStatus('requests', b.dataset.reqDeny, 'denied', _why.trim()); }
                 toast('❌ রিকোয়েস্ট বাতিল');
                 loadUsersFromFirestore();
             }));
@@ -23217,7 +23710,7 @@ body.dark-mode .btn-outline{border-color:var(--gold-300)!important;color:var(--g
                 const input = document.getElementById(`reply-input-${id}`);
                 const reply = input?.value?.trim();
                 if (!reply) { toast('উত্তর লিখুন'); return; }
-                await replyComment(id, reply);
+                await window.mfThreadAdd('comments', id, reply);
                 toast('✅ উত্তর দেওয়া হয়েছে');
                 loadUsersFromFirestore();
             }));
@@ -23607,7 +24100,7 @@ body.dark-mode .btn-outline{border-color:var(--gold-300)!important;color:var(--g
             `, (modalEl) => {
                 const grid = modalEl.querySelector('#tab-menu-grid');
                 const noticeCount = getUnreadCount('notices');
-                const reqCount = window.currentUser && isAdminUser() ? getUnreadCount('users') : 0;
+                const reqCount = getUnreadCount('users');
                 const chatCount = getUnreadCount('chat');
                 const logCount = getUnreadCount('notifications');
                 grid.innerHTML = CONFIG.TAB_ORDER.filter(key => isEditModeOn() || !isElementHidden('tab:' + key)).map(key => {
@@ -23615,7 +24108,7 @@ body.dark-mode .btn-outline{border-color:var(--gold-300)!important;color:var(--g
                     if (key === 'notices' && noticeCount > 0) badge = `<span class="notice-count-badge">${noticeCount}</span>`;
                     if (key === 'notifications' && logCount > 0) badge = `<span class="notice-count-badge" style="background:var(--maroon-600);color:#fff;">${logCount}</span>`;
                     if (key === 'users' && reqCount > 0) badge = `<span class="notice-count-badge" style="background:var(--maroon-600);color:#fff;">${reqCount}</span>`;
-                    if (key === 'chat' && chatCount > 0) badge = `<span class="notice-count-badge" style="background:var(--emerald-500);color:#fff;">${chatCount}</span>`;
+                    if (!badge) badge = (window.mfNewBadge ? window.mfNewBadge(key, 'notice-count-badge') : ''); if (key === 'chat' && chatCount > 0) badge = `<span class="notice-count-badge" style="background:var(--emerald-500);color:#fff;">${chatCount}</span>`;
                     return `<button type="button" class="tab-menu-item ${key === currentTab ? 'active' : ''}" data-tab="${key}">
                               <span class="tab-menu-icon">${CONFIG.TAB_ICONS[key]}</span>
                               <span class="tab-menu-label">${escapeHtml(getTabLabel(key))}</span>
@@ -23720,7 +24213,7 @@ body.dark-mode .btn-outline{border-color:var(--gold-300)!important;color:var(--g
 
             refreshReadStateForActiveTab(); // 🆕 সক্রিয় ট্যাবে থাকলে সেটা "দেখা হয়েছে" হিসেবে চিহ্নিত হবে
             const noticeCount = getUnreadCount('notices');
-            const reqCount = window.currentUser && isAdminUser() ? getUnreadCount('users') : 0;
+            const reqCount = getUnreadCount('users');
             const chatCount = getUnreadCount('chat');
             const logCount = getUnreadCount('notifications');
 
@@ -23750,8 +24243,8 @@ body.dark-mode .btn-outline{border-color:var(--gold-300)!important;color:var(--g
               let badge = '';
               if (key === 'notices' && noticeCount > 0) badge = `<span class="badge">${noticeCount}</span>`;
               if (key === 'notifications' && logCount > 0) badge = `<span class="badge" style="background:var(--maroon-600);color:#fff;">${logCount}</span>`;
-              if (key === 'users' && reqCount > 0 && window.currentUser && isAdminUser()) badge = `<span class="badge" style="background:var(--maroon-600);color:#fff;">${reqCount}</span>`;
-              if (key === 'chat' && chatCount > 0) badge = `<span class="badge" style="background:var(--emerald-500);color:#fff;">${chatCount}</span>`;
+              if (key === 'users' && reqCount > 0) badge = `<span class="badge" style="background:var(--maroon-600);color:#fff;">${reqCount}</span>`;
+              if (!badge) badge = (window.mfNewBadge ? window.mfNewBadge(key, 'badge') : ''); if (key === 'chat' && chatCount > 0) badge = `<span class="badge" style="background:var(--emerald-500);color:#fff;">${chatCount}</span>`;
               return dragResizeWrap('tab:' + key, `<div class="sidebar-item ${key === currentTab ? 'active' : ''}" data-sidebar-tab="${key}">
                 <span class="icon">${CONFIG.TAB_ICONS[key]}</span>
                 ${editableLabel('tabLabel:' + key, getTabLabel(key))}
@@ -24361,7 +24854,7 @@ body.dark-mode .btn-outline{border-color:var(--gold-300)!important;color:var(--g
                       ${mine ? '' : `<div class="cd-nm">${escapeHtml(name)}${isAdminEmail(m.sender) ? ' 👑' : ''}</div>`}
                       ${m.forwarded ? `<div class="cd-fwd">↪ ফরওয়ার্ড করা মেসেজ</div>` : ''}
                       ${quote}
-                      ${m.imageUrl ? `<img class="cd-img" src="${escapeHtml(toDirectImageUrl(m.imageUrl))}" data-cd-img="${escapeHtml(m.imageUrl)}" alt="">` : ''}
+                      ${(() => { const urls = (Array.isArray(m.imageUrls) && m.imageUrls.length) ? m.imageUrls : (m.imageUrl ? [m.imageUrl] : []); return urls.length ? urls.map((u, i) => `<img class="cd-img" src="${escapeHtml(toDirectImageUrl(u))}" data-cd-img="${escapeHtml(u)}" data-cd-img-list="${escapeHtml(JSON.stringify(urls))}" data-cd-img-index="${i}" alt="সংযুক্ত ছবি ${i + 1}">${urls.length > 1 ? '<div class="cd-img-count">' + toBengaliNum(i + 1) + ' / ' + toBengaliNum(urls.length) + '</div>' : ''}`).join('') : ''; })()}
                       ${m.text ? `<div class="cd-tx">${escapeHtml(m.text)}</div>` : ''}
                       <div class="cd-tm">${pinned ? '📌 ' : ''}${escapeHtml(cdTime(m.timestamp))}</div>
                     </div>
@@ -24530,7 +25023,7 @@ body.dark-mode .btn-outline{border-color:var(--gold-300)!important;color:var(--g
                 .filter(([em, p]) => em !== me && p.typing && p.lastActive && (now - new Date(p.lastActive).getTime()) < TYPING_WINDOW_MS)
                 .map(([em, p]) => p.displayName || cdName(em));
             if (!names.length) return '';
-            return names.length === 1 ? `✍️ ${escapeHtml(names[0])} লিখছেন…` : `✍️ ${names.length} জন লিখছেন…`;
+            return names.length === 1 ? `✍️ ${escapeHtml(names[0])} লিখছেন…` : `✍️ ${toBengaliNum(names.length)} জন লিখছেন…`;
         };
 
         const cdMarkReadSoon = () => {
@@ -24641,7 +25134,15 @@ body.dark-mode .btn-outline{border-color:var(--gold-300)!important;color:var(--g
             const dl = t.closest('[data-cd-del]');
             if (dl) { const id = dl.dataset.cdDel; cdResetMenus(); confirmDelete('মেসেজ মুছে ফেলা হবে?', () => deleteChatMessage(id)); return; }
             const im = t.closest('[data-cd-img]');
-            if (im) { try { openImagePreview(toDirectImageUrl(im.dataset.cdImg), { el: im }); } catch (er) {} return; }
+            if (im) {
+                try {
+                    let list = [];
+                    try { list = JSON.parse(im.dataset.cdImgList || '[]'); } catch (e) { list = []; }
+                    const index = Math.max(0, parseInt(im.dataset.cdImgIndex || '0', 10) || 0);
+                    openImagePreview(toDirectImageUrl(im.dataset.cdImg), { el: im, list: list.map(u => toDirectImageUrl(u)), index });
+                } catch (er) {}
+                return;
+            }
             const bub = t.closest('[data-cd-pick]');
             if (bub) { const id = bub.dataset.cdPick; _cdPickFor = (_cdPickFor === id) ? null : id; _cdMoreFor = null; cdRefresh(); return; }
             if (t.closest('#cd-send')) { cdSend(); }
@@ -24759,7 +25260,7 @@ body.dark-mode .btn-outline{border-color:var(--gold-300)!important;color:var(--g
             if (!el) return;
             refreshReadStateForActiveTab(); // 🆕 সক্রিয় ট্যাবে থাকলে সেটা "দেখা হয়েছে" হিসেবে চিহ্নিত হবে
             const noticeCount = getUnreadCount('notices');
-            const reqCount = window.currentUser && isAdminUser() ? getUnreadCount('users') : 0;
+            const reqCount = getUnreadCount('users');
             const chatCount = getUnreadCount('chat');
             const logCount = getUnreadCount('notifications');
             el.innerHTML = CONFIG.TAB_ORDER.filter(key => isEditModeOn() || !isElementHidden('tab:' + key)).map(key => {
@@ -24768,9 +25269,9 @@ body.dark-mode .btn-outline{border-color:var(--gold-300)!important;color:var(--g
                     `<span class="notice-count-badge">${noticeCount}</span>`;
                 if (key === 'notifications' && logCount > 0) badge =
                     `<span class="notice-count-badge" style="background:var(--maroon-600);color:#fff;">${logCount}</span>`;
-                if (key === 'users' && reqCount > 0 && window.currentUser && isAdminUser()) badge =
+                if (key === 'users' && reqCount > 0) badge =
                     `<span class="notice-count-badge" style="background:var(--maroon-600);color:#fff;">${reqCount}</span>`;
-                if (key === 'chat' && chatCount > 0) badge =
+                if (!badge) badge = (window.mfNewBadge ? window.mfNewBadge(key, 'notice-count-badge') : ''); if (key === 'chat' && chatCount > 0) badge =
                     `<span class="notice-count-badge" style="background:var(--emerald-500);color:#fff;">${chatCount}</span>`;
                 return `<button class="tab-btn ${key === currentTab ? 'active' : ''}" data-tab="${key}"><span>${CONFIG.TAB_ICONS[key]}</span> ${editableLabel('tabLabel:' + key, getTabLabel(key))} ${badge}${visibilityToggleHtml('tab:' + key)}</button>`;
             }).join('');
@@ -24811,6 +25312,7 @@ body.dark-mode .btn-outline{border-color:var(--gold-300)!important;color:var(--g
         // যেমন তালিকার ১২৫ নাম্বার সদস্য আপডেট করলে যেন পাতা আবার শুরুতে চলে না যায়
         window._scrollAnchorSelector = null;
         const renderMain = () => {
+            try { if (window.mfSentApply) window.mfSentApply(); } catch (e) { }
             if (_renderPending) return;
             _renderPending = true;
             requestAnimationFrame(() => {
@@ -24956,6 +25458,7 @@ body.dark-mode .btn-outline{border-color:var(--gold-300)!important;color:var(--g
                     default:
                         main.innerHTML = `<div class="empty-state"><div class="em">📄</div>পাতা পাওয়া যায়নি।</div>`;
                 }
+                try { if (window.mfPgNow) window.mfPgNow(); } catch (e) { }   // 🆕 [v16.5.114] বড় তালিকায় প্রথম layout-এর আগেই বাড়তি সারি লুকানো
                 // 🆕 [পয়েন্ট ৭] শুধু ট্যাব বদলানোর সময় (এডিট/আপডেট/ব্যাকগ্রাউন্ড-সিঙ্কে না —
                 // সেসবের সময় স্ক্রিন সম্পূর্ণ স্থির থাকা জরুরি) হালকা fade+slide অ্যানিমেশন
                 if (!_sameTabRerender) {
@@ -25358,7 +25861,7 @@ body.dark-mode .btn-outline{border-color:var(--gold-300)!important;color:var(--g
                         }
                         await setDoc(doc(window._firestoreDb, 'backups', parentRef.id), { status: 'complete' }, { merge: true });
                         try { window.mfAudit.event('backup', { m: 'backup', e: parentRef.id, o: 'ok', d: 'ক্লাউড ব্যাকআপ সম্পন্ন' }); } catch (e) { }
-                        addActivityLog('add', 'backup', parentRef.id, `ক্লাউড ব্যাকআপ: "${note}" (${selected.length} টি অংশ)`);
+                        addActivityLog('add', 'backup', parentRef.id, `ক্লাউড ব্যাকআপ: "${note}" (${toBengaliNum(selected.length)} টি অংশ)`);
                         toast('✅ সম্পূর্ণ ব্যাকআপ সংরক্ষণ হয়েছে!');
                         closeModal();
                         renderMain();
@@ -25422,7 +25925,7 @@ body.dark-mode .btn-outline{border-color:var(--gold-300)!important;color:var(--g
                     document.getElementById('rs-restore').onclick = () => {
                         const selectedKeys = Array.from(document.querySelectorAll('.bk-restore-chk:checked')).map(c => c.value);
                         if (!selectedKeys.length) { toast('❌ অন্তত একটি অংশ নির্বাচন করুন'); return; }
-                        confirmDelete(`নির্বাচিত ${selectedKeys.length} টি অংশ রিস্টোর করা হবে (বাকি অংশ অক্ষত থাকবে)। নিশ্চিত?`, () => {
+                        confirmDelete(`নির্বাচিত ${toBengaliNum(selectedKeys.length)} টি অংশ রিস্টোর করা হবে (বাকি অংশ অক্ষত থাকবে)। নিশ্চিত?`, () => {
                             selectedKeys.forEach(k => {
                                 const part = partsData.find(p => p.key === k);
                                 if (part) state[k] = part.data;
@@ -25449,18 +25952,26 @@ body.dark-mode .btn-outline{border-color:var(--gold-300)!important;color:var(--g
                     if (typeof window._firestore === 'undefined') { container.innerHTML =
                             '<div style="text-align:center;padding:40px;color:var(--maroon-600);">❌ Firebase সংযোগ নেই</div>';
                         return; }
-                    const { getDocs, collection, query, orderBy } = window._firestore;
-                    const snap = await getDocs(query(collection(window._firestoreDb, 'backups'), orderBy('timestamp',
-                        'desc')));
+                    const { getDocs, collection } = window._firestore;
+                    let snap;
+                    try {
+                        const { query, orderBy } = window._firestore;
+                        snap = await getDocs(query(collection(window._firestoreDb, 'backups'), orderBy('timestamp', 'desc')));
+                    } catch (orderedErr) {
+                        snap = await getDocs(collection(window._firestoreDb, 'backups'));
+                    }
                     if (snap.empty) {
                         container.innerHTML =
                             `<div style="text-align:center;padding:40px;color:var(--ink-soft);"><span style="font-size:36px;">📭</span><br>কোনো ব্যাকআপ পাওয়া যায়নি।</div>`;
                         return;
                     }
                     let items = '';
-                    snap.forEach(d => {
-                        const data = d.data();
-                        const id = d.id;
+                    const rows = [];
+                    snap.forEach(d => rows.push({ id: d.id, data: d.data() }));
+                    rows.sort((a, b) => String(b.data.timestamp || b.data.date || '').localeCompare(
+                        String(a.data.timestamp || a.data.date || '')
+                    ));
+                    rows.forEach(({ id, data }) => {
                         const dateStr = data.date || (data.timestamp ? data.timestamp.split('T')[0] : 'অজানা');
                         const note = data.note || 'কোনো নোট নেই';
                         const timeStr = data.timestamp ? new Date(data.timestamp).toLocaleString('bn-BD', {
@@ -25470,7 +25981,7 @@ body.dark-mode .btn-outline{border-color:var(--gold-300)!important;color:var(--g
                             hour: '2-digit',
                             minute: '2-digit'
                         }) : 'অজানা';
-                        const partsLabel = Array.isArray(data.parts) ? `📦 ${data.parts.length} টি অংশ${data.status === 'in_progress' ? ' (⏳ অসম্পূর্ণ)' : ''}` : (data.state ? '📦 সম্পূর্ণ ডেটা (পুরনো ফরম্যাট)' : '—');
+                        const partsLabel = Array.isArray(data.parts) ? `📦 ${toBengaliNum(data.parts.length)} টি অংশ${data.status === 'in_progress' ? ' (⏳ অসম্পূর্ণ)' : ''}` : (data.state ? '📦 সম্পূর্ণ ডেটা (পুরনো ফরম্যাট)' : '—');
                         items += `
                       <div class="backup-list-item" data-backup-id="${id}">
                         <div class="info"><div class="date">📅 ${dateStr}</div><div class="note">📝 ${escapeHtml(note)}</div><div class="small muted">🕐 ${timeStr} · ${partsLabel}</div></div>
@@ -25605,7 +26116,13 @@ body.dark-mode .btn-outline{border-color:var(--gold-300)!important;color:var(--g
                 }
 
                 log('সার্ভিস ওয়ার্কার রেজিস্টার করা হচ্ছে (/firebase-messaging-sw.js)...');
-                const registration = await navigator.serviceWorker.register('./firebase-messaging-sw.js');
+                let registration;
+                try {
+                    registration = await navigator.serviceWorker.register('./firebase-messaging-sw.js');
+                } catch (swError) {
+                    warn('Firebase Messaging সার্ভিস ওয়ার্কার পাওয়া যায়নি: ' + swError.message);
+                    return { ok: false, msg: 'পুশ সার্ভিস ওয়ার্কার পাওয়া যায়নি। firebase-messaging-sw.js ডেপ্লয়ে দিন।' };
+                }
                 // 🔧 [v16.5.68] নোটিফিকেশন-ক্লিকে 404 ঠিক করতে: এই পেজের আসল ঠিকানা SW-কে জানিয়ে রাখা (অ্যাপ বন্ধ থাকলে ক্লিকে ঠিক এই পেজই খুলবে)
                 try { const _c = await caches.open('mf-app'); await _c.put('pagePath', new Response(location.origin + location.pathname)); } catch (e) { }
                 log('✅ সার্ভিস ওয়ার্কার রেজিস্টার সফল।');
@@ -25797,6 +26314,7 @@ body.dark-mode .btn-outline{border-color:var(--gold-300)!important;color:var(--g
                 if (typeof window.updateActiveUsersBadge === 'function') window.updateActiveUsersBadge();
             }, (error) => console.error('Users realtime error:', error));
         }
+        window.watchUsersRealtime = watchUsersRealtime;
 
         // 🆕 নতুন ইউজার: Authentication থেকে একাউন্ট তৈরি হওয়া মানেই এডমিনের অনুমোদন হয়ে গেছে,
         // তাই আর আলাদা "pending" ধাপ নেই — লগইন করলেই সরাসরি সক্রিয়। শুধু রোল আলাদা হয়:
@@ -25877,6 +26395,8 @@ body.dark-mode .btn-outline{border-color:var(--gold-300)!important;color:var(--g
                 applyGateStatus('not-admin');
             }
         }
+        window.evaluateOwnGateStatus = evaluateOwnGateStatus;
+        window.getLastOwnUserStatus = () => _lastOwnUserStatus;
         function watchOwnUserStatus(user) {
             if (unsubscribeOwnUserDoc) { unsubscribeOwnUserDoc(); unsubscribeOwnUserDoc = null; }
             _lastOwnUserStatus = null;
@@ -26608,6 +27128,8 @@ body.dark-mode .btn-outline{border-color:var(--gold-300)!important;color:var(--g
 
     /* ---------- "কার্যক্রম" কলাম: বাটনগুলো একটার নিচে একটা না হয়ে পাশাপাশি (flex-row, জায়গা না থাকলে wrap) ---------- */
     var tidyActionCells = function (tb) {
+        var _b0 = tb.tBodies && tb.tBodies[0], _n = _b0 ? _b0.rows.length : 0;   // 🔧 [v16.5.114] একই টেবিলে একই সারি-সংখ্যায় বারবার পুরো স্ক্যান নয়
+        if (tb.__mfTidyN === _n) return; tb.__mfTidyN = _n;
         var cells = tb.querySelectorAll('tbody td');
         for (var i = 0; i < cells.length; i++) {
             var td = cells[i];
@@ -26644,6 +27166,7 @@ body.dark-mode .btn-outline{border-color:var(--gold-300)!important;color:var(--g
     var injectBars = function (tb) {
         if (!tb.tHead || tb.classList.contains('no-tbl-font')) return;
         if (tb.closest('#export-capture') || tb.closest('.tbl-tools')) return;
+        if (tb.__mfBarDone) return; tb.__mfBarDone = 1;   // 🔧 [v16.5.114] প্রতিটি DOM-পরিবর্তনে একই টেবিলে বারবার টুলবার-যাচাই নয়
         var host = tb.closest('.table-wrap, .mf-tbox') || tb;
         var prev = host.previousElementSibling;
         if (prev && prev.classList && prev.classList.contains('tbl-tools')) return;
@@ -26779,6 +27302,7 @@ body.dark-mode .btn-outline{border-color:var(--gold-300)!important;color:var(--g
         var present = keys.filter(Boolean);
         var id = table.getAttribute('data-mf-tid') || (present.length ? tableIdFor(present) : null);   // 🆕 [v16.5.57] স্পষ্ট টেবিল-আইডি থাকলে সেটাই
         var frozen = id ? getKeys(id) : [];
+        if (!frozen.length && !table.__mfFrz) return;   // 🔧 [v16.5.114] ফ্রিজ নেই — layout-জোরকারী মাপজোখ বাদ
         var idxs = [];
         keys.forEach(function (k, ix) { if (k && frozen.indexOf(k) >= 0) idxs.push(ix); });
         var tb0 = table.tBodies[0];
@@ -26788,7 +27312,8 @@ body.dark-mode .btn-outline{border-color:var(--gold-300)!important;color:var(--g
         if (table.__mfFp === fp && ok) return;
         clearTable(table);
         table.__mfFp = fp;
-        if (!idxs.length) return;
+        if (!idxs.length) { table.__mfFrz = false; return; }
+        table.__mfFrz = true;
         var host = table.closest('.table-wrap') || table.parentNode;
         var avail = host ? host.clientWidth : 0;
         var left = 0, use = [];
@@ -27181,7 +27706,7 @@ body.dark-mode .btn-outline{border-color:var(--gold-300)!important;color:var(--g
 </script>
 <script id="mf-erp10-common">
 /* 🆕 [v16.5.10 ধাপ ১০] সবার জন্য সাধারণ অংশ (admin/user/personal) — অ্যাপের ভেতরের কোনো ফাংশন বদলায় না।
-   ১) "আমাদের সম্পর্কে" + সংশ্লিষ্ট লিংক: app_settings/site_config { about, links } থেকে লাইভ, ফুটারের ঠিক ওপরে।
+   ১) "আমাদের সম্পর্কে", অফিসিয়াল লিংক ও ইউজার-প্যানেলের কাস্টম বাটন: app_settings/site_config থেকে লাইভ।
       (সংগঠনের নাম/ঠিকানা/লোগো/থিম আগের মতোই settings ও site_config থেকে আসে — দ্বিতীয় কোনো উৎস নেই।)
    ২) অডিট-লগার: এডমিন app_settings/audit_config { enabled:true } চালু করলেই কেবল কাজ করে (ডিফল্ট বন্ধ)।
       প্রতি ইউজারের প্রতিদিনের জন্য ১টি ডক audit_logs/{email}__{YYYYMMDD}; ব্যাচ করে ~৯০ সেকেন্ডে ১ বার লেখে (ফ্রি কোটা বাঁচাতে)।
@@ -27251,13 +27776,26 @@ body.dark-mode .btn-outline{border-color:var(--gold-300)!important;color:var(--g
 
     /* ====================================================================
        🆕 [v16.5.15 ধাপ ২] "আমাদের সম্পর্কে" v2 — সব প্যানেলে একই কোড (এই ব্লক তিন প্যানেলে হুবহু এক; শুধু panel ভেরিয়েবল আলাদা)।
-       ডেটার উৎস আগের মতোই app_settings/site_config: about(টেক্সট) ও links[] অপরিবর্তিত; নতুন সব ফিল্ড profile{} নামের আলাদা অংশে (পুরনো ডেটা ভাঙে না)।
+       ডেটার উৎস app_settings/site_config: about, links[], userButtons[] ও profile{}। userButtons শুধু অ্যাপে দেখায়, পাবলিক কপিতে নয়।
        পাবলিক ওয়েবসাইটের জন্য শুধু অনুমোদিত অংশের স্যানিটাইজড কপি public_site/profile-এ লেখা হয় (এডমিনের সেভের সময়)।
        ==================================================================== */
     /*PURE-START*/
     var T = function (s, n) { return String(s == null ? '' : s).slice(0, n); };
     var httpsUrl = function (u) { u = String(u || '').trim(); return (u.length <= 600 && /^https:\/\/[^\s"'<>]+$/i.test(u)) ? u : ''; };
     var httpUrl = function (u) { u = String(u || '').trim(); return (u.length <= 600 && /^https?:\/\/[^\s"'<>]+$/i.test(u)) ? u : ''; };
+    var buttonUrl = function (u) {
+        u = String(u || '').trim();
+        if (!u || u.length > 600 || /[\s"'<>\\]/.test(u)) return '';
+        if (/^https?:\/\/[^\s"'<>]+$/i.test(u)) return u;
+        if (u.indexOf(':') >= 0 || u.indexOf('//') === 0) return '';
+        return u;
+    };
+    var DEFAULT_USER_BUTTONS = [
+        { id: 'manual', label: 'ইউজার ম্যানুয়াল', url: 'manual/ইউজার-প্যানেল-ম্যানুয়াল.html', enabled: true },
+        { id: 'demo-1', label: 'ডেমো বাটন ১', url: '', enabled: false },
+        { id: 'demo-2', label: 'ডেমো বাটন ২', url: '', enabled: false },
+        { id: 'demo-3', label: 'ডেমো বাটন ৩', url: '', enabled: false }
+    ];
     var safeUrl = httpUrl;
     var normImg = function (o) { o = o || {}; return { url: httpsUrl(o.url), alt: T(o.alt, 140) }; };
     var normVis = function (o) { o = o || {}; return { value: T(o.value, 200), vis: (o.vis === 'app' || o.vis === 'public') ? o.vis : 'none' }; };
@@ -27268,7 +27806,19 @@ body.dark-mode .btn-outline{border-color:var(--gold-300)!important;color:var(--g
         var p = (d.profile && typeof d.profile === 'object') ? d.profile : {}, c = p.contact || {}, ps = p.publicSite || {};
         return {
             about: T(d.about, 2000),
-            links: arr(d.links, 12).map(function (l) { return { label: T(l && l.label, 60), url: httpUrl(l && l.url) }; }).filter(function (l) { return l.url; }),
+            links: arr(d.links, 12).map(function (l) { return { label: T(l && l.label, 60), url: httpUrl(l && l.url), userEnabled: !l || l.userEnabled !== false }; }).filter(function (l) { return l.url; }),
+            userButtons: Array.isArray(d.userButtons) ? arr(d.userButtons, 12).map(function (b, i) {
+                b = (b && typeof b === 'object') ? b : {};
+                var def = DEFAULT_USER_BUTTONS.filter(function (x) { return x.id === b.id; })[0] || DEFAULT_USER_BUTTONS[i];
+                return {
+                    id: T(b.id, 24) || (def ? def.id : 'custom-' + (i + 1)),
+                    label: T(b.label == null ? (def ? def.label : '') : b.label, 60),
+                    url: buttonUrl(b.url == null ? (def ? def.url : '') : b.url),
+                    enabled: b.enabled == null ? (def ? def.enabled : false) : b.enabled === true
+                };
+            }) : DEFAULT_USER_BUTTONS.map(function (def) {
+                return { id: def.id, label: def.label, url: buttonUrl(def.url), enabled: def.enabled };
+            }),
             profile: {
                 v: 2, orgName: T(p.orgName, 80), tagline: T(p.tagline, 140), cover: normImg(p.cover), history: T(p.history, 3000),
                 workItems: arr(p.workItems, 12).map(function (x) { x = x || {}; return { id: T(x.id, 24), title: T(x.title, 80), text: T(x.text, 600), image: normImg(x.image) }; }),
@@ -27290,7 +27840,7 @@ body.dark-mode .btn-outline{border-color:var(--gold-300)!important;color:var(--g
             enabled: true, v: 2, updatedAt: now, title: p.publicSite.title, orgName: p.orgName, tagline: p.tagline, about: s.about, history: p.history, cover: p.cover,
             workItems: p.workItems, experienceItems: p.experienceItems, gallery: p.gallery,
             testimonials: p.testimonials.filter(function (t) { return t.approved && t.text; }).map(function (t) { return { name: t.name, role: t.role, text: t.text }; }),
-            contact: contact, links: s.links, loginUrl: p.publicSite.loginUrl, siteUrl: p.publicSite.url
+            contact: contact, links: s.links.map(function (l) { return { label: l.label, url: l.url }; }), loginUrl: p.publicSite.loginUrl, siteUrl: p.publicSite.url
         };
     }
     var nl = function (t) { return esc(t).replace(/\n/g, '<br>'); };
@@ -27312,9 +27862,13 @@ body.dark-mode .btn-outline{border-color:var(--gold-300)!important;color:var(--g
         if (vis('address')) ct.push('<li>📍 ' + nl(p.contact.address.value) + '</li>');
         if (vis('hours')) ct.push('<li>🕒 ' + nl(p.contact.hours.value) + '</li>');
         if (ct.length) sec('☎️ যোগাযোগ', '<ul class="mfa-ct">' + ct.join('') + '</ul>');
-        var ln = site.links.map(function (l) { return '<a href="' + esc(l.url) + '" target="_blank" rel="noopener noreferrer">🔗 ' + esc(l.label || l.url) + '</a>'; });
+        var ln = site.links.filter(function (l) { return o.mode === 'public' || l.userEnabled !== false; }).map(function (l) { return '<a href="' + esc(l.url) + '" target="_blank" rel="noopener noreferrer">🔗 ' + esc(l.label || l.url) + '</a>'; });
         if (o.mode !== 'public' && p.publicSite.enabled && p.publicSite.url) ln.unshift('<a href="' + esc(p.publicSite.url) + '" target="_blank" rel="noopener noreferrer">🌐 ' + esc(p.publicSite.title) + '</a>');
         if (ln.length) sec('🔗 অফিসিয়াল লিংক', '<div class="mfa-links">' + ln.join('') + '</div>');
+        var userButtons = (o.mode !== 'public' && Array.isArray(site.userButtons)) ? site.userButtons.filter(function (b) { return b.enabled && b.label && buttonUrl(b.url); }) : [];
+        if (userButtons.length) sec('📘 ইউজার প্যানেলের বাটন', '<div class="mfa-links">' + userButtons.map(function (b) {
+            return '<a href="' + esc(buttonUrl(b.url)) + '" target="_blank" rel="noopener noreferrer">🔗 ' + esc(b.label) + '</a>';
+        }).join('') + '</div>');
         if (out.length === 1) out.push('<p class="mfa-empty">এখনো কোনো তথ্য যোগ করা হয়নি।' + (o.admin ? ' <b>ERP কেন্দ্র → সংগঠন</b> থেকে যোগ করুন।' : '') + '</p>');
         return out.join('');
     }
@@ -27681,7 +28235,7 @@ body.dark-mode .btn-outline{border-color:var(--gold-300)!important;color:var(--g
     var DB = function () { return window._firestoreDb; };
     var S = function () { return window.state || { members: [], monthly: [], yearly: [], expenses: [], categories: [], settings: {} }; };
     var bn = function (n) { return String(n).replace(/[0-9]/g, function (d) { return '০১২৩৪৫৬৭৮৯'[d]; }); };
-    var money = function (n) { return '৳' + (Number(n) || 0).toLocaleString('en-IN', { maximumFractionDigits: 0 }); };
+    var money = function (n) { var s = '৳' + (Number(n) || 0).toLocaleString('en-IN', { maximumFractionDigits: 0 }); try { return (window.mfDigitsBn ? window.mfDigitsBn() : true) ? s.replace(/[0-9]/g, function (d) { return '০১২৩৪৫৬৭৮৯'.charAt(+d); }) : s; } catch (e) { return s; } };
     var d10 = function (d) { return d ? String(d).slice(0, 10) : ''; };
     var rerender = function () { if (typeof window.goToTab === 'function') window.goToTab('erp'); };
 
@@ -28028,7 +28582,13 @@ body.dark-mode .btn-outline{border-color:var(--gold-300)!important;color:var(--g
         'profile.experienceItems': { label: '🏅 অভিজ্ঞতা ও অর্জন', max: 12, f: [['year', 'সাল', 't', 10], ['title', 'শিরোনাম', 't', 80], ['text', 'বিবরণ', 'a', 400]], blank: function () { return { id: uid(), year: '', title: '', text: '' }; } },
         'profile.gallery': { label: '📷 মাহফিলের ছবি / গ্যালারি', max: 24, img: '', f: [['caption', 'ক্যাপশন', 't', 100]], blank: function () { return { id: uid(), url: '', alt: '', caption: '' }; } },
         'profile.testimonials': { label: '💬 মতামত (যাচাই করে অনুমোদন দিন)', max: 20, appr: true, f: [['name', 'নাম', 't', 60], ['role', 'পরিচয়', 't', 80], ['text', 'মতামত', 'a', 500]], blank: function () { return { id: uid(), name: '', role: '', text: '', approved: false }; } },
-        'links': { label: '🔗 অফিসিয়াল লিংক', max: 12, f: [['label', 'নাম (যেমন ফেসবুক পেজ)', 't', 60], ['url', 'লিংক (https://...)', 't', 600]], blank: function () { return { label: '', url: '' }; } }
+        'links': { label: '🔗 অফিসিয়াল লিংক', max: 12, toggle: true, toggleField: 'userEnabled', toggleInHeader: true, toggleLabel: 'ইউজার প্যানেলে দেখান', help: 'লিংক ০/১২ হলে কোনো সারি বা টিকবক্স নেই—প্রথমে “যোগ করুন” চাপুন; নতুন সারির পাশে টিকবক্স আসবে। টিক দিয়ে ইউজার প্যানেলের “আমাদের সম্পর্কে” পাতায় লিংক দেখানো বা লুকানো নিয়ন্ত্রণ করুন। ইউজার প্যানেলের বাটন তালিকা আলাদা।', f: [['label', 'নাম (যেমন ফেসবুক পেজ)', 't', 60], ['url', 'লিংক (https://...)', 't', 600]], blank: function () { return { label: '', url: '', userEnabled: true }; } },
+        'userButtons': {
+            label: '📘 ইউজার প্যানেলের বাটন', max: 12, fixedSlots: true, removableFrom: 0, toggle: true,
+            help: 'প্রথম বাটনটি ইউজার ম্যানুয়াল; পরের ৩টি ডেমো বাটন। যেকোনো বাটন মুছতে তার পাশের “মুছুন” চাপুন। “নতুন বাটন যোগ করুন” দিয়ে Facebook, X/Twitter বা অন্য লিংক যোগ করুন। টিক দিলে দেখাবে, টিক না থাকলে লুকানো থাকবে। সর্বোচ্চ ১২টি বাটন রাখা যাবে।',
+            f: [['label', 'বাটনের নাম', 't', 60], ['url', 'লিংক (https://... অথবা manual/... পথ)', 't', 600]],
+            blank: function () { return { id: uid(), label: '', url: '', enabled: false }; }
+        }
     };
     var getP = function (path) { return path.split('.').reduce(function (o, k) { return o == null ? o : o[k]; }, E); };
     var setP = function (path, v) { var ks = path.split('.'), o = E; for (var i = 0; i < ks.length - 1; i++) { if (o[ks[i]] == null) o[ks[i]] = {}; o = o[ks[i]]; } o[ks[ks.length - 1]] = v; };
@@ -28046,18 +28606,22 @@ body.dark-mode .btn-outline{border-color:var(--gold-300)!important;color:var(--g
     };
     var listHtml = function (path) {
         var L = LISTS[path], arr = getP(path) || [], h = '<div class="mfe-card"><h4>' + L.label + ' <span class="muted">(' + arr.length + '/' + L.max + ')</span></h4>';
+        if (L.help) h += '<p class="muted">' + esc(L.help) + '</p>';
         arr.forEach(function (it, i) {
             var b = path + '.' + i;
-            h += '<div class="mfe-card" style="background:rgba(127,127,127,.04)"><div class="mfe-row"><b>#' + (i + 1) + '</b>' +
-                '<button type="button" class="mfe-btn alt" data-act="up" data-p="' + path + '" data-i="' + i + '" ' + (i ? '' : 'disabled') + ' aria-label="উপরে">↑</button>' +
-                '<button type="button" class="mfe-btn alt" data-act="dn" data-p="' + path + '" data-i="' + i + '" ' + (i < arr.length - 1 ? '' : 'disabled') + ' aria-label="নিচে">↓</button>' +
-                '<button type="button" class="mfe-btn alt" data-act="del" data-p="' + path + '" data-i="' + i + '">🗑️ মুছুন</button></div>';
+            var toggleHtml = L.toggle ? '<label class="mfe-chk"><input type="checkbox" data-k="' + b + '.' + (L.toggleField || 'enabled') + '" ' + (it[L.toggleField || 'enabled'] ? 'checked' : '') + '> ' + esc(L.toggleLabel || 'ইউজার প্যানেলে দেখান') + '</label>' : '';
+            h += '<div class="mfe-card" style="background:rgba(127,127,127,.04)"><div class="mfe-row"><b>' + (L.fixedSlots ? 'বাটন ' + (i + 1) : '#' + (i + 1)) + '</b>' +
+                (L.fixedSlots ? (L.removableFrom != null && i >= L.removableFrom ? '<button type="button" class="mfe-btn alt" data-act="del" data-p="' + path + '" data-i="' + i + '">🗑️ মুছুন</button>' : '') :
+                    '<button type="button" class="mfe-btn alt" data-act="up" data-p="' + path + '" data-i="' + i + '" ' + (i ? '' : 'disabled') + ' aria-label="উপরে">↑</button>' +
+                    '<button type="button" class="mfe-btn alt" data-act="dn" data-p="' + path + '" data-i="' + i + '" ' + (i < arr.length - 1 ? '' : 'disabled') + ' aria-label="নিচে">↓</button>' +
+                    '<button type="button" class="mfe-btn alt" data-act="del" data-p="' + path + '" data-i="' + i + '">🗑️ মুছুন</button>') + (L.toggleInHeader ? toggleHtml : '') + '</div>';
             if (L.img === 'image') h += imgSlot(b + '.image'); else if (L.img === '') h += imgSlot(b);
             L.f.forEach(function (f) { h += inp(b + '.' + f[0], f[1], f[2], f[3]); });
+            if (L.toggle && !L.toggleInHeader) h += toggleHtml;
             if (L.appr) h += '<label style="display:flex;gap:8px;align-items:center;min-height:48px"><input type="checkbox" data-k="' + b + '.approved" ' + (it.approved ? 'checked' : '') + '> ✅ অনুমোদিত (শুধু অনুমোদিত মতামত সবার সামনে দেখাবে)</label>';
             h += '</div>';
         });
-        if (arr.length < L.max) h += '<button type="button" class="mfe-btn" data-act="add" data-p="' + path + '">➕ যোগ করুন</button>';
+        if ((!L.fixedSlots || L.removableFrom != null) && arr.length < L.max) h += '<button type="button" class="mfe-btn" data-act="add" data-p="' + path + '">' + (path === 'userButtons' ? '➕ নতুন বাটন যোগ করুন' : '➕ যোগ করুন') + '</button>';
         if (path === 'profile.gallery' && arr.length < L.max) h += ' <label class="mfe-btn alt" style="cursor:pointer">📷 একাধিক ছবি একসাথে<input type="file" multiple accept="image/jpeg,image/png,image/webp" data-upmany="1" style="display:none"></label>';
         return h + '</div>';
     };
@@ -28068,7 +28632,7 @@ body.dark-mode .btn-outline{border-color:var(--gold-300)!important;color:var(--g
         ['profile.workItems', 'profile.experienceItems', 'profile.gallery', 'profile.testimonials'].forEach(function (p) { h += listHtml(p); });
         h += '<div class="mfe-card"><h4>☎️ যোগাযোগ</h4><p class="muted">⚠️ ব্যক্তিগত মোবাইল/ইমেইল কখনো পাবলিকে দেবেন না — শুধু সংগঠনের অফিসিয়াল তথ্য, এবং প্রতিটির জন্য কোথায় দেখাবে বেছে নিন। ডিফল্ট: গোপন।</p>';
         [['phone', '📞 মোবাইল'], ['email', '✉️ ইমেইল'], ['address', '📍 ঠিকানা'], ['hours', '🕒 সময়']].forEach(function (c) { h += '<div class="mfe-row">' + inp('profile.contact.' + c[0] + '.value', c[1], 't', 200) + '<div class="mfe-f">' + visSel(c[0]) + '</div></div>'; });
-        h += '</div>' + listHtml('links');
+        h += '</div>' + listHtml('links') + listHtml('userButtons');
         h += '<div class="mfe-card"><h4>🌐 পাবলিক পরিচিতি-ওয়েবসাইট</h4><label style="display:flex;gap:8px;align-items:center;min-height:48px"><input type="checkbox" data-k="profile.publicSite.enabled" ' + ((getP('profile.publicSite') || {}).enabled ? 'checked' : '') + '> চালু (পাবলিক কপি হালনাগাদ হবে)</label>' +
             inp('profile.publicSite.title', 'ওয়েবসাইটের নাম', 't', 100) + inp('profile.publicSite.url', 'ওয়েবসাইটের ঠিকানা (হোস্ট করার পর https://...)', 't', 600) + inp('profile.publicSite.loginUrl', 'ERP/লগইন পাতার ঠিকানা (পাবলিক সাইটে "লগইন" লিংক)', 't', 600) +
             '<p class="muted">পাবলিক সাইটে কখনো সদস্যের তথ্য বা হিসাব যায় না — শুধু এই পাতার অনুমোদিত অংশ। হোস্টিং-নির্দেশনা: README_Phase2.md</p></div>';
@@ -28091,9 +28655,16 @@ body.dark-mode .btn-outline{border-color:var(--gold-300)!important;color:var(--g
         return window.mfUploadImage(file, 'about', '', oldUrl || '', null, '', 'about');
     };
     var save = function (btn) {
-        var clean = AB.norm(E), now = new Date().toISOString(), by = (window.currentUser && window.currentUser.email) || '';
+        var clean = AB.norm(E), rawButtons = Array.isArray(E.userButtons) ? E.userButtons : [];
+        var invalidButton = rawButtons.length > LISTS.userButtons.max || rawButtons.slice(0, LISTS.userButtons.max).some(function (b, i) {
+            b = b || {};
+            var label = String(b.label || '').trim(), url = String(b.url || '').trim();
+            return (url && !clean.userButtons[i].url) || (b.enabled && (!label || !url || !clean.userButtons[i].url));
+        });
+        if (invalidButton) { toast('ইউজার প্যানেলের চালু বাটনের নাম ও বৈধ লিংক দিন। লিংক http(s):// অথবা সাইটের ভেতরের পথ হতে হবে।'); return; }
+        var now = new Date().toISOString(), by = (window.currentUser && window.currentUser.email) || '';
         btn.disabled = true;
-        F().setDoc(F().doc(DB(), 'app_settings', 'site_config'), { about: clean.about, links: clean.links, profile: clean.profile, updatedAt: now, updatedBy: by }, { merge: true })
+        F().setDoc(F().doc(DB(), 'app_settings', 'site_config'), { about: clean.about, links: clean.links, userButtons: clean.userButtons, profile: clean.profile, updatedAt: now, updatedBy: by }, { merge: true })
             .then(function () {
                 site = clean; E = clone(clean);
                 return F().setDoc(F().doc(DB(), 'public_site', 'profile'), AB.publicDoc(clean, now)).then(function () { toast('✅ সেভ হয়েছে — অ্যাপে লাইভ; পাবলিক কপিও হালনাগাদ'); }, function (e) { console.error(e); toast('⚠️ অ্যাপে সেভ হয়েছে, কিন্তু পাবলিক কপি হালনাগাদ হয়নি (Firestore rules-এ public_site যোগ করেছেন?)'); });
@@ -28107,7 +28678,7 @@ body.dark-mode .btn-outline{border-color:var(--gold-300)!important;color:var(--g
                 '<div><b>' + esc(s.name || '') + '</b></div><div class="muted">' + esc(s.address || '') + '</div><div class="muted">' + esc(s.contact || '') + '</div>' +
                 '<p class="muted">নাম, ঠিকানা, লোগো, ফুটার-লেখা ও থিম আগের মতোই <b>সেটিংস</b> থেকে বদলাবে — যাতে একই তথ্যের দুটি উৎস না থাকে।</p>' +
                 '<button type="button" class="mfe-btn alt" id="mfe-open-settings">⚙️ সেটিংস খুলুন</button></div>' +
-                '<div class="mfe-card"><h4>ℹ️ "আমাদের সম্পর্কে" ও পাবলিক পরিচিতি</h4><p class="muted">এখানকার তথ্য তিন প্যানেলের "আমাদের সম্পর্কে" মেনুতে লাইভ দেখায়। সেভ করলে পাবলিক-ওয়েবসাইটের জন্য নিরাপদ কপিও তৈরি হয়। ছবি Google Drive-এ জমা হয়।</p></div><div id="mfe-ab"></div>';
+                '<div class="mfe-card"><h4>ℹ️ "আমাদের সম্পর্কে" ও পাবলিক পরিচিতি</h4><p class="muted">এখানকার তথ্য তিন প্যানেলের "আমাদের সম্পর্কে" মেনুতে লাইভ দেখায়। ইউজার-প্যানেলের কাস্টম বাটন এখানে নাম, লিংক ও দেখানো/লুকানো দিয়ে নিয়ন্ত্রণ করুন। সেভ করলে পাবলিক-ওয়েবসাইটের জন্য নিরাপদ কপিও তৈরি হয়; কাস্টম বাটন শুধু অ্যাপেই থাকে। ছবি Google Drive-এ জমা হয়।</p></div><div id="mfe-ab"></div>';
         },
         after: function (root) {
             var o = $('mfe-open-settings'); if (o) o.onclick = function () { if (window.openSettingsForm) window.openSettingsForm(); else toast('সেটিংস বাটন থেকে খুলুন'); };
@@ -29167,10 +29738,11 @@ body.dark-mode .btn-outline{border-color:var(--gold-300)!important;color:var(--g
                 var keep = Math.max(7, Math.min(365, Number(g('mfa-keep').value) || 90)), cut = new Date(); cut.setDate(cut.getDate() - keep); var cd = dk(iso(cut)), f = F(); pg.disabled = true;
                 f.getDocs(f.query(f.collection(DB(), 'audit_logs'), f.where('day', '<', cd))).then(function (snap) {
                     if (!snap.size) { toast('মোছার মতো পুরোনো লগ নেই'); return null; }
-                    var rows = []; snap.forEach(function (d) { var x = d.data() || {}; (x.events || []).forEach(function (e) { rows.push([x.email, e.t, e.a, e.m || '', e.e || '', e.o || '', e.d || '', e.p || '']); }); });
+                    var rows = [], evs = []; snap.forEach(function (d) { var x = d.data() || {}; (x.events || []).forEach(function (e) { rows.push([x.email, e.t, e.a, e.m || '', e.e || '', e.o || '', e.d || '', e.p || '']); evs.push({ t: e.t, email: x.email, a: e.a, m: e.m || '', e: e.e || '', o: e.o || '', d: e.d || '', p: e.p || '' }); }); });
                     download('\ufeff' + [['ইউজার', 'সময়', 'কাজ', 'মডিউল', 'বস্তু', 'ফল', 'বিবরণ', 'উৎস']].concat(rows).map(function (r) { return r.map(csvCell).join(','); }).join('\r\n'), 'audit-backup-before-' + iso(cut) + '.csv', 'text/csv;charset=utf-8');   // 🔒 মোছার আগে ব্যাকআপ
                     return window.mfDanger.run({ action: 'audit_purge', title: 'পুরোনো অডিট লগ মোছা', message: keep + ' দিনের পুরোনো (' + iso(cut) + '-এর আগের) অডিট লগ স্থায়ীভাবে মুছে যাবে। ব্যাকআপ-CSV এইমাত্র নেমেছে — ফাইলটি সংরক্ষণ করুন। (danger_log এতে মুছে না।)', level: 'high', target: 'আগে ' + iso(cut), details: [snap.size + 'টি দিনের ডক', rows.length + 'টি ঘটনা', 'ব্যাকআপ: audit-backup-before-' + iso(cut) + '.csv'] }, function () {
-                        var ps = []; snap.forEach(function (d) { ps.push(f.deleteDoc(d.ref)); }); return Promise.all(ps).then(function () { toast('🧹 ' + bn(ps.length) + ' টি ডক মুছেছে'); });
+                        var up = (window.mfLogArch && evs.length) ? window.mfLogArch.putAudit(evs).then(function (r) { if (r) toast('📚 অডিট লগ Drive-এ আর্কাইভ হয়েছে (' + bn(evs.length) + 'টি)'); }).catch(function (e) { toast('⚠️ Drive-এ আর্কাইভ হয়নি (' + ((e && e.message) || e) + ') — লোকাল CSV নামানো আছে'); }) : Promise.resolve();   // 🆕 [v16.5.118]
+                        return up.then(function () { var ps = []; snap.forEach(function (d) { ps.push(f.deleteDoc(d.ref)); }); return Promise.all(ps).then(function () { toast('🧹 ' + bn(ps.length) + ' টি ডক মুছেছে'); }); });
                     });
                 }).then(function (r) { if (r && !r.ok && !r.cancelled && !r.auditFailed) toast('মোছা যায়নি'); }).catch(function () { toast('লগ পড়া যায়নি'); }).then(function () { pg.disabled = false; });
             };
@@ -30870,6 +31442,62 @@ body.dark-mode .log-icon.sent,body.dark-mode .log-tag.sent{color:#e8c877}
   });
   window.addEventListener('appinstalled', function () { if (box) box.classList.remove('show'); });
   window.mfInstallApp = function () { if (ev) { ev.prompt(); } else { try { alert('ব্রাউজার মেনু (⋮) থেকে "Add to Home screen / হোম স্ক্রিনে যোগ করুন" বেছে নিন। iPhone-এ Safari-র শেয়ার বাটন থেকে।'); } catch (e) { } } };
+})();
+</script>
+<style id="mf-pg-css">
+tr.mf-pg-hide{display:none}
+#export-capture tr.mf-pg-hide{display:table-row!important}
+@media print{tr.mf-pg-hide{display:table-row!important}.mf-pg-bar{display:none!important}}
+.mf-pg-bar{display:flex;align-items:center;justify-content:center;gap:10px;flex-wrap:wrap;margin:10px 0 18px;font-size:13.5px}
+.mf-pg-bar span{opacity:.8}
+.mf-pg-bar button{border:1.5px solid var(--emerald-700,#0c4230);background:var(--paper-raised,#fff);color:var(--emerald-700,#0c4230);border-radius:999px;padding:8px 16px;font:inherit;font-weight:700;cursor:pointer;min-height:40px}
+.mf-pg-bar button.pri{background:var(--emerald-700,#0c4230);color:#fff}
+body.dark-mode .mf-pg-bar button{background:#17302a;color:#e8c877;border-color:#e8c877}
+body.dark-mode .mf-pg-bar button.pri{background:#e8c877;color:#0c2c22}
+</style>
+<script id="mf-pg-js">
+/* 🆕 [v16.5.114] বড় তালিকায় লেগ কমানো: ১২০টির বেশি সারি থাকলে প্রথমে ৬০টি দেখায়, নিচে "আরও দেখান" বাটন।
+   সারিগুলো DOM-এ থেকেই যায় (শুধু লুকানো), তাই এডিট/ডিলিট/সিলেক্ট/এক্সপোর্ট/প্রিন্ট আগের মতোই কাজ করে।
+   এক্সপোর্ট-ক্যাপচার ও প্রিন্টে সব সারি দেখা যায়। */
+(function () {
+  'use strict';
+  var MIN = 120, FIRST = 60, STEP = 60, limits = {}, lastSig = '', obs = null, obsEl = null, pend = false;
+  function sigOf(tb, i) { var ks = []; try { var hs = tb.tHead && tb.tHead.rows[0] ? tb.tHead.rows[0].cells : []; for (var k = 0; k < hs.length; k++) ks.push(hs[k].getAttribute('data-col-key') || hs[k].textContent.trim().slice(0, 12)); } catch (e) { } return (tb.getAttribute('data-mf-tid') || '') + ':' + i + ':' + ks.join('|'); }
+  function rowsOf(tb) { var b = tb.tBodies && tb.tBodies[0]; return b ? Array.prototype.slice.call(b.rows) : []; }
+  function bn(n) { return String(n).replace(/\d/g, function (d) { return '০১২৩৪৫৬৭৮৯'.charAt(+d); }); }
+  function apply(tb, key) {
+    var rows = rowsOf(tb); if (rows.length < MIN) return;
+    var lim = limits[key] || FIRST;
+    try { var _a = window._scrollAnchorSelector; if (_a) { var _el = tb.querySelector(_a); var _tr = _el && (_el.closest ? _el.closest('tr') : null); var _ix = _tr ? rows.indexOf(_tr) : -1; if (_ix >= lim) { lim = Math.ceil((_ix + 1) / STEP) * STEP; limits[key] = lim; } } } catch (e) { }   // এডিট-করা সারি লুকানো থাকলে খুলে দেওয়া
+    rows.forEach(function (r, i) { r.classList.toggle('mf-pg-hide', i >= lim); });
+    var host = tb.closest('.table-wrap') || tb, old = host.nextElementSibling;
+    if (old && old.classList && old.classList.contains('mf-pg-bar')) old.parentNode.removeChild(old);
+    if (lim >= rows.length) return;
+    var bar = document.createElement('div'); bar.className = 'mf-pg-bar no-print';
+    bar.innerHTML = '<span>' + bn(Math.min(lim, rows.length)) + ' / ' + bn(rows.length) + ' টি দেখানো হচ্ছে</span><button type="button" class="pri" data-pg="more">⬇ আরও ' + bn(STEP) + 'টি দেখান</button><button type="button" data-pg="all">সব দেখান</button>';
+    bar.addEventListener('click', function (e) {
+      var b = e.target.closest && e.target.closest('[data-pg]'); if (!b) return;
+      limits[key] = b.getAttribute('data-pg') === 'all' ? rows.length : lim + STEP;
+      apply(tb, key);
+    });
+    host.parentNode.insertBefore(bar, host.nextSibling);
+  }
+  function run() {
+    pend = false;
+    var main = document.getElementById('main'); if (!main) return;
+    var tbs = main.querySelectorAll('table'), sigs = [];
+    for (var i = 0; i < tbs.length; i++) { if (tbs[i].closest('#export-capture')) continue; sigs.push(sigOf(tbs[i], i)); }
+    var sig = sigs.join('#'); if (sig !== lastSig) { limits = {}; lastSig = sig; }
+    for (var j = 0; j < tbs.length; j++) { if (tbs[j].closest('#export-capture')) continue; try { apply(tbs[j], sigOf(tbs[j], j)); } catch (e) { console.error('[পেজিং]', e); } }
+  }
+  function sched() { if (pend) return; pend = true; (window.requestAnimationFrame || setTimeout)(run); }
+  function attach() {
+    var m = document.getElementById('main'); if (!m || m === obsEl) return;
+    if (obs) obs.disconnect(); obsEl = m; obs = new MutationObserver(sched); obs.observe(m, { childList: true }); sched();
+  }
+  setInterval(attach, 700); attach();
+  window.mfPgNow = run;
+  window.mfPgExpandAll = function () { var m = document.getElementById('main'); if (!m) return; var t = m.querySelectorAll('tr.mf-pg-hide'); for (var i = 0; i < t.length; i++) t[i].classList.remove('mf-pg-hide'); };
 })();
 </script>
 </body>
